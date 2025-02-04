@@ -7,17 +7,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
+import frc.robot.inputs.ButtonBoard;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SpitterSubsystem;
 
 public class RobotContainer {
 
   CommandXboxController driverController;
+  ButtonBoard buttonBoard;
   ElevatorSubsystem elevatorSubsystem;
   SpitterSubsystem spitterSubsystem;
 
   public RobotContainer() {
     driverController = new CommandXboxController(0);
+    buttonBoard = new ButtonBoard(1);
     elevatorSubsystem = new ElevatorSubsystem(driverController::getLeftY);
     spitterSubsystem = new SpitterSubsystem();
     configureBindings();
