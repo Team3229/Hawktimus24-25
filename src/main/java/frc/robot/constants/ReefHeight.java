@@ -11,9 +11,9 @@ import lombok.Getter;
 @Getter
 public enum ReefHeight {
     L1(Feet.of(1).plus(Inch.of(6))),
-    L2(Feet.of(2).plus(Inch.of(7 + (7/8)))),
-    L3(Feet.of(3).plus(Inch.of(11 + (5/8)))),
-    L4(Feet.of(6));
+    L2(Feet.of( 2).plus(Inch.of(11 + (5/8)))),
+    L3(Feet.of(4).plus(Inch.of(4))),
+    L4(Feet.of(6).plus(Inch.of(5)));
 
     Distance height;
 
