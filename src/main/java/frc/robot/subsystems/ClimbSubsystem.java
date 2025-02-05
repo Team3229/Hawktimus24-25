@@ -16,7 +16,10 @@ public class ClimbSubsystem extends SubsystemBase {
     private SparkMaxConfig motorConfig;
 
     private static final int CAN_ID = 10;
+    
     private static final double POSITION_CONVERSION_FACTOR = 1; //Change this value to the correct conversion factor later.
+    private static final double FORWARD_SOFT_LIMIT = 1; //Change this value to the correct forward soft limit later.
+    private static final double REVERSE_SOFT_LIMIT = 1; //Change this value to the correct reverse soft limit later.
     
     public ClimbSubsystem(DoubleSupplier joystickInput) {
         climbMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
@@ -32,12 +35,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
             /*Change the value of 1 to the correct forward soft limit later,
             and double check that POSITION_CONVERSION_FACTOR is used correctly. */
-            .forwardSoftLimit(1 * POSITION_CONVERSION_FACTOR)
+            .forwardSoftLimit(FORWARD_SOFT_LIMIT * POSITION_CONVERSION_FACTOR)
             .reverseSoftLimitEnabled(true)
 
-            /*Change the value of -1 to the correct forward soft limit later,
+            /*Change the value of 1 to the correct forward soft limit later,
             and double check that POSITION_CONVERSION_FACTOR is used correctly. */
-            .reverseSoftLimit(1 * POSITION_CONVERSION_FACTOR);
+            .reverseSoftLimit(REVERSE_SOFT_LIMIT * POSITION_CONVERSION_FACTOR);
 
         setDefaultCommand(
             Commands.run(
@@ -46,7 +49,7 @@ public class ClimbSubsystem extends SubsystemBase {
                 }, this)
         );
     }
-    
+
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Climb Position", () -> climbMotor.getEncoder().getPosition(), null);
