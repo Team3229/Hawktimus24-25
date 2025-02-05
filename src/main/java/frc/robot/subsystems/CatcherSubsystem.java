@@ -18,10 +18,10 @@ public class CatcherSubsystem extends SubsystemBase{
     private DigitalInput irSensor;
     public Trigger coral;
 
-    //15 degrees in cad (NEEDS TO BE TESTED)
-    private static final double FEED_ANGLE = 15;
+    //25 degrees in cad (NEEDS TO BE TESTED)
+    private static final double FEED_ANGLE = 25;
     private static final double CATCH_ANGLE = 0;
-
+    
     private static final int MOTOR_CAN_ID = 9;
     private static final double MAX_SPEED = 1;
 
@@ -45,7 +45,6 @@ public class CatcherSubsystem extends SubsystemBase{
 
         motorConfig.idleMode(IdleMode.kBrake);
 
-        motorConfig.inverted(true);
         motorConfig.closedLoop
         .pid(kP, kI, kD)
         .outputRange(
@@ -61,7 +60,12 @@ public class CatcherSubsystem extends SubsystemBase{
         
         coral = new Trigger(this::hasCoral);
 
-        coral.onTrue(feedAngle().andThen( catchAngle()));
+        coral.onTrue(
+                feedAngle()
+            .andThen(
+                catchAngle()
+            )
+        );
     }
 
     public Command feedAngle () {
