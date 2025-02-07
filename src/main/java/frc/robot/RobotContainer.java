@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
@@ -47,6 +49,62 @@ public class RobotContainer {
       elevatorSubsystem.goToLevel(ReefHeight.L4)
         .andThen(spitterSubsystem.spit())
     );  
+
+    buttonBoard.b_1().onTrue(
+      elevatorSubsystem.goToLevel(ReefHeight.L1)
+        .andThen(spitterSubsystem.spit())
+      // L1
+    );
+
+    buttonBoard.b_2().onTrue(
+      elevatorSubsystem.goToLevel(ReefHeight.L2)
+        .andThen(spitterSubsystem.spit())
+      // L2
+    );
+
+    buttonBoard.b_3().onTrue(
+      elevatorSubsystem.goToLevel(ReefHeight.L4)
+        .andThen(spitterSubsystem.spit())
+      // L3
+    );
+
+    buttonBoard.b_4().onTrue(
+      elevatorSubsystem.goToLevel(ReefHeight.L4)
+        .andThen(spitterSubsystem.spit())
+      // L4
+    );
+
+    buttonBoard.b_5().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_6().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_7().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_8().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_9().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_10().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_11().onTrue(
+      Commands.none()
+    );
+
+    buttonBoard.b_12().onTrue(
+      Commands.none()
+    );
 
     SmartDashboard.putData(elevatorSubsystem);
 
