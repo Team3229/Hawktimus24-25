@@ -45,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "S3-REEF",
+  "folder": "Waypoints",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

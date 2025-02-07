@@ -3,8 +3,9 @@
   "robotLength": 0.7747,
   "holonomicMode": true,
   "pathFolders": [
-    "HPT-REEF",
     "HPB-REEF",
+    "HPT-REEF",
+    "Waypoints",
     "REEF-HPB",
     "REEF-HPT",
     "S1-REEF",
