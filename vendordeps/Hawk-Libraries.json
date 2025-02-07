@@ -1,7 +1,7 @@
 {
     "fileName": "Hawk-Libraries.json",
     "name": "Hawk-Libraries",
-    "version": "25.0.0",
+    "version": "25.0.2",
     "frcYear": "2025",
     "uuid": "f5831905-4ef2-4c83-b71c-3ce3a6c73fd0",
     "mavenUrls": [
@@ -12,7 +12,7 @@
         {
             "groupId": "frc.hawklibraries",
             "artifactId": "hawklibraries-java",
-            "version": "25.0.0"
+            "version": "25.0.2"
         }
     ],
     "jniDependencies": [],

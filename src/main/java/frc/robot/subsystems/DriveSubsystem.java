@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import frc.hawklibraries.drivetrains.swerve.SwerveDrivetrain;
 import frc.hawklibraries.drivetrains.swerve.SwerveDrivetrainConfig;
 import frc.hawklibraries.drivetrains.swerve.SwerveModuleConfig;
@@ -14,24 +19,24 @@ public class DriveSubsystem {
     private SwerveModuleConfigBuilder<?,?> baseModuleConfig() {
 
         return SwerveModuleConfig.builder()
-            .driveGearRatio(0)
-            .maxSpeed(0)
-            .wheelDiameter(0)
-            .turningGearRatio(0)
-            .turningOutputMax(0)
-            .turningOutputMin(0);
+            .driveGearRatio(5.9)
+            .maxSpeed(MetersPerSecond.of(5.24))
+            .wheelDiameter(Inch.of(4))
+            .turningGearRatio(12.8)
+            .turningOutputMax(-1)
+            .turningOutputMin(1);
 
     }
 
     public DriveSubsystem() {
 
         config = SwerveDrivetrainConfig.builder()
-            .robotWidth(0)
-            .robotLength(0)
-            .maxAccel(0)
-            .maxSpeed(0)
-            .maxTurnRate(0)
-            .moduleDistance(0)
+            .robotWidth(Inch.of(27))
+            .robotLength(Inch.of(27))
+            .maxAccel(MetersPerSecondPerSecond.of(1.0))
+            .maxSpeed(MetersPerSecond.of(5.24))
+            .maxTurnRate(RadiansPerSecond.of(Math.PI))
+            .moduleDistance(Inch.of(26))
             .frontLeftConfig(
                 baseModuleConfig()
                 .driveID(1)
