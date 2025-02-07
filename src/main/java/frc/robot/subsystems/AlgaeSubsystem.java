@@ -19,6 +19,9 @@ public class AlgaeSubsystem extends SubsystemBase {
     private SparkMaxConfig motorConfig;
 
     private static final int MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int algaeForwardSoftLimit = 0;
+    private static final int algaeReverseSoftLimit = 0;
+    private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
 
     public AlgaeSubsystem() {
 
@@ -28,14 +31,14 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         motorConfig.inverted(true); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
         
-        motorConfig.smartCurrentLimit(80);
+        motorConfig.smartCurrentLimit(algaeSmartCurrentLimit);
         motorConfig.idleMode(IdleMode.kBrake);
         
         motorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-            .forwardSoftLimitEnabled(true)
-            .forwardSoftLimit(0)
-            .reverseSoftLimitEnabled(true)
-            .reverseSoftLimit(0);
+            .forwardSoftLimitEnabled((algaeForwardSoftLimit > 0) ? true : false)
+            .forwardSoftLimit(algaeForwardSoftLimit)
+            .reverseSoftLimitEnabled((algaeReverseSoftLimit > 0) ? true : false)
+            .reverseSoftLimit(algaeReverseSoftLimit);
             
     }
 
