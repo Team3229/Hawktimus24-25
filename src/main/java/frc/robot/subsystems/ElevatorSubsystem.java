@@ -17,23 +17,40 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ReefHeight;
 
+/**
+ * The ElevatorSubsystem class represents the elevator mechanism of the robot.
+ * It controls the movement of the elevator using a motor and various sensors.
+ */
 public class ElevatorSubsystem extends SubsystemBase {
 
+    // CAN ID for the motor controller
     private static final int MOTOR_CAN_ID = 2;
     
+    // Maximum speed of the elevator motor
     private static final double MAX_SPEED = 1;
+    
+    // Current limit for the motor controller
     private static final int CURRENT_LIMIT = 80;
+    
+    // Tolerance for the elevator position
     private static final Distance POSITION_TOLERANCE = Inch.of(1/2);
 
-    private static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.588230);
+    // Base height of the elevator
+    public static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.588230);
+    
+    // Radius of the sprocket used in the elevator mechanism
     private static final Distance SPROCKET_RADIUS = Inch.of(0.7);
+    
+    // Circumference of the sprocket
     private static final Distance SPROCKET_CIRCUMFERENCE = SPROCKET_RADIUS.times(2 * Math.PI);
 
+    // Maximum height the elevator can reach
     private static final Distance MAX_ELEVATOR_HEIGHT = Inch.of(30);
 
-    // Conversion factor is half the circumference of the sprocket because of the 2-Stage nature of the Swyft Elevator
+    // Conversion factor for the elevator position, considering the 2-stage nature of the Swyft Elevator
     private static final double POSITION_CONVERSION_FACTOR = SPROCKET_CIRCUMFERENCE.in(Inch) / 2;
 
+    // PID controller constants
     private static final double kP = 0.1;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
@@ -59,10 +76,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         motorConfig.idleMode(IdleMode.kBrake);
 
         motorConfig.softLimit
-            .forwardSoftLimitEnabled(true)
             .forwardSoftLimit(MAX_ELEVATOR_HEIGHT.in(Inch) * POSITION_CONVERSION_FACTOR / 2)
-            .reverseSoftLimitEnabled(true)
-            .reverseSoftLimit(0);
+            .reverseSoftLimit(0)
+            .forwardSoftLimitEnabled(true)
+            .reverseSoftLimitEnabled(true);
 
         motorConfig.closedLoop
             .pid(kP, kI, kD)
@@ -98,7 +115,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return goToLevelCommand;
     }
 
-    private double getElevatorRelativeHeightInInches(ReefHeight reefPosition) {
+    public double getElevatorRelativeHeightInInches(ReefHeight reefPosition) {
         return reefPosition.getHeightInInches() - ELEVATOR_BASE_HEIGHT.in(Inch);
     }
 
