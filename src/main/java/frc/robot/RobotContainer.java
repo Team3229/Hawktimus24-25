@@ -21,7 +21,7 @@ public class RobotContainer {
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     buttonBoard = new ButtonBoard(1);
-    elevatorSubsystem = new ElevatorSubsystem(driverController::getLeftY);
+    elevatorSubsystem = new ElevatorSubsystem();
     spitterSubsystem = new SpitterSubsystem();
     configureBindings();
   }
