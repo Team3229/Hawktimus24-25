@@ -4,11 +4,15 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SpitterSubsystem {
+public class SpitterSubsystem extends SubsystemBase{
     
+    private static final double INTAKE_SPEED = 0.5;
+    private static final double SPIT_SPEED = -0.5;
     private SparkMax spitterMotor;
     private DigitalInput spitterSensor;
     private SparkMaxConfig motorConfig;
@@ -20,18 +24,32 @@ public class SpitterSubsystem {
         spitterMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         spitterSensor = new DigitalInput(SENSOR_PORT);
     }
-
-    public Command spit() {
+/**
+ * Checks if the spitter has coral.
+ * 
+ * @return True if the spitter has coral, false otherwise.
+ */
+    public boolean hasCoral() {
+        return spitterSensor.get();
+    }
+    
+    /**
+     * Intakes the coral until the coral is detected by the sensor.
+     * 
+     * @return Command that intakes the coral.
+     */
+    public Command intake() {
         return new Command() {
             @Override
             public void execute() {
-                spitterMotor.set(-0.5);
+                spitterMotor.set(INTAKE_SPEED);
             }
 
             @Override
             public boolean isFinished() {
-                return spitterSensor.get();
+                return hasCoral();
             }
+
 
             @Override
             public void end(boolean interrupted) {
@@ -41,6 +59,36 @@ public class SpitterSubsystem {
             }
         
         };
+    }
+    
+    /**
+     * Spits out the coral until the coral is not detected by the sensor.
+     * 
+     * @return Command that spits out the coral.
+     */
+    public Command spit() {
+        return new Command() {
+            @Override
+            public void execute() {
+                spitterMotor.set(SPIT_SPEED);
+            }
+
+            @Override
+            public boolean isFinished() {
+                return !hasCoral();
+            }
+
+
+            @Override
+            public void end(boolean interrupted) {
+                spitterMotor.stopMotor();
+            }
+        };
+    }
+   
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addBooleanProperty("Spitter has Coral", () -> hasCoral(), null);
     }
 
 }
