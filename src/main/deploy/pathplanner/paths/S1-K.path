@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.95,
-        "y": 4.2
+        "x": 8.048625,
+        "y": 7.31075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.528988732161993,
-        "y": 4.74590952592881
+        "x": 8.830043330660056,
+        "y": 7.698136324568345
       },
       "isLocked": false,
-      "linkedName": "Coral H"
+      "linkedName": "S1"
     },
     {
       "anchor": {
-        "x": 4.914000000004924,
-        "y": 5.477750000003692
+        "x": 3.95,
+        "y": 5.3
       },
       "prevControl": {
-        "x": 5.281314158343789,
-        "y": 4.923161388261121
-      },
-      "nextControl": {
-        "x": 4.775953048287837,
-        "y": 5.686179938164265
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.25,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 1.9680953088117255,
-        "y": 6.698091249778633
+        "x": 4.178149867391855,
+        "y": 5.402213687973183
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral K"
     }
   ],
   "rotationTargets": [],
@@ -57,11 +41,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 126.44425362523513
+    "velocity": 0,
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "REEF-HPT",
+  "folder": "S1-REEF",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

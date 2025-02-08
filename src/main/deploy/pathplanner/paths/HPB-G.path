@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.075,
-        "y": 5.0
+        "x": 0.9896249999999999,
+        "y": 1.075625
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0899208441697175,
-        "y": 5.1421709787884256
+        "x": 1.906125,
+        "y": 1.0707499999999994
       },
       "isLocked": false,
-      "linkedName": "InsideStart"
+      "linkedName": "HPSB"
     },
     {
       "anchor": {
-        "x": 5.3,
-        "y": 5.1
+        "x": 3.8951250000000006,
+        "y": 1.8897499999999992
       },
       "prevControl": {
-        "x": 5.817451191814893,
-        "y": 5.051619707968016
+        "x": 2.927132812500001,
+        "y": 1.464374999999999
+      },
+      "nextControl": {
+        "x": 4.863117187500002,
+        "y": 2.315125000000001
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.85,
+        "y": 3.85
+      },
+      "prevControl": {
+        "x": 6.0596250000000005,
+        "y": 2.411374999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral I"
+      "linkedName": "Coral G"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "S3-REEF",
+  "folder": "HPB-REEF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 53.13010235415587
   },
   "useDefaultConstraints": true
 }

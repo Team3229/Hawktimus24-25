@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.075,
-        "y": 5.0
+        "x": 8.048625,
+        "y": 7.31075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.559374671499603,
-        "y": 4.494996164524641
+        "x": 6.909428324462798,
+        "y": 4.56806607498564
       },
       "isLocked": false,
-      "linkedName": "InsideStart"
+      "linkedName": "S1"
     },
     {
       "anchor": {
-        "x": 5.6160000000000005,
-        "y": 2.9817499999999995
+        "x": 6.015750000000001,
+        "y": 2.6063749999999994
       },
       "prevControl": {
-        "x": 5.938872506621938,
-        "y": 3.2726626473844336
+        "x": 6.426657808244287,
+        "y": 2.96568691829506
       },
       "nextControl": {
-        "x": 5.404687246109529,
-        "y": 2.791354251215004
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.59225,
-        "y": 2.5625
-      },
-      "prevControl": {
-        "x": 4.849591636558682,
-        "y": 2.4939567826222624
-      },
-      "nextControl": {
-        "x": 3.611945668140737,
-        "y": 2.8236050967636364
+        "x": 5.68425,
+        "y": 2.3164999999999987
       },
       "isLocked": false,
       "linkedName": null
@@ -52,24 +36,15 @@
         "y": 2.75
       },
       "prevControl": {
-        "x": 4.296926255020599,
-        "y": 2.668644120770623
+        "x": 5.3576250000000005,
+        "y": 2.070124999999999
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Coral D"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -59.99999999999999
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -86,7 +61,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "S3-REEF",
+  "folder": "S1-REEF",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

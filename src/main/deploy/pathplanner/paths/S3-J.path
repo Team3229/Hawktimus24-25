@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.353910689170775,
-        "y": 4.368418136501125
+        "x": 9.06325,
+        "y": 5.0195
       },
       "isLocked": false,
       "linkedName": "S3"
     },
     {
       "anchor": {
-        "x": 5.3,
-        "y": 2.9
+        "x": 5.05,
+        "y": 5.3
       },
       "prevControl": {
-        "x": 5.933658964023478,
-        "y": 3.3046076468174697
+        "x": 5.835374999999999,
+        "y": 5.219375
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral F"
+      "linkedName": "Coral J"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "S3-REEF",
