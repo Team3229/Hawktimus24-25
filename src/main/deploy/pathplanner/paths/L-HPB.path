@@ -24,7 +24,7 @@
         "y": 4.117625000000001
       },
       "nextControl": {
-        "x": 1.9894207416419616,
+        "x": 1.9894207416419618,
         "y": 1.6229800599747424
       },
       "isLocked": false,
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HPSB"
+      "linkedName": "HPB"
     }
   ],
   "rotationTargets": [],
