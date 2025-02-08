@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.432769223961326,
-        "y": 5.120427159227293
+        "x": 6.873153196479234,
+        "y": 4.589067627032632
       },
       "isLocked": false,
       "linkedName": "InsideStart"
@@ -20,8 +20,8 @@
         "y": 4.2
       },
       "prevControl": {
-        "x": 5.669619045956962,
-        "y": 4.09495279782386
+        "x": 7.078026814110823,
+        "y": 4.608067712373461
       },
       "nextControl": null,
       "isLocked": false,

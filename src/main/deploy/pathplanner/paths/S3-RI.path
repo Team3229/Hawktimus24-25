@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7,
-        "y": 2.9
+        "x": 8.075,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.700000000000002,
-        "y": 2.9000000000000004
+        "x": 7.0899208441697175,
+        "y": 5.1421709787884256
       },
       "isLocked": false,
-      "linkedName": "Coral C"
+      "linkedName": "InsideStart"
     },
     {
       "anchor": {
-        "x": 5.85,
-        "y": 3.85
+        "x": 5.3,
+        "y": 5.1
       },
       "prevControl": {
-        "x": 4.85,
-        "y": 3.85
+        "x": 5.817451191814893,
+        "y": 5.051619707968016
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral G"
+      "linkedName": "Coral I"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Waypoints",
+  "folder": "S3-REEF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
