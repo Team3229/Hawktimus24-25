@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.06325,
-        "y": 5.0195
+        "x": 0.9896249999999999,
+        "y": 1.075625
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.353910689170775,
-        "y": 4.368418136501125
+        "x": 1.6818749999999996,
+        "y": 0.5101249999999999
       },
       "isLocked": false,
-      "linkedName": "S3"
+      "linkedName": "HPSB"
     },
     {
       "anchor": {
-        "x": 5.3,
-        "y": 2.9
+        "x": 8.00475,
+        "y": 6.243125
       },
       "prevControl": {
-        "x": 5.933658964023478,
-        "y": 3.3046076468174697
+        "x": 7.00475,
+        "y": 6.243125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral F"
+      "linkedName": "S2"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "S3-REEF",
+  "folder": "Waypoints",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 53.13010235415587
   },
   "useDefaultConstraints": true
 }

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.075,
-        "y": 5.0
+        "x": 8.06325,
+        "y": 5.0195
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.279354975367152,
-        "y": 4.316025431758488
+        "x": 7.267604975367153,
+        "y": 4.335525431758488
       },
       "isLocked": false,
-      "linkedName": "InsideStart"
+      "linkedName": "S3"
     },
     {
       "anchor": {

@@ -12,20 +12,20 @@
         "y": 4.2
       },
       "isLocked": false,
-      "linkedName": "Coral A"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 8.06325,
+        "y": 5.0195
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 7.06325,
+        "y": 5.0195
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "S3"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": "Waypoints",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

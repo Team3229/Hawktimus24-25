@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.06325,
-        "y": 5.0195
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.353910689170775,
-        "y": 4.368418136501125
+        "x": 3.0,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "S3"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.3,
-        "y": 2.9
+        "x": 8.0535,
+        "y": 7.29125
       },
       "prevControl": {
-        "x": 5.933658964023478,
-        "y": 3.3046076468174697
+        "x": 7.0535,
+        "y": 7.29125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral F"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "S3-REEF",
+  "folder": "Waypoints",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
