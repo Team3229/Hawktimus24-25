@@ -4,109 +4,93 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SpitterSubsystem;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RobotContainer {
 
-  CommandXboxController driverController;
-  ButtonBoard buttonBoard;
-  ElevatorSubsystem elevatorSubsystem;
-  SpitterSubsystem spitterSubsystem;
+	CommandXboxController driverController;
+	ButtonBoard buttonBoard;
+	ElevatorSubsystem elevatorSubsystem;
+	SpitterSubsystem spitterSubsystem;
+	DriveSubsystem driveSubsystem;
 
-  public RobotContainer() {
-    driverController = new CommandXboxController(0);
-    buttonBoard = new ButtonBoard(1);
-    elevatorSubsystem = new ElevatorSubsystem();
-    spitterSubsystem = new SpitterSubsystem();
-    configureBindings();
-  }
+	public RobotContainer() {
 
-  private void configureBindings() {
+		driverController = new CommandXboxController(0);
+		buttonBoard = new ButtonBoard(1);
+		elevatorSubsystem = new ElevatorSubsystem();
+		spitterSubsystem = new SpitterSubsystem();
+		driveSubsystem = new DriveSubsystem(
+			"swerve",
+			MetersPerSecond.of(3.0),
+			new Pose2d(),
+			TelemetryVerbosity.HIGH
+		);
 
-    driverController.a().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L1)
-        .andThen(spitterSubsystem.spit())
-    );
+		configureBindings();
+	}
 
-    driverController.b().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L2)
-        .andThen(spitterSubsystem.spit())
-    );
+	private void configureBindings() {
 
-    driverController.x().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L3)
-        .andThen(spitterSubsystem.spit())
-    );
+		driveSubsystem.setDefaultCommand(
+			driveSubsystem.driveCommand(
+				driverController::getLeftX,
+				driverController::getLeftY,
+				driverController::getRightX
+			)
+		);
 
-    driverController.y().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L4)
-        .andThen(spitterSubsystem.spit())
-    );  
+		driverController.a().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L1)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_1().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L1)
-        .andThen(spitterSubsystem.spit())
-      // L1
-    );
+		driverController.b().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L2)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_2().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L2)
-        .andThen(spitterSubsystem.spit())
-      // L2
-    );
+		driverController.x().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L3)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_3().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L4)
-        .andThen(spitterSubsystem.spit())
-      // L3
-    );
+		driverController.y().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L4)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_4().onTrue(
-      elevatorSubsystem.goToLevel(ReefHeight.L4)
-        .andThen(spitterSubsystem.spit())
-      // L4
-    );
+		buttonBoard.b_1().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L1)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_5().onTrue(
-      Commands.none()
-    );
+		buttonBoard.b_2().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L2)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_6().onTrue(
-      Commands.none()
-    );
+		buttonBoard.b_3().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L3)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_7().onTrue(
-      Commands.none()
-    );
+		buttonBoard.b_4().onTrue(
+			elevatorSubsystem.goToLevel(ReefHeight.L4)
+			.andThen(spitterSubsystem.spit())
+		);
 
-    buttonBoard.b_8().onTrue(
-      Commands.none()
-    );
+		SmartDashboard.putData(elevatorSubsystem);
 
-    buttonBoard.b_9().onTrue(
-      Commands.none()
-    );
-
-    buttonBoard.b_10().onTrue(
-      Commands.none()
-    );
-
-    buttonBoard.b_11().onTrue(
-      Commands.none()
-    );
-
-    buttonBoard.b_12().onTrue(
-      Commands.none()
-    );
-
-    SmartDashboard.putData(elevatorSubsystem);
-
-  }
+	}
 }
