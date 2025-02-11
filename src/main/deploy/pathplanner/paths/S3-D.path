@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.06325,
+        "y": 5.0195
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.368430113485411,
+        "y": 4.329779119490721
+      },
+      "isLocked": false,
+      "linkedName": "S3"
+    },
+    {
+      "anchor": {
+        "x": 5.5185,
+        "y": 2.6258749999999997
+      },
+      "prevControl": {
+        "x": 5.681509817207012,
+        "y": 2.8154212990779213
+      },
+      "nextControl": {
+        "x": 5.3088750000000005,
+        "y": 2.382125
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 2.75
+      },
+      "prevControl": {
+        "x": 4.953,
+        "y": 2.099375
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral D"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "S3-REEF",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
