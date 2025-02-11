@@ -8,89 +8,87 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SpitterSubsystem;
-import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import frc.robot.subsystems.coral.CoralSubsystem;
 
 public class RobotContainer {
 
-	CommandXboxController driverController;
-	ButtonBoard buttonBoard;
-	ElevatorSubsystem elevatorSubsystem;
-	SpitterSubsystem spitterSubsystem;
-	DriveSubsystem driveSubsystem;
+  CommandXboxController driverController;
+  ButtonBoard buttonBoard;
+  CoralSubsystem coralSubsystem;
 
-	public RobotContainer() {
+  public RobotContainer() {
+    driverController = new CommandXboxController(0);
+    buttonBoard = new ButtonBoard(1);
+    // coralSubsystem = new CoralSubsystem();
+    coralSubsystem = new CoralSubsystem(driverController.leftBumper());
+    configureBindings();
+    initTelemetery();
+  }
 
-		driverController = new CommandXboxController(0);
-		buttonBoard = new ButtonBoard(1);
-		elevatorSubsystem = new ElevatorSubsystem();
-		spitterSubsystem = new SpitterSubsystem();
-		driveSubsystem = new DriveSubsystem(
-			"swerve",
-			MetersPerSecond.of(3.0),
-			new Pose2d(),
-			TelemetryVerbosity.HIGH
-		);
+  private void configureBindings() {
 
-		configureBindings();
-	}
+    driverController.a().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L1));
 
-	private void configureBindings() {
+    driverController.b().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L2));
 
-		driveSubsystem.setDefaultCommand(
-			driveSubsystem.driveCommand(
-				driverController::getLeftX,
-				driverController::getLeftY,
-				driverController::getRightX
-			)
-		);
+    driverController.x().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L3));
 
-		driverController.a().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L1)
-			.andThen(spitterSubsystem.spit())
-		);
+    driverController.y().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L4));
 
-		driverController.b().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L2)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_1().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L1)
+    // L1
+    );
 
-		driverController.x().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L3)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_2().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L2)
+    // L2
+    );
 
-		driverController.y().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L4)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_3().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L3)
+    // L3
+    );
 
-		buttonBoard.b_1().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L1)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_4().onTrue(
+        coralSubsystem.elevatorSpit(ReefHeight.L4)
+    // L4
+    );
 
-		buttonBoard.b_2().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L2)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_5().onTrue(
+        Commands.none());
 
-		buttonBoard.b_3().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L3)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_6().onTrue(
+        Commands.none());
 
-		buttonBoard.b_4().onTrue(
-			elevatorSubsystem.goToLevel(ReefHeight.L4)
-			.andThen(spitterSubsystem.spit())
-		);
+    buttonBoard.b_7().onTrue(
+        Commands.none());
 
-		SmartDashboard.putData(elevatorSubsystem);
+    buttonBoard.b_8().onTrue(
+        Commands.none());
 
-	}
+    buttonBoard.b_9().onTrue(
+        Commands.none());
+
+    buttonBoard.b_10().onTrue(
+        Commands.none());
+
+    buttonBoard.b_11().onTrue(
+        Commands.none());
+
+    buttonBoard.b_12().onTrue(
+        Commands.none());
+  }
+
+  public void initTelemetery(){
+      SmartDashboard.putData(coralSubsystem);
+    }
 }
