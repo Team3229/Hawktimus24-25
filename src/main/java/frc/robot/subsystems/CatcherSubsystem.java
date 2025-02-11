@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class CatcherSubsystem extends SubsystemBase{
+public class CatcherSubsystem extends SubsystemBase {
     private DigitalInput irSensor;
     public Trigger coral;
 

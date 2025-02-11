@@ -14,6 +14,7 @@ import frc.robot.inputs.ButtonBoard;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SpitterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RobotContainer {
@@ -34,7 +35,10 @@ public class RobotContainer {
 			"swerve",
 			MetersPerSecond.of(3.0),
 			new Pose2d(),
-			TelemetryVerbosity.HIGH
+			TelemetryVerbosity.HIGH,
+			() -> {
+				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
+			}
 		);
 
 		configureBindings();
