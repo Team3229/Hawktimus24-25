@@ -14,7 +14,7 @@ public class CoralSubsystem extends SubsystemBase {
     ElevatorSubsystem elevatorSubsystem;
     SpitterSubsystem spitterSubsystem;
     CatcherSubsystem catcherSubsystem;
-
+    
     public CoralSubsystem() {
         elevatorSubsystem = new ElevatorSubsystem();
         catcherSubsystem = new CatcherSubsystem();
