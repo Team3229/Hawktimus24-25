@@ -3,6 +3,7 @@ package frc.robot.subsystems.coral;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.ReefHeight;
 
 /**
@@ -15,12 +16,16 @@ public class CoralSubsystem extends SubsystemBase {
     SpitterSubsystem spitterSubsystem;
     CatcherSubsystem catcherSubsystem;
     
-    public CoralSubsystem() {
+    public CoralSubsystem(Trigger catchTrigger) {
         elevatorSubsystem = new ElevatorSubsystem();
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
 
-        catcherSubsystem.getCoral().onTrue(catcherSubsystem.feedAngle()
+        // catcherSubsystem.getCoral().onTrue(catcherSubsystem.feedAngle()
+        //         .alongWith(spitterSubsystem.intake())
+        //         .andThen(catcherSubsystem.catchAngle()));
+
+        catchTrigger.onTrue(catcherSubsystem.feedAngle()
                 .alongWith(spitterSubsystem.intake())
                 .andThen(catcherSubsystem.catchAngle()));
     }
@@ -29,17 +34,10 @@ public class CoralSubsystem extends SubsystemBase {
      * Connect elevator to spit
      */
     public Command elevatorSpit(ReefHeight reefHeight) {
-        return new Command() {
-            @Override
-            public void execute() {
-                if (spitterSubsystem.hasCoral()) {
-                    elevatorSubsystem.goToLevel(reefHeight)
-                            .andThen(spitterSubsystem.spit())
-                            .andThen();
-                }
-            }
-
-        };
+        return elevatorSubsystem.goToLevel(reefHeight)
+            .andThen(spitterSubsystem.spit())
+            .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base)
+        );
     }
 
     @Override

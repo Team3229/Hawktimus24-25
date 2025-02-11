@@ -4,7 +4,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,10 +45,10 @@ public class SpitterSubsystem extends SubsystemBase {
                 spitterMotor.set(INTAKE_SPEED);
             }
 
-            @Override
-            public boolean isFinished() {
-                return hasCoral();
-            }
+            // @Override
+            // public boolean isFinished() {
+            //     return hasCoral();
+            // }
 
             @Override
             public void end(boolean interrupted) {
@@ -58,7 +57,7 @@ public class SpitterSubsystem extends SubsystemBase {
                 motorConfig.smartCurrentLimit(38); // change to actual desired current limit later
             }
 
-        };
+        }.withTimeout(2);
     }
 
     /**
@@ -73,15 +72,15 @@ public class SpitterSubsystem extends SubsystemBase {
                 spitterMotor.set(SPIT_SPEED);
             }
 
-            @Override
-            public boolean isFinished() {
-                return !hasCoral();
-            }
+            // @Override
+            // public boolean isFinished() {
+            //     return !hasCoral();
+            // }
 
             @Override
             public void end(boolean interrupted) {
                 spitterMotor.stopMotor();
             }
-        };
+        }.withTimeout(2);
     }
 }

@@ -20,7 +20,8 @@ public class RobotContainer {
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     buttonBoard = new ButtonBoard(1);
-    coralSubsystem = new CoralSubsystem();
+    // coralSubsystem = new CoralSubsystem();
+    coralSubsystem = new CoralSubsystem(driverController.leftBumper());
     configureBindings();
     initTelemetery();
   }
