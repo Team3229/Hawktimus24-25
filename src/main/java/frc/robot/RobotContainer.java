@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SpitterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -24,6 +22,7 @@ public class RobotContainer {
   CommandXboxController driverController;
   ButtonBoard buttonBoard;
   CoralSubsystem coralSubsystem;
+  DriveSubsystem driveSubsystem;
 
 	public RobotContainer() {
 
