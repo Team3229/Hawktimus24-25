@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
+import frc.robot.inputs.FlightStick;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
@@ -19,16 +20,16 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RobotContainer {
 
-  CommandXboxController driverController;
+  FlightStick driverController;
   ButtonBoard buttonBoard;
   CoralSubsystem coralSubsystem;
   DriveSubsystem driveSubsystem;
 
 	public RobotContainer() {
 
-		driverController = new CommandXboxController(0);
+		driverController = new FlightStick(0);
 		buttonBoard = new ButtonBoard(1);
-		coralSubsystem = new CoralSubsystem(driverController.leftBumper());
+		coralSubsystem = new CoralSubsystem(driverController.b_3());
 		driveSubsystem = new DriveSubsystem(
 			"swerve",
 			MetersPerSecond.of(3.0),
@@ -43,18 +44,6 @@ public class RobotContainer {
 	}
 
   private void configureBindings() {
-
-    driverController.a().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L1));
-
-    driverController.b().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L2));
-
-    driverController.x().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L3));
-
-    driverController.y().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L4));
 
     buttonBoard.b_1().onTrue(
         coralSubsystem.elevatorSpit(ReefHeight.L1)
