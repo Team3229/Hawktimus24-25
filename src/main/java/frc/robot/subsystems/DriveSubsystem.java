@@ -120,7 +120,9 @@ public class DriveSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		PoseEstimate estimate = visionPoseEstimate.get();
-		swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+		if (estimate != null) {
+			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+		}
 	}
 
 	/**

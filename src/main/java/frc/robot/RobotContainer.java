@@ -6,10 +6,13 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
@@ -20,10 +23,12 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RobotContainer {
 
-  FlightStick driverController;
-  ButtonBoard buttonBoard;
-  CoralSubsystem coralSubsystem;
-  DriveSubsystem driveSubsystem;
+	FlightStick driverController;
+	ButtonBoard buttonBoard;
+	CoralSubsystem coralSubsystem;
+	DriveSubsystem driveSubsystem;
+
+	private SendableChooser<Command> autoChooser;
 
 	public RobotContainer() {
 
@@ -37,60 +42,68 @@ public class RobotContainer {
 			TelemetryVerbosity.HIGH,
 			() -> {
 				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
-			}
-		);
+			});
 
 		configureBindings();
+		initTelemetery();
 	}
 
-  private void configureBindings() {
+	private void configureBindings() {
 
-    buttonBoard.b_1().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L1)
-    // L1
-    );
+		buttonBoard.b_1().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L1)
+		// L1
+		);
 
-    buttonBoard.b_2().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L2)
-    // L2
-    );
+		buttonBoard.b_2().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L2)
+		// L2
+		);
 
-    buttonBoard.b_3().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L3)
-    // L3
-    );
+		buttonBoard.b_3().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L3)
+		// L3
+		);
 
-    buttonBoard.b_4().onTrue(
-        coralSubsystem.elevatorSpit(ReefHeight.L4)
-    // L4
-    );
+		buttonBoard.b_4().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L4)
+		// L4
+		);
 
-    buttonBoard.b_5().onTrue(
-        Commands.none());
+		buttonBoard.b_5().onTrue(
+			Commands.none());
 
-    buttonBoard.b_6().onTrue(
-        Commands.none());
+		buttonBoard.b_6().onTrue(
+			Commands.none());
 
-    buttonBoard.b_7().onTrue(
-        Commands.none());
+		buttonBoard.b_7().onTrue(
+			Commands.none());
 
-    buttonBoard.b_8().onTrue(
-        Commands.none());
+		buttonBoard.b_8().onTrue(
+			Commands.none());
 
-    buttonBoard.b_9().onTrue(
-        Commands.none());
+		buttonBoard.b_9().onTrue(
+			Commands.none());
 
-    buttonBoard.b_10().onTrue(
-        Commands.none());
+		buttonBoard.b_10().onTrue(
+			Commands.none());
 
-    buttonBoard.b_11().onTrue(
-        Commands.none());
+		buttonBoard.b_11().onTrue(
+			Commands.none());
 
-    buttonBoard.b_12().onTrue(
-        Commands.none());
-  }
+		buttonBoard.b_12().onTrue(
+			Commands.none());
+	}
 
-  public void initTelemetery(){
-      SmartDashboard.putData(coralSubsystem);
-    }
+	public void initTelemetery() {
+		SmartDashboard.putData(coralSubsystem);
+
+		autoChooser = AutoBuilder.buildAutoChooser();
+		SmartDashboard.putData(autoChooser);
+	}
+
+	public Command getAutonomousCommand() {
+		return autoChooser.getSelected();
+	}
+
 }

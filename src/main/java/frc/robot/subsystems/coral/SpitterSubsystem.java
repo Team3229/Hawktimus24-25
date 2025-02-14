@@ -16,7 +16,7 @@ public class SpitterSubsystem extends SubsystemBase {
     private DigitalInput spitterSensor;
     private SparkMaxConfig motorConfig;
 
-    private static final int CAN_ID = 3;
+    private static final int CAN_ID = 14;
     private static final int SENSOR_PORT = 0;
 
     public SpitterSubsystem() {

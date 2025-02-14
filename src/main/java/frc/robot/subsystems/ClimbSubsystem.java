@@ -15,7 +15,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private SparkMax climbMotor;
     private SparkMaxConfig motorConfig;
 
-    private static final int CAN_ID = 10;
+    private static final int CAN_ID = 16;
     
     private static final double POSITION_CONVERSION_FACTOR = 1; //Change this value to the correct conversion factor later.
     private static final double FORWARD_SOFT_LIMIT = 1; //Change this value to the correct forward soft limit later.

@@ -24,7 +24,7 @@ import frc.robot.constants.ReefHeight;
 public class ElevatorSubsystem extends SubsystemBase {
 
     // CAN ID for the motor controller
-    private static final int MOTOR_CAN_ID = 2;
+    private static final int MOTOR_CAN_ID = 13;
     
     // Maximum speed of the elevator motor
     private static final double MAX_SPEED = 1;
