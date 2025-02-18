@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
@@ -90,6 +91,18 @@ public class RobotContainer {
 			.andThen(spitterSubsystem.spit())
 		);
 
+		driverController.a()
+		.and(buttonBoard.joy_L())
+			.onTrue(
+				driveSubsystem.findCoralZone(true)
+			);
+
+		driverController.a()
+		.and(buttonBoard.joy_R())
+			.onTrue(
+				driveSubsystem.findCoralZone(false)
+			);
+		
 		SmartDashboard.putData(elevatorSubsystem);
 
 	}
