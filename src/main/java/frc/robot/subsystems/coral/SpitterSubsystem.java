@@ -20,6 +20,7 @@ public class SpitterSubsystem extends SubsystemBase {
     private static final int SENSOR_PORT = 0;
 
     public SpitterSubsystem() {
+        super();
         spitterMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         spitterSensor = new DigitalInput(SENSOR_PORT);
     }

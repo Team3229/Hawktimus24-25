@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,8 +17,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
@@ -27,6 +31,10 @@ public class RobotContainer {
 	ButtonBoard buttonBoard;
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
+	ClimbSubsystem climbSubsystem;
+	AlgaeSubsystem algaeSubsystem;
+
+	VisualizerSubsystem visualizerSubsystem;
 
 	private SendableChooser<Command> autoChooser;
 
@@ -34,21 +42,38 @@ public class RobotContainer {
 
 		driverController = new FlightStick(0);
 		buttonBoard = new ButtonBoard(1);
+		climbSubsystem = new ClimbSubsystem();
 		coralSubsystem = new CoralSubsystem(driverController.b_3());
+		algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 			"swerve",
-			MetersPerSecond.of(3.0),
-			new Pose2d(),
+			MetersPerSecond.of(5.0),
+			new Pose2d(2, 4, new Rotation2d()),
 			TelemetryVerbosity.HIGH,
 			() -> {
 				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
 			});
+
+		visualizerSubsystem = new VisualizerSubsystem(
+			coralSubsystem::getElevatorPos,
+			coralSubsystem::getFeederAngle,
+			climbSubsystem::getPosition,
+			algaeSubsystem::getPosition
+		);
 
 		configureBindings();
 		initTelemetery();
 	}
 
 	private void configureBindings() {
+
+		driveSubsystem.setDefaultCommand(
+			driveSubsystem.driveCommand(
+				driverController::a_Y,
+				driverController::a_X,
+				driverController::a_Z
+			)
+		);
 
 		buttonBoard.b_1().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L1)

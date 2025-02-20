@@ -85,6 +85,8 @@ public class DriveSubsystem extends SubsystemBase {
 		Supplier<PoseEstimate> visionPoseEstimate
 	) {
 
+		super();
+
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
 		SwerveDriveTelemetry.verbosity = verbosity;

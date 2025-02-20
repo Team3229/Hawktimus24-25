@@ -61,6 +61,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
 
+        super();
+
         elevatorMotor = new SparkMax(MOTOR_CAN_ID, MotorType.kBrushless);
 
         positionController = elevatorMotor.getClosedLoopController();
@@ -123,6 +125,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         
         positionController.setReference(getElevatorRelativeHeightInInches(reefPosition), ControlType.kPosition);
 
+    }
+
+    public double getElevatorPos() {
+        return elevatorMotor.getEncoder().getPosition();
     }
     
     @Override

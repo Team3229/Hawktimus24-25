@@ -36,6 +36,9 @@ public class CatcherSubsystem extends SubsystemBase{
 
     
     public CatcherSubsystem() {
+
+        super();
+
         catcherMotor = new SparkMax(MOTOR_CAN_ID, MotorType.kBrushless);
 
         positionController = catcherMotor.getClosedLoopController();
@@ -76,6 +79,10 @@ public class CatcherSubsystem extends SubsystemBase{
             () -> {
                 positionController.setReference(CATCH_ANGLE, ControlType.kPosition);
             }, this );
+    }
+
+    public double getFeederAngle() {
+        return catcherMotor.getEncoder().getPosition();
     }
 
     protected boolean hasCoral() {

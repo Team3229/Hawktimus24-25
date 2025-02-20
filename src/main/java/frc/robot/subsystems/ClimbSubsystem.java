@@ -1,14 +1,11 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -21,7 +18,10 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final double FORWARD_SOFT_LIMIT = 1; //Change this value to the correct forward soft limit later.
     private static final double REVERSE_SOFT_LIMIT = 1; //Change this value to the correct reverse soft limit later.
     
-    public ClimbSubsystem(DoubleSupplier joystickInput) {
+    public ClimbSubsystem() {
+
+        super();
+
         climbMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         motorConfig = new SparkMaxConfig();
         
@@ -41,13 +41,10 @@ public class ClimbSubsystem extends SubsystemBase {
             /*Change the value of 1 to the correct forward soft limit later,
             and double check that POSITION_CONVERSION_FACTOR is used correctly. */
             .reverseSoftLimit(REVERSE_SOFT_LIMIT * POSITION_CONVERSION_FACTOR);
+    }
 
-        setDefaultCommand(
-            Commands.run(
-                () -> {
-                    climbMotor.set(joystickInput.getAsDouble());
-                }, this)
-        );
+    public double getPosition() {
+        return climbMotor.getEncoder().getPosition();
     }
 
     @Override

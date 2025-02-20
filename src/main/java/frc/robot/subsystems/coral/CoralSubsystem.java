@@ -17,6 +17,9 @@ public class CoralSubsystem extends SubsystemBase {
     CatcherSubsystem catcherSubsystem;
     
     public CoralSubsystem(Trigger catchTrigger) {
+
+        super();
+
         elevatorSubsystem = new ElevatorSubsystem();
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
@@ -38,6 +41,14 @@ public class CoralSubsystem extends SubsystemBase {
             .andThen(spitterSubsystem.spit())
             .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base)
         );
+    }
+
+    public double getElevatorPos() {
+        return elevatorSubsystem.getElevatorPos();
+    }
+
+    public double getFeederAngle() {
+        return catcherSubsystem.getFeederAngle();
     }
 
     @Override
