@@ -5,8 +5,9 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Milliseconds;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -18,6 +19,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,6 +38,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Robot;
+import frc.robot.constants.ReefPositions;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
@@ -43,6 +48,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
 import org.json.simple.parser.ParseException;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -213,7 +219,7 @@ public class DriveSubsystem extends SubsystemBase {
 			pose,
 			constraints,
 			edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
-		);
+		).withName("DriveToPose");
 	}
 
 	/**
@@ -648,7 +654,120 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @return {@link SwerveDrive}
 	 */
+
 	public SwerveDrive getSwerveDrive() {
 		return swerveDrive;
 	}
+
+	private double al(double x) {
+		return -(1 / Math.sqrt(3)) * (x - 3.673422) + 4.496925;
+	}
+
+	private double bc(double x) {
+		return (1 / Math.sqrt(3)) * (x - 3.673480) + 3.554821;
+	}
+
+	private double de(double x) {
+		return 4.489395;
+	}
+
+	private double fg(double x) {
+		return -(1 / Math.sqrt(3)) * (x - 5.305252) + 3.554921;
+	}
+
+	private double hi(double x) {
+		return (1 / Math.sqrt(3)) * (x - 5.305194) + 4.497025;
+	}
+	
+	private double jk(double x) {
+		return 4.489279;
+	}
+
+	public Command findCoralZone(boolean leftSide) {
+
+		//LEFT SIDE
+		if (leftSide && inZone_AL_BC(getPose())) {
+			return driveToPose(ReefPositions.A.getPosition());
+		}
+		if (leftSide && inZone_BC_DE(getPose())) {
+			return driveToPose(ReefPositions.C.getPosition());
+		}
+		if (leftSide && inZone_DE_FG(getPose())) {
+			return driveToPose(ReefPositions.E.getPosition());
+		}
+		if (leftSide && inZone_FG_HI(getPose())) {
+			return driveToPose(ReefPositions.G.getPosition());
+		}
+		if (leftSide && inZone_HI_JK(getPose())) {
+			return driveToPose(ReefPositions.I.getPosition());
+		}
+		if (leftSide && inZone_JK_AL(getPose())) {
+			return driveToPose(ReefPositions.K.getPosition());
+		}
+		
+
+		//RIGHT SIDE
+		if (!leftSide && inZone_AL_BC(getPose())) {
+			return driveToPose(ReefPositions.B.getPosition());
+		}
+		if (!leftSide && inZone_BC_DE(getPose())) {
+			return driveToPose(ReefPositions.D.getPosition());
+		}
+		if (!leftSide && inZone_DE_FG(getPose())) {
+			return driveToPose(ReefPositions.F.getPosition());
+		}
+		if (!leftSide && inZone_FG_HI(getPose())) {
+			return driveToPose(ReefPositions.H.getPosition());
+		}
+		if (!leftSide && inZone_HI_JK(getPose())) {
+			return driveToPose(ReefPositions.J.getPosition());
+		}
+		if (!leftSide && inZone_JK_AL(getPose())) {
+			return driveToPose(ReefPositions.K.getPosition());
+		}
+
+		System.out.println("Robot is not positioned inside a zone");
+		return Commands.none();
+
+	}
+
+	
+
+	private boolean inZone_AL_BC(Pose2d robotPose) {
+		return (
+			al(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < bc(robotPose.getX()));
+	}
+
+	private boolean inZone_BC_DE(Pose2d robotPose) {
+		return (
+			bc(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < de(robotPose.getX()));
+	}
+
+	private boolean inZone_DE_FG(Pose2d robotPose) {
+		return (
+			de(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < fg(robotPose.getX()));
+	}
+
+	private boolean inZone_FG_HI(Pose2d robotPose) {
+		return (
+			fg(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < hi(robotPose.getX()));
+	}
+
+	private boolean inZone_HI_JK(Pose2d robotPose) {
+		return (
+			hi(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < jk(robotPose.getX()));
+	}
+
+	private boolean inZone_JK_AL(Pose2d robotPose) {
+		return (
+			jk(robotPose.getX()) < robotPose.getY()) && 
+			(robotPose.getY() < al(robotPose.getX()));
+	}
+		
+			
 }
