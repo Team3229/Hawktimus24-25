@@ -1,7 +1,11 @@
 package frc.robot.subsystems.coral;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.ReefHeight;
@@ -31,6 +35,12 @@ public class CoralSubsystem extends SubsystemBase {
         catchTrigger.onTrue(catcherSubsystem.feedAngle()
                 .alongWith(spitterSubsystem.intake())
                 .andThen(catcherSubsystem.catchAngle()));
+
+        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4));
+        NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
+        NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
+        NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
+        NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral).withTimeout(2));
     }
 
     /**
@@ -43,7 +53,7 @@ public class CoralSubsystem extends SubsystemBase {
         );
     }
 
-    public double getElevatorPos() {
+    public Distance getElevatorPos() {
         return elevatorSubsystem.getElevatorPos();
     }
 

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
+import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RobotContainer {
@@ -46,20 +48,19 @@ public class RobotContainer {
 		coralSubsystem = new CoralSubsystem(driverController.b_3());
 		algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
-			"swerve",
-			MetersPerSecond.of(5.0),
-			new Pose2d(2, 4, new Rotation2d()),
-			TelemetryVerbosity.HIGH,
-			() -> {
-				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
-			});
+				"swerve",
+				MetersPerSecond.of(5.0),
+				new Pose2d(2, 4, new Rotation2d()),
+				TelemetryVerbosity.HIGH,
+				() -> {
+					return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
+				});
 
 		visualizerSubsystem = new VisualizerSubsystem(
-			coralSubsystem::getElevatorPos,
-			coralSubsystem::getFeederAngle,
-			climbSubsystem::getPosition,
-			algaeSubsystem::getPosition
-		);
+				() -> coralSubsystem.getElevatorPos().in(Meters),
+				coralSubsystem::getFeederAngle,
+				climbSubsystem::getPosition,
+				algaeSubsystem::getPosition);
 
 		configureBindings();
 		initTelemetery();
@@ -67,57 +68,78 @@ public class RobotContainer {
 
 	private void configureBindings() {
 
+		SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
+				driveSubsystem.getSwerveDrive(),
+				() -> driverController.a_Y() * -1,
+				() -> driverController.a_X() * -1)
+				.withControllerRotationAxis(() -> -driverController.a_Z())
+				.deadband(0.1)
+				.scaleTranslation(0.8)
+				.allianceRelativeControl(true);
+
 		driveSubsystem.setDefaultCommand(
-			driveSubsystem.driveCommand(
-				driverController::a_Y,
-				driverController::a_X,
-				driverController::a_Z
-			)
+				driveSubsystem.driveFieldOriented(
+						driveAngularVelocity));
+		
+		driverController.b_Trigger().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L4)
+		);
+
+		driverController.b_Hazard().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L3)
+		);
+
+		driverController.b_3().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L2)
+		);
+
+		driverController.b_4().onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L1)
 		);
 
 		buttonBoard.b_1().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L1)
+				coralSubsystem.elevatorSpit(ReefHeight.L1)
 		// L1
 		);
 
 		buttonBoard.b_2().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2)
+				coralSubsystem.elevatorSpit(ReefHeight.L2)
 		// L2
 		);
 
 		buttonBoard.b_3().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3)
+				coralSubsystem.elevatorSpit(ReefHeight.L3)
 		// L3
 		);
 
 		buttonBoard.b_4().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4)
+				coralSubsystem.elevatorSpit(ReefHeight.L4)
 		// L4
 		);
 
 		buttonBoard.b_5().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_6().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_7().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_8().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_9().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_10().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_11().onTrue(
-			Commands.none());
+				Commands.none());
 
 		buttonBoard.b_12().onTrue(
-			Commands.none());
+				Commands.none());
 	}
 
 	public void initTelemetery() {
