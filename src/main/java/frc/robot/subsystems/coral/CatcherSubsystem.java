@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.coral;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -12,16 +12,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import lombok.Getter;
 
 public class CatcherSubsystem extends SubsystemBase{
     private DigitalInput irSensor;
-    public Trigger coral;
+    @Getter
+    private Trigger coral;
 
     //25 degrees in cad (NEEDS TO BE TESTED)
     private static final double FEED_ANGLE = 25;
     private static final double CATCH_ANGLE = 0;
     
-    private static final int MOTOR_CAN_ID = 9;
+    private static final int MOTOR_CAN_ID = 12;
     private static final double MAX_SPEED = 1;
 
     private static final double kP = 0.1;
@@ -34,11 +36,14 @@ public class CatcherSubsystem extends SubsystemBase{
 
     
     public CatcherSubsystem() {
+
+        super();
+
         catcherMotor = new SparkMax(MOTOR_CAN_ID, MotorType.kBrushless);
 
         positionController = catcherMotor.getClosedLoopController();
 
-        irSensor = new DigitalInput(0);
+        irSensor = new DigitalInput(1);
         
         motorConfig = new SparkMaxConfig();
 
@@ -59,12 +64,7 @@ public class CatcherSubsystem extends SubsystemBase{
         
         coral = new Trigger(this::hasCoral);
 
-        coral.onTrue(
-                feedAngle()
-            .andThen(
-                catchAngle()
-            )
-        );
+        
     }
 
     public Command feedAngle () {
@@ -81,7 +81,11 @@ public class CatcherSubsystem extends SubsystemBase{
             }, this );
     }
 
-    private boolean hasCoral() {
+    public double getFeederAngle() {
+        return catcherMotor.getEncoder().getPosition();
+    }
+
+    protected boolean hasCoral() {
         return !irSensor.get();
     }
 }

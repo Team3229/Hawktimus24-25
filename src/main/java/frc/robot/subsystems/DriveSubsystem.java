@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Milliseconds;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -29,6 +30,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -38,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Robot;
 import frc.robot.constants.ReefPositions;
+import frc.robot.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +73,8 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	private SwerveDrive swerveDrive;
 
+	private Supplier<PoseEstimate> visionPoseEstimate;
+
 	/**
 	 * Initialize {@link SwerveDrive}
 	 *
@@ -82,12 +87,17 @@ public class DriveSubsystem extends SubsystemBase {
 		String path,
 		LinearVelocity maxChassisVelocity,
 		Pose2d initialPose,
-		TelemetryVerbosity verbosity
+		TelemetryVerbosity verbosity,
+		Supplier<PoseEstimate> visionPoseEstimate
 	) {
+
+		super();
 
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
 		SwerveDriveTelemetry.verbosity = verbosity;
+
+		this.visionPoseEstimate = visionPoseEstimate;
 		
 		try {
 			swerveDrive = new SwerveParser(
@@ -113,6 +123,14 @@ public class DriveSubsystem extends SubsystemBase {
 		);
 
 		setupPathPlanner();
+	}
+
+	@Override
+	public void periodic() {
+		PoseEstimate estimate = visionPoseEstimate.get();
+		if (estimate != null) {
+			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+		}
 	}
 
 	/**
@@ -341,7 +359,7 @@ public class DriveSubsystem extends SubsystemBase {
 	) {
 		return run(() -> {
 			// Make the robot move
-			swerveDrive.drive(
+			drive(
 				SwerveMath.scaleTranslation(
 					new Translation2d(
 						translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
@@ -349,9 +367,8 @@ public class DriveSubsystem extends SubsystemBase {
 					),
 					0.8
 				),
-				Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-				true,
-				false
+				Math.pow(angularRotationX.getAsDouble(), 3) * 50,
+				true
 			);
 		});
 	}
@@ -435,8 +452,12 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @param initialHolonomicPose The pose to set the odometry to
 	 */
-	public void resetOdometry(Pose2d initialHolonomicPose) {
-		swerveDrive.resetOdometry(initialHolonomicPose);
+	public void resetOdometry(Pose2d pose) {
+		if (pose == null) {
+			swerveDrive.resetOdometry(new Pose2d());
+			return;
+		}
+		swerveDrive.resetOdometry(pose);
 	}
 
 	/**
@@ -622,6 +643,10 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void addFakeVisionReading() {
 		swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+	}
+
+	public void addVisionReading(Pose2d pose, Time timestamp) {
+		swerveDrive.addVisionMeasurement(pose, timestamp.in(Milliseconds));
 	}
 
 	/**

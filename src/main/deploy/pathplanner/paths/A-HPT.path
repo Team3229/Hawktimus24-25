@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6889498837135672,
-        "y": 4.419589766577748
+        "x": 2.241700819672131,
+        "y": 4.3666495901639335
       },
       "isLocked": false,
       "linkedName": "Coral A"
@@ -48,7 +48,7 @@
   "folder": "REEF-HPT",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

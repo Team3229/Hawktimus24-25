@@ -3,7 +3,44 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S1-A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPT-C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        }
+      ]
     }
   },
   "resetOdom": true,
