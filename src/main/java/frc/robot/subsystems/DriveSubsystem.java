@@ -353,7 +353,7 @@ public class DriveSubsystem extends SubsystemBase {
 	) {
 		return run(() -> {
 			// Make the robot move
-			swerveDrive.drive(
+			drive(
 				SwerveMath.scaleTranslation(
 					new Translation2d(
 						translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
@@ -361,9 +361,8 @@ public class DriveSubsystem extends SubsystemBase {
 					),
 					0.8
 				),
-				Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-				true,
-				false
+				Math.pow(angularRotationX.getAsDouble(), 3) * 50,
+				true
 			);
 		});
 	}
@@ -447,8 +446,12 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @param initialHolonomicPose The pose to set the odometry to
 	 */
-	public void resetOdometry(Pose2d initialHolonomicPose) {
-		swerveDrive.resetOdometry(initialHolonomicPose);
+	public void resetOdometry(Pose2d pose) {
+		if (pose == null) {
+			swerveDrive.resetOdometry(new Pose2d());
+			return;
+		}
+		swerveDrive.resetOdometry(pose);
 	}
 
 	/**

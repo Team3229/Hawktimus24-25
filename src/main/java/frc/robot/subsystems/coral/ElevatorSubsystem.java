@@ -13,6 +13,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ReefHeight;
@@ -33,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final int CURRENT_LIMIT = 80;
     
     // Tolerance for the elevator position
-    private static final Distance POSITION_TOLERANCE = Inch.of(1/2);
+    private static final Distance POSITION_TOLERANCE = Inch.of(0.5);
 
     // Base height of the elevator
     public static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.588230);
@@ -58,6 +59,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private SparkMax elevatorMotor;
     private SparkMaxConfig motorConfig;
     private SparkClosedLoopController positionController;
+
+    private Distance elevatorHeight;
 
     public ElevatorSubsystem() {
 
@@ -95,6 +98,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             ResetMode.kResetSafeParameters,
             PersistMode.kNoPersistParameters
         );
+
+        elevatorHeight = Inch.of(0);
         
     }
 
@@ -102,13 +107,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         
         Command goToLevelCommand = new Command() {
             @Override
-            public void initialize() {
+            public void execute() {
                 setSetpoint(reefPosition);
             }
 
             @Override
             public boolean isFinished() {
-                return Math.abs(elevatorMotor.getEncoder().getPosition() - getElevatorRelativeHeightInInches(reefPosition)) < POSITION_TOLERANCE.in(Inch);
+                return getElevatorPos().minus(getElevatorRelativeHeight(reefPosition)).abs(Inch) < POSITION_TOLERANCE.in(Inch);
             }
         };
 
@@ -117,18 +122,27 @@ public class ElevatorSubsystem extends SubsystemBase {
         return goToLevelCommand;
     }
 
-    public double getElevatorRelativeHeightInInches(ReefHeight reefPosition) {
-        return reefPosition.getHeightInInches() - ELEVATOR_BASE_HEIGHT.in(Inch);
+    public Distance getElevatorRelativeHeight(ReefHeight reefPosition) {
+        return reefPosition.getHeight().minus(ELEVATOR_BASE_HEIGHT);
     }
 
     private void setSetpoint(ReefHeight reefPosition) {
+
+        if (RobotBase.isSimulation()) {
+            elevatorHeight = elevatorHeight.plus(getElevatorRelativeHeight(reefPosition).minus(getElevatorPos()).times(0.2));
+        }
         
-        positionController.setReference(getElevatorRelativeHeightInInches(reefPosition), ControlType.kPosition);
+        positionController.setReference(getElevatorRelativeHeight(reefPosition).in(Inch), ControlType.kPosition);
 
     }
 
-    public double getElevatorPos() {
-        return elevatorMotor.getEncoder().getPosition();
+    public Distance getElevatorPos() {
+
+        if (RobotBase.isSimulation()) {
+            return elevatorHeight;
+        }
+
+        return Inch.of(elevatorMotor.getEncoder().getPosition());
     }
     
     @Override

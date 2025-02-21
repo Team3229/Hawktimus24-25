@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.010875000000001,
-        "y": 7.491125
+        "x": 4.9868852459016395,
+        "y": 7.2197233606557365
       },
       "isLocked": false,
       "linkedName": "S1"
@@ -20,8 +20,8 @@
         "y": 4.3759999999999994
       },
       "prevControl": {
-        "x": 3.26625,
-        "y": 5.5264999999999995
+        "x": 2.901024590163934,
+        "y": 5.361629098360655
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "S1-REEF",
