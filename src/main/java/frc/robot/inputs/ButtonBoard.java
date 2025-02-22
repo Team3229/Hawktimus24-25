@@ -7,8 +7,6 @@ public class ButtonBoard {
     
     private CommandGenericHID controller;
 
-    private static final double kControllerDeadzone = 0.1;
-
     public ButtonBoard(int port) {
         controller = new CommandGenericHID(port);
     }

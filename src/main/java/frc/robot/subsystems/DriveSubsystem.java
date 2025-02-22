@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Inch;
-import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Milliseconds;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -33,12 +31,12 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.Robot;
 import frc.robot.constants.ReefPositions;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
@@ -147,7 +145,13 @@ public class DriveSubsystem extends SubsystemBase {
 			
 			// Configure AutoBuilder last
 			AutoBuilder.configure(
-				this::getPose,
+				() -> {
+					if (RobotBase.isSimulation()) {
+						return swerveDrive.field.getRobotPose();
+					} else {
+						return swerveDrive.getPose();
+					}
+				},
 				// Robot pose supplier
 				this::resetOdometry,
 				// Method to reset odometry (will be called if your auto has a starting pose)

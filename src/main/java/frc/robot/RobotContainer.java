@@ -13,10 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
@@ -59,10 +56,11 @@ public class RobotContainer {
 				});
 
 		visualizerSubsystem = new VisualizerSubsystem(
-				() -> coralSubsystem.getElevatorPos().in(Meters),
-				coralSubsystem::getFeederAngle,
-				climbSubsystem::getPosition,
-				algaeSubsystem::getPosition);
+			() -> coralSubsystem.getElevatorPos().in(Meters),
+			coralSubsystem::getFeederAngle,
+			climbSubsystem::getPosition,
+			algaeSubsystem::getPosition
+		);
 
 		configureBindings();
 		initTelemetery();
@@ -95,10 +93,6 @@ public class RobotContainer {
 			coralSubsystem.elevatorSpit(ReefHeight.L2)
 		);
 
-		driverController.b_4().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L1)
-		);
-
 		buttonBoard.b_1().onTrue(
 				coralSubsystem.elevatorSpit(ReefHeight.L1)
 		// L1
@@ -119,19 +113,22 @@ public class RobotContainer {
 		// L4
 		);
     
-		driverController.a()
+		driverController.b_4()
 		.and(buttonBoard.joy_L())
 			.onTrue(
 				driveSubsystem.findCoralZone(true)
 			);
 
-		driverController.a()
+		driverController.b_4()
 		.and(buttonBoard.joy_R())
 			.onTrue(
 				driveSubsystem.findCoralZone(false)
 			);
-		
-		SmartDashboard.putData(elevatorSubsystem);
+
+		driverController.b_4()
+			.onTrue(
+				driveSubsystem.findCoralZone(true)
+			);
 	}
 
 	public void initTelemetery() {

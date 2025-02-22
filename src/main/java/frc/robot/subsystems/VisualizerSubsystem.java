@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +25,8 @@ public class VisualizerSubsystem extends SubsystemBase {
     private Supplier<Double> climbPos;
     private Supplier<Double> algaePos;
 
+    private NetworkTable table;
+
     public VisualizerSubsystem(
         Supplier<Double> elevatorPos,
         Supplier<Double> feederAngle,
@@ -32,21 +35,18 @@ public class VisualizerSubsystem extends SubsystemBase {
     ) {
         super();
 
+        table = NetworkTableInstance.getDefault().getTable("Visualizer");
+
         this.elevatorPos = elevatorPos;
         this.feederAngle = feederAngle;
         this.climbPos = climbPos;
         this.algaePos = algaePos;
 
-        elevatorPosePub = NetworkTableInstance.getDefault()
-  .getStructTopic("ElevatorPose", Pose3d.struct).publish();
-        elevatorMidPosePub = NetworkTableInstance.getDefault()
-  .getStructTopic("ElevatorMidPose", Pose3d.struct).publish();
-        feederPosePub = NetworkTableInstance.getDefault()
-  .getStructTopic("FeederPose", Pose3d.struct).publish();
-        climbPosePub = NetworkTableInstance.getDefault()
-    .getStructTopic("ClimbPose", Pose3d.struct).publish();
-        algaePosePub = NetworkTableInstance.getDefault()
-    .getStructTopic("AlgaePose", Pose3d.struct).publish();
+        elevatorPosePub = table.getStructTopic("ElevatorPose", Pose3d.struct).publish();
+        elevatorMidPosePub = table.getStructTopic("ElevatorMidPose", Pose3d.struct).publish();
+        feederPosePub = table.getStructTopic("FeederPose", Pose3d.struct).publish();
+        climbPosePub = table.getStructTopic("ClimbPose", Pose3d.struct).publish();
+        algaePosePub = table.getStructTopic("AlgaePose", Pose3d.struct).publish();
 
     }
 
