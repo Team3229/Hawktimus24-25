@@ -1,7 +1,5 @@
 package frc.robot.utilities;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import org.ironmaple.utils.FieldMirroringUtils;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -20,15 +18,15 @@ public class CoralZones {
 	private static Pose2d reefCenterPose = ReefPositions.Center.getPosition();
     
     private static double al(double x) {
-		return -(1 / Math.sqrt(3)) * (x - 3.673422) + 4.496925;
+		return -(1 / Math.sqrt(3)) * (x - reefCenterPose.getX()) + reefCenterPose.getY();
 	}
 
 	private static double bc(double x) {
-		return (1 / Math.sqrt(3)) * (x - 3.673480) + 3.554821;
+		return (1 / Math.sqrt(3)) * (x - reefCenterPose.getX()) + reefCenterPose.getY();
 	}
 
 	private static double de() {
-		return 4.489395;
+		return reefCenterPose.getX();
 	}
 
 	public static Command findCoralZone(
@@ -36,7 +34,7 @@ public class CoralZones {
             DriveSubsystem driveSubsystem
         ) {
 
-		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(reefCenterPose);
+		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
         System.out.println("Finding Coral Zone");
 
