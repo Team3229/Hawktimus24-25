@@ -19,6 +19,8 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     public AlgaeSubsystem() {
 
+        super();
+
         algaeMotor = new SparkMax(MOTOR_CAN_ID, MotorType.kBrushless);
 
         motorConfig = new SparkMaxConfig();
@@ -29,15 +31,19 @@ public class AlgaeSubsystem extends SubsystemBase {
         motorConfig.idleMode(IdleMode.kBrake);
         
         motorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-            .forwardSoftLimitEnabled((algaeForwardSoftLimit > 0) ? true : false)
+            .forwardSoftLimitEnabled(algaeForwardSoftLimit > 0)
             .forwardSoftLimit(algaeForwardSoftLimit)
-            .reverseSoftLimitEnabled((algaeReverseSoftLimit > 0) ? true : false)
+            .reverseSoftLimitEnabled(algaeReverseSoftLimit > 0)
             .reverseSoftLimit(algaeReverseSoftLimit);
             
     }
 
     public void setMotorSpeed(double speed) {
         algaeMotor.set(speed);
+    }
+
+    public double getPosition() {
+        return algaeMotor.getEncoder().getPosition();
     }
 
     public void stopMotor() {

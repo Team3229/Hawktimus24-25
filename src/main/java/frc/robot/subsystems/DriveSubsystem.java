@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -15,12 +15,12 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.swerve.SwerveSetpoint;
-import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -30,9 +30,9 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.LimelightHelpers.PoseEstimate;
@@ -40,10 +40,9 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-import org.json.simple.parser.ParseException;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -85,6 +84,8 @@ public class DriveSubsystem extends SubsystemBase {
 		Supplier<PoseEstimate> visionPoseEstimate
 	) {
 
+		super();
+
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
 		SwerveDriveTelemetry.verbosity = verbosity;
@@ -103,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
 		}
 
 		swerveDrive.setHeadingCorrection(false);
-		swerveDrive.setCosineCompensator(false);
+		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
 			true,
 			true,
@@ -113,6 +114,13 @@ public class DriveSubsystem extends SubsystemBase {
 			false,
 			1
 		);
+
+		swerveDrive.pushOffsetsToEncoders();
+
+		swerveDrive.getGyro().setOffset(new Rotation3d(0, 0, Math.PI));
+
+		swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
+		swerveDrive.getMapleSimDrive().get().config.bumperWidthY = Inch.of(33.954922);
 
 		setupPathPlanner();
 	}
@@ -139,7 +147,13 @@ public class DriveSubsystem extends SubsystemBase {
 			
 			// Configure AutoBuilder last
 			AutoBuilder.configure(
-				this::getPose,
+				() -> {
+					if (RobotBase.isSimulation()) {
+						return swerveDrive.field.getRobotPose();
+					} else {
+						return swerveDrive.getPose();
+					}
+				},
 				// Robot pose supplier
 				this::resetOdometry,
 				// Method to reset odometry (will be called if your auto has a starting pose)
@@ -157,8 +171,8 @@ public class DriveSubsystem extends SubsystemBase {
 					}
 				},
 				new PPHolonomicDriveController(
-						new PIDConstants(5.0, 0.0, 0.0),
-						new PIDConstants(5.0, 0.0, 0.0)
+						new PIDConstants(10.0, 0.0, 0.0),
+						new PIDConstants(10.0, 0.0, 0.0)
 				),
 				config,
 				() -> {
@@ -211,61 +225,7 @@ public class DriveSubsystem extends SubsystemBase {
 			pose,
 			constraints,
 			edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
-		);
-	}
-
-	/**
-	 * Drive with {@link SwerveSetpointGenerator} from 254, implemented by
-	 * PathPlanner.
-	 *
-	 * @param robotRelativeChassisSpeed Robot relative {@link ChassisSpeeds} to
-	 *                                  achieve.
-	 * @return {@link Command} to run.
-	 * @throws IOException    If the PathPlanner GUI settings is invalid
-	 * @throws ParseException If PathPlanner GUI settings is nonexistent.
-	 */
-	private Command driveWithSetpointGenerator(Supplier<ChassisSpeeds> robotRelativeChassisSpeed)
-			throws IOException, ParseException {
-		SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator(RobotConfig.fromGUISettings(),
-				swerveDrive.getMaximumChassisAngularVelocity());
-		AtomicReference<SwerveSetpoint> prevSetpoint = new AtomicReference<>(
-				new SwerveSetpoint(swerveDrive.getRobotVelocity(),
-						swerveDrive.getStates(),
-						DriveFeedforwards.zeros(swerveDrive.getModules().length)));
-		AtomicReference<Double> previousTime = new AtomicReference<>();
-
-		return startRun(() -> previousTime.set(Timer.getFPGATimestamp()),
-				() -> {
-					double newTime = Timer.getFPGATimestamp();
-					SwerveSetpoint newSetpoint = setpointGenerator.generateSetpoint(prevSetpoint.get(),
-							robotRelativeChassisSpeed.get(),
-							newTime - previousTime.get());
-					swerveDrive.drive(newSetpoint.robotRelativeSpeeds(),
-							newSetpoint.moduleStates(),
-							newSetpoint.feedforwards().linearForces());
-					prevSetpoint.set(newSetpoint);
-					previousTime.set(newTime);
-
-				});
-	}
-
-	/**
-	 * Drive with 254's Setpoint generator; port written by PathPlanner.
-	 *
-	 * @param fieldRelativeSpeeds Field-Relative {@link ChassisSpeeds}
-	 * @return Command to drive the robot using the setpoint generator.
-	 */
-	public Command driveWithSetpointGeneratorFieldRelative(Supplier<ChassisSpeeds> fieldRelativeSpeeds) {
-		try {
-			return driveWithSetpointGenerator(() -> {
-				return ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds.get(), getHeading());
-
-			});
-		} catch (Exception e) {
-			DriverStation.reportError(e.toString(), true);
-		}
-		return Commands.none();
-
+		).withName("DriveToPose");
 	}
 
 	/**
@@ -305,22 +265,6 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Returns a Command that drives the swerve drive to a specific distance at a
-	 * given speed.
-	 *
-	 * @param distanceInMeters       the distance to drive in meters
-	 * @param speedInMetersPerSecond the speed at which to drive in meters per
-	 *                               second
-	 * @return a Command that drives the swerve drive to a specific distance at a
-	 *         given speed
-	 */
-	public Command driveToDistanceCommand(double distanceInMeters, double speedInMetersPerSecond) {
-		return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
-				.until(() -> swerveDrive.getPose().getTranslation()
-						.getDistance(new Translation2d(0, 0)) > distanceInMeters);
-	}
-
-	/**
 	 * Replaces the swerve module feedforward with a new SimpleMotorFeedforward
 	 * object.
 	 *
@@ -351,7 +295,7 @@ public class DriveSubsystem extends SubsystemBase {
 	) {
 		return run(() -> {
 			// Make the robot move
-			swerveDrive.drive(
+			drive(
 				SwerveMath.scaleTranslation(
 					new Translation2d(
 						translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
@@ -359,9 +303,8 @@ public class DriveSubsystem extends SubsystemBase {
 					),
 					0.8
 				),
-				Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-				true,
-				false
+				Math.pow(angularRotationX.getAsDouble(), 3) * 50,
+				true
 			);
 		});
 	}
@@ -445,8 +388,12 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @param initialHolonomicPose The pose to set the odometry to
 	 */
-	public void resetOdometry(Pose2d initialHolonomicPose) {
-		swerveDrive.resetOdometry(initialHolonomicPose);
+	public void resetOdometry(Pose2d pose) {
+		if (pose == null) {
+			swerveDrive.resetOdometry(new Pose2d());
+			return;
+		}
+		swerveDrive.resetOdometry(pose);
 	}
 
 	/**
@@ -491,7 +438,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return true if the red alliance, false if blue. Defaults to false if none is
 	 *         available.
 	 */
-	private boolean isRedAlliance() {
+	public static boolean isRedAlliance() {
 		var alliance = DriverStation.getAlliance();
 		return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 	}
@@ -504,7 +451,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void zeroGyroWithAlliance() {
 		if (isRedAlliance()) {
-			zeroGyro();
+			zeroGyro();	
 			// Set the pose 180 degrees
 			resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
 		} else {
@@ -631,7 +578,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * Add a fake vision reading for testing purposes.
 	 */
 	public void addFakeVisionReading() {
-		swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+		swerveDrive.addVisionMeasurement(swerveDrive.getSimulationDriveTrainPose().get(), Timer.getFPGATimestamp());
 	}
 
 	public void addVisionReading(Pose2d pose, Time timestamp) {
@@ -643,7 +590,9 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @return {@link SwerveDrive}
 	 */
+
 	public SwerveDrive getSwerveDrive() {
 		return swerveDrive;
-	}
+	}	
+			
 }

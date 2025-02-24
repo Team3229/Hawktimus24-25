@@ -1,6 +1,6 @@
 {
   "imu": {
-    "type": "navx_mxp_serial",
+    "type": "pigeon2",
     "id": 0,
     "canbus": null
   },
