@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.125,
-        "y": 5.3
+        "x": 3.5257208869767216,
+        "y": 2.815456277958124
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6021249999999996,
-        "y": 5.082875
-      },
-      "isLocked": false,
-      "linkedName": "Coral K"
-    },
-    {
-      "anchor": {
-        "x": 2.6763750000000006,
-        "y": 3.44975
-      },
-      "prevControl": {
-        "x": 2.892723776404404,
-        "y": 4.99784568893817
-      },
-      "nextControl": {
-        "x": 2.457,
-        "y": 1.88
+        "x": 3.6935487558291804,
+        "y": 3.1031611959909116
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.99,
-        "y": 1.075625
+        "x": 3.6322745901639335,
+        "y": 3.0120389344262293
       },
       "prevControl": {
-        "x": 0.8653266268827684,
-        "y": 0.8589303991545439
+        "x": 3.520471191288945,
+        "y": 2.7884321366762497
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HPB"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.13010235415587
+    "rotation": 59.37641797514612
   },
   "reversed": false,
-  "folder": "REEF-HPB",
+  "folder": "Reef Lineup",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 119.99999999999999
+    "velocity": 0.5,
+    "rotation": 59.08132275013778
   },
   "useDefaultConstraints": true
 }

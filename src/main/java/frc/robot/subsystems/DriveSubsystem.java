@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -14,14 +15,12 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.swerve.SwerveSetpoint;
-import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -34,20 +33,16 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.constants.ReefPositions;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import org.json.simple.parser.ParseException;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -109,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
 		}
 
 		swerveDrive.setHeadingCorrection(false);
-		swerveDrive.setCosineCompensator(false);
+		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
 			true,
 			true,
@@ -119,6 +114,13 @@ public class DriveSubsystem extends SubsystemBase {
 			false,
 			1
 		);
+
+		swerveDrive.pushOffsetsToEncoders();
+
+		swerveDrive.getGyro().setOffset(new Rotation3d(0, 0, Math.PI));
+
+		swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
+		swerveDrive.getMapleSimDrive().get().config.bumperWidthY = Inch.of(33.954922);
 
 		setupPathPlanner();
 	}
@@ -169,8 +171,8 @@ public class DriveSubsystem extends SubsystemBase {
 					}
 				},
 				new PPHolonomicDriveController(
-						new PIDConstants(5.0, 0.0, 0.0),
-						new PIDConstants(5.0, 0.0, 0.0)
+						new PIDConstants(10.0, 0.0, 0.0),
+						new PIDConstants(10.0, 0.0, 0.0)
 				),
 				config,
 				() -> {
@@ -227,60 +229,6 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Drive with {@link SwerveSetpointGenerator} from 254, implemented by
-	 * PathPlanner.
-	 *
-	 * @param robotRelativeChassisSpeed Robot relative {@link ChassisSpeeds} to
-	 *                                  achieve.
-	 * @return {@link Command} to run.
-	 * @throws IOException    If the PathPlanner GUI settings is invalid
-	 * @throws ParseException If PathPlanner GUI settings is nonexistent.
-	 */
-	private Command driveWithSetpointGenerator(Supplier<ChassisSpeeds> robotRelativeChassisSpeed)
-			throws IOException, ParseException {
-		SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator(RobotConfig.fromGUISettings(),
-				swerveDrive.getMaximumChassisAngularVelocity());
-		AtomicReference<SwerveSetpoint> prevSetpoint = new AtomicReference<>(
-				new SwerveSetpoint(swerveDrive.getRobotVelocity(),
-						swerveDrive.getStates(),
-						DriveFeedforwards.zeros(swerveDrive.getModules().length)));
-		AtomicReference<Double> previousTime = new AtomicReference<>();
-
-		return startRun(() -> previousTime.set(Timer.getFPGATimestamp()),
-				() -> {
-					double newTime = Timer.getFPGATimestamp();
-					SwerveSetpoint newSetpoint = setpointGenerator.generateSetpoint(prevSetpoint.get(),
-							robotRelativeChassisSpeed.get(),
-							newTime - previousTime.get());
-					swerveDrive.drive(newSetpoint.robotRelativeSpeeds(),
-							newSetpoint.moduleStates(),
-							newSetpoint.feedforwards().linearForces());
-					prevSetpoint.set(newSetpoint);
-					previousTime.set(newTime);
-
-				});
-	}
-
-	/**
-	 * Drive with 254's Setpoint generator; port written by PathPlanner.
-	 *
-	 * @param fieldRelativeSpeeds Field-Relative {@link ChassisSpeeds}
-	 * @return Command to drive the robot using the setpoint generator.
-	 */
-	public Command driveWithSetpointGeneratorFieldRelative(Supplier<ChassisSpeeds> fieldRelativeSpeeds) {
-		try {
-			return driveWithSetpointGenerator(() -> {
-				return ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds.get(), getHeading());
-
-			});
-		} catch (Exception e) {
-			DriverStation.reportError(e.toString(), true);
-		}
-		return Commands.none();
-
-	}
-
-	/**
 	 * Command to characterize the robot drive motors using SysId
 	 *
 	 * @return SysId Drive Command
@@ -314,22 +262,6 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command centerModulesCommand() {
 		return run(() -> Arrays.asList(swerveDrive.getModules())
 				.forEach(it -> it.setAngle(0.0)));
-	}
-
-	/**
-	 * Returns a Command that drives the swerve drive to a specific distance at a
-	 * given speed.
-	 *
-	 * @param distanceInMeters       the distance to drive in meters
-	 * @param speedInMetersPerSecond the speed at which to drive in meters per
-	 *                               second
-	 * @return a Command that drives the swerve drive to a specific distance at a
-	 *         given speed
-	 */
-	public Command driveToDistanceCommand(double distanceInMeters, double speedInMetersPerSecond) {
-		return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
-				.until(() -> swerveDrive.getPose().getTranslation()
-						.getDistance(new Translation2d(0, 0)) > distanceInMeters);
 	}
 
 	/**
@@ -506,7 +438,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return true if the red alliance, false if blue. Defaults to false if none is
 	 *         available.
 	 */
-	private boolean isRedAlliance() {
+	public static boolean isRedAlliance() {
 		var alliance = DriverStation.getAlliance();
 		return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 	}
@@ -519,7 +451,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void zeroGyroWithAlliance() {
 		if (isRedAlliance()) {
-			zeroGyro();
+			zeroGyro();	
 			// Set the pose 180 degrees
 			resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
 		} else {
@@ -646,7 +578,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * Add a fake vision reading for testing purposes.
 	 */
 	public void addFakeVisionReading() {
-		swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+		swerveDrive.addVisionMeasurement(swerveDrive.getSimulationDriveTrainPose().get(), Timer.getFPGATimestamp());
 	}
 
 	public void addVisionReading(Pose2d pose, Time timestamp) {
@@ -661,117 +593,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public SwerveDrive getSwerveDrive() {
 		return swerveDrive;
-	}
-
-	private double al(double x) {
-		return -(1 / Math.sqrt(3)) * (x - 3.673422) + 4.496925;
-	}
-
-	private double bc(double x) {
-		return (1 / Math.sqrt(3)) * (x - 3.673480) + 3.554821;
-	}
-
-	private double de(double x) {
-		return 4.489395;
-	}
-
-	private double fg(double x) {
-		return -(1 / Math.sqrt(3)) * (x - 5.305252) + 3.554921;
-	}
-
-	private double hi(double x) {
-		return (1 / Math.sqrt(3)) * (x - 5.305194) + 4.497025;
-	}
-	
-	private double jk(double x) {
-		return 4.489279;
-	}
-
-	public Command findCoralZone(boolean leftSide) {
-
-		//LEFT SIDE
-		if (leftSide && inZone_AL_BC(getPose())) {
-			return driveToPose(ReefPositions.A.getPosition());
-		}
-		if (leftSide && inZone_BC_DE(getPose())) {
-			return driveToPose(ReefPositions.C.getPosition());
-		}
-		if (leftSide && inZone_DE_FG(getPose())) {
-			return driveToPose(ReefPositions.E.getPosition());
-		}
-		if (leftSide && inZone_FG_HI(getPose())) {
-			return driveToPose(ReefPositions.G.getPosition());
-		}
-		if (leftSide && inZone_HI_JK(getPose())) {
-			return driveToPose(ReefPositions.I.getPosition());
-		}
-		if (leftSide && inZone_JK_AL(getPose())) {
-			return driveToPose(ReefPositions.K.getPosition());
-		}
-		
-
-		//RIGHT SIDE
-		if (!leftSide && inZone_AL_BC(getPose())) {
-			return driveToPose(ReefPositions.B.getPosition());
-		}
-		if (!leftSide && inZone_BC_DE(getPose())) {
-			return driveToPose(ReefPositions.D.getPosition());
-		}
-		if (!leftSide && inZone_DE_FG(getPose())) {
-			return driveToPose(ReefPositions.F.getPosition());
-		}
-		if (!leftSide && inZone_FG_HI(getPose())) {
-			return driveToPose(ReefPositions.H.getPosition());
-		}
-		if (!leftSide && inZone_HI_JK(getPose())) {
-			return driveToPose(ReefPositions.J.getPosition());
-		}
-		if (!leftSide && inZone_JK_AL(getPose())) {
-			return driveToPose(ReefPositions.K.getPosition());
-		}
-
-		System.out.println("Robot is not positioned inside a zone");
-		return Commands.none();
-
-	}
-
-	
-
-	private boolean inZone_AL_BC(Pose2d robotPose) {
-		return (
-			al(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < bc(robotPose.getX()));
-	}
-
-	private boolean inZone_BC_DE(Pose2d robotPose) {
-		return (
-			bc(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < de(robotPose.getX()));
-	}
-
-	private boolean inZone_DE_FG(Pose2d robotPose) {
-		return (
-			de(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < fg(robotPose.getX()));
-	}
-
-	private boolean inZone_FG_HI(Pose2d robotPose) {
-		return (
-			fg(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < hi(robotPose.getX()));
-	}
-
-	private boolean inZone_HI_JK(Pose2d robotPose) {
-		return (
-			hi(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < jk(robotPose.getX()));
-	}
-
-	private boolean inZone_JK_AL(Pose2d robotPose) {
-		return (
-			jk(robotPose.getX()) < robotPose.getY()) && 
-			(robotPose.getY() < al(robotPose.getX()));
-	}
-		
+	}	
 			
 }

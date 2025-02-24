@@ -11,9 +11,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
@@ -23,6 +26,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.utilities.CoralZones;
 import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
@@ -67,6 +71,8 @@ public class RobotContainer {
 	}
 
 	private void configureBindings() {
+
+		DriverStation.silenceJoystickConnectionWarning(true);
 
 		SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
 				driveSubsystem.getSwerveDrive(),
@@ -114,21 +120,33 @@ public class RobotContainer {
 		);
     
 		driverController.b_4()
-		.and(buttonBoard.joy_L())
+		.and(driverController.p_Left())
 			.onTrue(
-				driveSubsystem.findCoralZone(true)
+				Commands.runOnce(() -> {
+					CoralZones.findCoralZone(true, driveSubsystem).schedule();
+				},
+				driveSubsystem
+				)
 			);
 
 		driverController.b_4()
-		.and(buttonBoard.joy_R())
+		.and(driverController.p_Right())
 			.onTrue(
-				driveSubsystem.findCoralZone(false)
+				Commands.runOnce(() -> {
+					CoralZones.findCoralZone(false, driveSubsystem).schedule();
+				},
+				driveSubsystem
+				)
 			);
-
-		driverController.b_4()
-			.onTrue(
-				driveSubsystem.findCoralZone(true)
+		
+		if (RobotBase.isSimulation()) {
+			driverController.b_5().onTrue(
+				Commands.runOnce(
+					() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get()),
+					driveSubsystem
+				)
 			);
+		}
 	}
 
 	public void initTelemetery() {
