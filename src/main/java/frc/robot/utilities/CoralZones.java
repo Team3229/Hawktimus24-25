@@ -2,6 +2,8 @@ package frc.robot.utilities;
 
 import static edu.wpi.first.units.Units.Meters;
 
+import org.ironmaple.utils.FieldMirroringUtils;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -10,9 +12,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.constants.ReefPositions;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class CoralZones {
+
+	private static Pose2d reefCenterPose = ReefPositions.Center.getPosition();
     
     private static double al(double x) {
 		return -(1 / Math.sqrt(3)) * (x - 3.673422) + 4.496925;
@@ -30,6 +35,8 @@ public class CoralZones {
             boolean leftSide,
             DriveSubsystem driveSubsystem
         ) {
+
+		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(reefCenterPose);
 
         System.out.println("Finding Coral Zone");
 
