@@ -153,7 +153,7 @@ public class RobotContainer {
 		SmartDashboard.putData(coralSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
-		SmartDashboard.putData(autoChooser);
+		SmartDashboard.putData("Autonomous", autoChooser);
 	}
 
 	public Command getAutonomousCommand() {

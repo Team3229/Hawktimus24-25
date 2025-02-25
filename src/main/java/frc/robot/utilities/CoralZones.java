@@ -124,7 +124,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() < al(robotPose.getX())) && 
 				(robotPose.getY() > bc(robotPose.getX()));
-		} return 
+		} 
+		return 
 			(robotPose.getY() > al(robotPose.getX())) && 
 			(robotPose.getY() < bc(robotPose.getX()));
 	}
@@ -134,7 +135,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() < bc(robotPose.getX())) && 
 				(robotPose.getX() < de());
-		}return
+		}
+		return
 			(robotPose.getY() > bc(robotPose.getX())) && 
 			(robotPose.getX() > de());
 	}
@@ -144,7 +146,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() < al(robotPose.getX())) && 
 				(robotPose.getX() > de());
-		} return 
+		} 
+		return 
 			(robotPose.getY() > al(robotPose.getX())) && 
 			(robotPose.getX() < de());
 	}
@@ -154,7 +157,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() > al(robotPose.getX())) && 
 				(robotPose.getY() < bc(robotPose.getX()));
-		} return 
+		} 
+		return 
 			(robotPose.getY() < al(robotPose.getX())) && 
 			(robotPose.getY() > bc(robotPose.getX()));
 	}
@@ -164,7 +168,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() > bc(robotPose.getX())) && 
 				(robotPose.getX() > de());
-		} return 
+		} 
+		return 
 			(robotPose.getY() < al(robotPose.getX())) && 
 			(robotPose.getX() < de());
 	}
@@ -174,7 +179,8 @@ public class CoralZones {
 			return 
 				(robotPose.getY() > al(robotPose.getX())) && 
 				(robotPose.getX() < de());
-		} return 
+		} 
+		return 
 			(robotPose.getY() < al(robotPose.getX())) && 
 			(robotPose.getX() > de());
 	}
