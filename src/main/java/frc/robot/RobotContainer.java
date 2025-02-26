@@ -100,11 +100,11 @@ public class RobotContainer {
 			coralSubsystem.elevatorSpit(ReefHeight.L2)
 		);
 
-		driverController.b_Hazard().onTrue(
-			Commands.runOnce(
-				driveSubsystem.getCurrentCommand()::cancel
-			)
-		);
+		// driverController.b_Hazard().onTrue(
+		// 	Commands.runOnce(
+		// 		driveSubsystem.getCurrentCommand()::cancel
+		// 	)
+		// );
 
 		buttonBoard.b_1().onTrue(
 				coralSubsystem.elevatorSpit(ReefHeight.L1)
