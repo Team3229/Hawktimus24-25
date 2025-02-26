@@ -5,13 +5,13 @@
   "pathFolders": [
     "HPB-REEF",
     "HPT-REEF",
-    "Reef Lineup",
     "REEF-HPB",
     "REEF-HPT",
+    "Reef Lineup",
     "S1-REEF",
     "S2-REEF",
     "S3-REEF",
-    "Waypoints"
+    "HPS Lineup"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

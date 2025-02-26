@@ -26,6 +26,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.utilities.CoralStationPathing;
 import frc.robot.utilities.CoralZones;
 import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -99,6 +100,12 @@ public class RobotContainer {
 			coralSubsystem.elevatorSpit(ReefHeight.L2)
 		);
 
+		driverController.b_Hazard().onTrue(
+			Commands.runOnce(
+				driveSubsystem.getCurrentCommand()::cancel
+			)
+		);
+
 		buttonBoard.b_1().onTrue(
 				coralSubsystem.elevatorSpit(ReefHeight.L1)
 		// L1
@@ -117,6 +124,12 @@ public class RobotContainer {
 		buttonBoard.b_4().onTrue(
 				coralSubsystem.elevatorSpit(ReefHeight.L4)
 		// L4
+		);
+
+		driverController.b_3().onTrue(
+			Commands.runOnce(() -> {
+				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
+			})
 		);
     
 		driverController.b_4()

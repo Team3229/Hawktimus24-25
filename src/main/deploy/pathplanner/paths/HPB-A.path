@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.99,
-        "y": 1.076
+        "x": 0.881192,
+        "y": 1.24
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1892500000000004,
-        "y": 0.9589999999999995
+        "x": 2.0804420000000006,
+        "y": 1.1229999999999996
       },
       "isLocked": false,
       "linkedName": "HPB"
