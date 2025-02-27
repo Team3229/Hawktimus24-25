@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.hawklibraries.utilities.Alliance.AllianceColor;
+import frc.hawklibraries.utilities.Alliance;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class CoralStationPathing {
@@ -18,13 +20,23 @@ public class CoralStationPathing {
 
     public static Command findHumanZones(DriveSubsystem driveSubsystem) {
 
+        if (Alliance.getAlliance() == AllianceColor.Blue) {
+            if (aboveZone(driveSubsystem.getPose())) {
+                System.out.println("Robot is above zone");
+                return driveToPlayerStation("HPS Top"); 
+            }
+
+            System.out.println("Robot is bellow zone");
+            return driveToPlayerStation("HPS Bottom");
+        } 
+
         if (aboveZone(driveSubsystem.getPose())) {
             System.out.println("Robot is above zone");
-			return driveToPlayerStation("HPS Top"); 
-		}
+            return driveToPlayerStation("HPS Bottom"); //these are flipped as red
+        }
 
-        System.out.println("Robot is below zone");
-        return driveToPlayerStation("HPS Bottom");
+        System.out.println("Robot is bellow zone");
+        return driveToPlayerStation("HPS Top"); //these are flipped as red
 
     }
 
