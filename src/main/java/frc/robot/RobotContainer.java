@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
 
 public class RobotContainer {
 
   CommandXboxController driverController;
   ButtonBoard buttonBoard;
   CoralSubsystem coralSubsystem;
+  AlgaeSubsystem algaeSubsystem;
 
   public RobotContainer() {
     driverController = new CommandXboxController(0);
@@ -61,16 +63,20 @@ public class RobotContainer {
     );
 
     buttonBoard.b_5().onTrue(
-        Commands.none());
+        algaeSubsystem.removeUpperAlgae()
+    );
 
     buttonBoard.b_6().onTrue(
-        Commands.none());
+        algaeSubsystem.removeLowerAlgae()
+    );
 
     buttonBoard.b_7().onTrue(
-        Commands.none());
+        algaeSubsystem.holdAlgae()
+    );
 
     buttonBoard.b_8().onTrue(
-        Commands.none());
+        algaeSubsystem.scoreAlgae()
+    );
 
     buttonBoard.b_9().onTrue(
         Commands.none());
