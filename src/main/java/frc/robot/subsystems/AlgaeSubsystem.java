@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -139,8 +140,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         return scorePosition()
                 .alongWith(spinWheel(false))
                 .andThen(new WaitCommand(2))
-                .andThen(stopWheel())
-                .alongWith(armHome());
+                .andThen(stopWheel());
     }
 
     /*
@@ -226,7 +226,7 @@ public class AlgaeSubsystem extends SubsystemBase {
             @Override
             public boolean isFinished() {
                 return Math.abs(armMotor.getEncoder().getPosition()
-                        - rotations) < POSITION_TOLERANCE.in(Rotations);
+                - rotations) < POSITION_TOLERANCE.in(Rotations);
             }
         };
 
@@ -242,18 +242,10 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to spin the algae wheel
      */
     public Command spinWheel(boolean clockwise) {
-
-        Command spinWheelCommand = new Command() {
-            @Override
-            public void initialize() {
-                setWheelDirection(clockwise);
-            }
-
-        };
-
-        spinWheelCommand.addRequirements(this);
-
-        return spinWheelCommand;
+        return Commands.runOnce(
+            () -> setWheelDirection(clockwise),
+            this
+        );
     }
 
     /**
@@ -262,17 +254,11 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to stop the algae wheel
      */
     public Command stopWheel() {
-        Command stopWheelCommand = new Command() {
-            @Override
-            public void initialize() {
-                wheelMotor.stopMotor();
-            }
-        };
-
-        stopWheelCommand.addRequirements(this);
-
-        return stopWheelCommand;
-    }
+        return Commands.runOnce(
+            () -> wheelMotor.stopMotor(),
+            this
+        );
+    };
 
     private void setSetpoint(double rotations) {
 
@@ -280,7 +266,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     }
 
-    private void setWheelDirection(Boolean clockwise) {
+    private void setWheelDirection(boolean clockwise) {
 
         if (clockwise) {
             wheelMotor.set(CW_WHEEL_SPEED);
