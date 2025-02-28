@@ -87,24 +87,12 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				driveSubsystem.driveFieldOriented(
 						driveAngularVelocity));
-		
-		driverController.b_Trigger().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4)
-		);
 
 		driverController.b_Hazard().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3)
+			Commands.runOnce(
+				() -> driveSubsystem.getCurrentCommand().cancel()
+			)
 		);
-
-		driverController.b_3().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2)
-		);
-
-		// driverController.b_Hazard().onTrue(
-		// 	Commands.runOnce(
-		// 		driveSubsystem.getCurrentCommand()::cancel
-		// 	)
-		// );
 
 		buttonBoard.b_1().onTrue(
 				coralSubsystem.elevatorSpit(ReefHeight.L1)
@@ -126,6 +114,30 @@ public class RobotContainer {
 		// L4
 		);
 
+		buttonBoard.b_5().onTrue(
+			Commands.runOnce(
+				() -> algaeSubsystem.removeUpperAlgae().schedule()
+			)
+		);
+
+		buttonBoard.b_6().onTrue(
+			Commands.runOnce(
+				() -> algaeSubsystem.removeLowerAlgae().schedule()
+			)
+		);
+
+		buttonBoard.b_7().onTrue(
+			Commands.runOnce(
+				() -> algaeSubsystem.intakeAlgae().schedule()
+			)
+		);
+
+		buttonBoard.b_8().onTrue(
+			Commands.runOnce(
+				() -> algaeSubsystem.scoreAlgae().schedule()
+			)
+		);	
+
 		driverController.b_3().onTrue(
 			Commands.runOnce(() -> {
 				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
@@ -133,7 +145,7 @@ public class RobotContainer {
 		);
     
 		driverController.b_4()
-		.and(driverController.p_Left())
+		.and(buttonBoard.joy_R())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(true, driveSubsystem).schedule();
@@ -143,7 +155,7 @@ public class RobotContainer {
 			);
 
 		driverController.b_4()
-		.and(driverController.p_Right())
+		.and(buttonBoard.joy_L())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(false, driveSubsystem).schedule();

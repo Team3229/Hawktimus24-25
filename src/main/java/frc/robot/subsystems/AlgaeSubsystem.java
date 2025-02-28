@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,12 +37,13 @@ public class AlgaeSubsystem extends SubsystemBase {
     private static final double ALGAE_GROUND_COLLECT_ANGLE = Degrees.of(90).in(Rotations);
     private static final double ALGAE_HOLD_ANGLE = Degrees.of(45).in(Rotations);
     private static final double ALGAE_SCORE_ANGLE = Degrees.of(70).in(Rotations);
-    private static final int ARM_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int WHEEL_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int MOTOR_CAN_ID = 15; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int ARM_MOTOR_CAN_ID = 18; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int WHEEL_MOTOR_CAN_ID = 19; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int algaeForwardSoftLimit = 0;
     private static final int algaeReverseSoftLimit = 0;
     private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
+
+    private static final double kP = 0.1;
 
     public AlgaeSubsystem() {
 
@@ -81,6 +83,8 @@ public class AlgaeSubsystem extends SubsystemBase {
                 wheelMotorConfig,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kNoPersistParameters);
+
+        positionController = armMotor.getClosedLoopController();
     }
 
     /**
@@ -109,10 +113,10 @@ public class AlgaeSubsystem extends SubsystemBase {
                 .andThen(upperAlgaeRemmovalPosition())
                 .andThen(stopWheel())
                 .alongWith(armHome());
+    }
 
     public double getPosition() {
-        return algaeMotor.getEncoder().getPosition();
-    }
+        return armMotor.getEncoder().getPosition();
     }
 
     /**
@@ -130,8 +134,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return Command to hold algae
      */
-    public Command holdAlgae() {
-        return holdPosition()
+    public Command intakeAlgae() {
+        return intakePosition()
                 .andThen(stopWheel());
     }
 
@@ -209,7 +213,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return
      */
-    public Command holdPosition() {
+    public Command intakePosition() {
         return rotateArm(ALGAE_HOLD_ANGLE);
     }
 
@@ -247,8 +251,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command spinWheel(boolean clockwise) {
         return Commands.runOnce(
-            () -> setWheelDirection(clockwise),
-            this
+            () -> setWheelDirection(clockwise)
         );
     }
 
@@ -259,12 +262,15 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command stopWheel() {
         return Commands.runOnce(
-            () -> wheelMotor.stopMotor(),
-            this
+            () -> wheelMotor.stopMotor()
         );
     };
 
     private void setSetpoint(double rotations) {
+
+        if(RobotBase.isSimulation()) {
+            armMotor.getEncoder().setPosition((rotations - armMotor.getEncoder().getPosition()) * kP);
+        }
 
         positionController.setReference(rotations, ControlType.kPosition);
 
