@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.00475,
+        "y": 6.243125
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.711616812341052,
+        "y": 6.31967765410962
+      },
+      "isLocked": false,
+      "linkedName": "S2"
+    },
+    {
+      "anchor": {
+        "x": 3.6903750000000004,
+        "y": 5.570375
+      },
+      "prevControl": {
+        "x": 4.45536973033002,
+        "y": 5.664047824122046
+      },
+      "nextControl": {
+        "x": 3.212625000000001,
+        "y": 5.511874999999999
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.175,
+        "y": 4.1
+      },
+      "prevControl": {
+        "x": 3.0237604633635624,
+        "y": 4.299064317641298
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral B"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "S2-REEF",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

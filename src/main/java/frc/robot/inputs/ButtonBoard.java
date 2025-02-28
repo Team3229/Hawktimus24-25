@@ -4,16 +4,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ButtonBoard {
-    protected CommandGenericHID controller;
-
-    private static final double kControllerDeadzone = 0.1;
+    
+    private CommandGenericHID controller;
 
     public ButtonBoard(int port) {
         controller = new CommandGenericHID(port);
     }
 
-    public double joy_X() {return applyDeadzone(controller.getRawAxis(0));}
-    public double joy_Y() {return applyDeadzone(controller.getRawAxis(1));}
+    public Trigger joy_L() {return controller.povLeft();}
+    public Trigger joy_R() {return controller.povRight();}
 
     public Trigger b_1() {return controller.button(1);}
     public Trigger b_2() {return controller.button(2);}
@@ -27,11 +26,4 @@ public class ButtonBoard {
     public Trigger b_10() {return controller.button(10);}
     public Trigger b_11() {return controller.button(11);}
     public Trigger b_12() {return controller.button(12);}
-
-    //deadzone is probably not used based on the joystick
-    private static double applyDeadzone(double input) {
-        return (Math.abs(input) > kControllerDeadzone) ? 
-        Math.pow(input,3)
-        : 0;
-    }
 }

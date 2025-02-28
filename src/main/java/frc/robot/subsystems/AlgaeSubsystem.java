@@ -8,8 +8,8 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -38,6 +38,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     private static final double ALGAE_SCORE_ANGLE = Degrees.of(70).in(Rotations);
     private static final int ARM_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int WHEEL_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int MOTOR_CAN_ID = 15; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int algaeForwardSoftLimit = 0;
     private static final int algaeReverseSoftLimit = 0;
     private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
@@ -70,7 +71,6 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         wheelMotorConfig.smartCurrentLimit(algaeSmartCurrentLimit);
         wheelMotorConfig.idleMode(IdleMode.kBrake);
-
         wheelMotorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
                 .forwardSoftLimitEnabled(algaeForwardSoftLimit > 0)
                 .forwardSoftLimit(algaeForwardSoftLimit)
@@ -109,6 +109,10 @@ public class AlgaeSubsystem extends SubsystemBase {
                 .andThen(upperAlgaeRemmovalPosition())
                 .andThen(stopWheel())
                 .alongWith(armHome());
+
+    public double getPosition() {
+        return algaeMotor.getEncoder().getPosition();
+    }
     }
 
     /**

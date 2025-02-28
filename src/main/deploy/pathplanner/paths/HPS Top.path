@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.1507575455309769,
+        "y": 6.795056384477467
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0073634364432154,
+        "y": 6.999844395549715
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.045711,
+        "y": 6.92
+      },
+      "prevControl": {
+        "x": 1.1891051090877616,
+        "y": 6.715211988927752
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HPT"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.196655891628986
+  },
+  "reversed": false,
+  "folder": "HPS Lineup",
+  "idealStartingState": {
+    "velocity": 0.5,
+    "rotation": -54.196655891628986
+  },
+  "useDefaultConstraints": true
+}

@@ -16,12 +16,17 @@ public class SpitterSubsystem extends SubsystemBase {
     private DigitalInput spitterSensor;
     private SparkMaxConfig motorConfig;
 
-    private static final int CAN_ID = 3;
+    private static final int CAN_ID = 14;
     private static final int SENSOR_PORT = 0;
 
     public SpitterSubsystem() {
+        super();
         spitterMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         spitterSensor = new DigitalInput(SENSOR_PORT);
+
+        motorConfig = new SparkMaxConfig();
+        motorConfig.smartCurrentLimit(38);
+
     }
 
     /**
@@ -53,8 +58,6 @@ public class SpitterSubsystem extends SubsystemBase {
             @Override
             public void end(boolean interrupted) {
                 spitterMotor.stopMotor();
-
-                motorConfig.smartCurrentLimit(38); // change to actual desired current limit later
             }
 
         }.withTimeout(2);
