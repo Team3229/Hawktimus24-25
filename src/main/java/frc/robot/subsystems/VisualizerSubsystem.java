@@ -50,6 +50,11 @@ public class VisualizerSubsystem extends SubsystemBase {
 
     }
 
+    public VisualizerSubsystem(Supplier<Double> elevatorPos2, Supplier<Double> feederAngle2, Supplier<Double> climbPos2,
+            Object algaePos2) {
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
     public void periodic() {
         elevatorPosePub.set(new Pose3d(

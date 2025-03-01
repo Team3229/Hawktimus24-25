@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.algae;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,43 +13,38 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Angle;   
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class AlgaeSubsystem extends SubsystemBase {
+/**
+ * Subsystem for the algae arm. The arm is used to remove algae from the reef and
+ * to collect algae from the ground.
+ */
+public class AlgaeArmSubsystem extends SubsystemBase {
 
     private SparkMax armMotor;
     private SparkMaxConfig armMotorConfig;
     private SparkClosedLoopController positionController;
-    private SparkMax wheelMotor;
-    private SparkMaxConfig wheelMotorConfig;
     private static final Angle POSITION_TOLERANCE = Degrees.of(3);
-    private static final double ARM_REMOVAL_POSITION = Degrees.of(135).in(Rotations);// ( ━☞´◔‿◔`)━☞ Replace with actual
+    private static final double ARM_REMOVAL_POSITION = Degrees.of(135).in(Rotations); // ( ━☞´◔‿◔`)━☞ Replace with actual
                                                                                      // position pls
-    private static final double ARM_HOME_POSITION = 0;// ( ━☞´◔‿◔`)━☞ Replace with actual position pls
-    private static final int CW_WHEEL_SPEED = 1;
-    private static final int CCW_WHEEL_SPEED = -1;
+    private static final double ARM_HOME_POSITION = Degrees.of(0).in(Rotations); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
     private static final double ALGAE_THROW_ANGLE = Degrees.of(200).in(Rotations);
     private static final double ALGAE_GROUND_COLLECT_ANGLE = Degrees.of(90).in(Rotations);
     private static final double ALGAE_HOLD_ANGLE = Degrees.of(45).in(Rotations);
     private static final double ALGAE_SCORE_ANGLE = Degrees.of(70).in(Rotations);
     private static final int ARM_MOTOR_CAN_ID = 18; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int WHEEL_MOTOR_CAN_ID = 19; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int algaeForwardSoftLimit = 0;
     private static final int algaeReverseSoftLimit = 0;
     private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
 
     private static final double kP = 0.1;
 
-    public AlgaeSubsystem() {
+    public AlgaeArmSubsystem() {
 
         armMotor = new SparkMax(ARM_MOTOR_CAN_ID, MotorType.kBrushless);
-        wheelMotor = new SparkMax(WHEEL_MOTOR_CAN_ID, MotorType.kBrushless);
-
         armMotorConfig = new SparkMaxConfig();
 
         armMotorConfig.inverted(true); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
@@ -67,52 +62,8 @@ public class AlgaeSubsystem extends SubsystemBase {
                 armMotorConfig,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kNoPersistParameters);
-        wheelMotorConfig = new SparkMaxConfig();
-
-        wheelMotorConfig.inverted(true); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
-
-        wheelMotorConfig.smartCurrentLimit(algaeSmartCurrentLimit);
-        wheelMotorConfig.idleMode(IdleMode.kBrake);
-        wheelMotorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-                .forwardSoftLimitEnabled(algaeForwardSoftLimit > 0)
-                .forwardSoftLimit(algaeForwardSoftLimit)
-                .reverseSoftLimitEnabled(algaeReverseSoftLimit > 0)
-                .reverseSoftLimit(algaeReverseSoftLimit);
-
-        wheelMotor.configure(
-                wheelMotorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kNoPersistParameters);
 
         positionController = armMotor.getClosedLoopController();
-    }
-
-    /**
-     * Command to remove algae from the lower part of the reef, then drop it
-     * 
-     * @return
-     */
-    public Command removeLowerAlgae() {
-        return armUpToRemoveAlgaeFromReef()
-                .alongWith(spinWheel(true))
-                .andThen(new WaitCommand(2))
-                .andThen(stopWheel())
-                .alongWith(armHome());
-    }
-
-    /**
-     * Command to remove algae from the upper part of the reef, then throws it off
-     * the back of the robot
-     * 
-     * @return Command to remove algae from the upper part of the reef
-     */
-    public Command removeUpperAlgae() {
-        return armUpToRemoveAlgaeFromReef()
-                .alongWith(spinWheel(false))
-                .andThen(new WaitCommand(1))
-                .andThen(upperAlgaeRemmovalPosition())
-                .andThen(stopWheel())
-                .alongWith(armHome());
     }
 
     public double getPosition() {
@@ -120,56 +71,12 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
 
     /**
-     * Command to get ready to collect algae from the ground
-     * 
-     * @return Command to collect algae
-     */
-    public Command readyAlgaeCollection() {
-        return readyingCollectPosition()
-                .alongWith(spinWheel(true));
-    }
-
-    /**
-     * Command to hold algae in the arm
-     * 
-     * @return Command to hold algae
-     */
-    public Command intakeAlgae() {
-        return intakePosition()
-                .andThen(stopWheel());
-    }
-
-    /**
-     * Command to score algae
-     * 
-     * @return Command to score algae
-     */
-    public Command scoreAlgae() {
-        return scorePosition()
-                .alongWith(spinWheel(false))
-                .andThen(new WaitCommand(2))
-                .andThen(stopWheel());
-    }
-
-    /*
-     * Can you please check if this is needed Nathan? -Reilly
-     */
-    // public void setMotorSpeed(double speed) {
-    // armMotor.set(speed);
-    // }
-
-    // public void stopMotor() {
-    // armMotor.stopMotor();
-
-    // }
-
-    /**
      * Command that rotates the arm to a position where the algae can
      * be removed from the reef
      * 
      * @return
      */
-    public Command armUpToRemoveAlgaeFromReef() {
+    public Command upToRemoveAlgaeFromReef() {
         return rotateArm(ARM_REMOVAL_POSITION);
     }
 
@@ -178,7 +85,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return
      */
-    public Command armHome() {
+    public Command home() {
         return rotateArm(ARM_HOME_POSITION);
     }
 
@@ -187,7 +94,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      *         the arm across the robot
      *         (i.e. the algae is thrown off the arm and not into the robot)
      */
-    public Command upperAlgaeRemmovalPosition() {
+    public Command upperAlgaeRemovalPosition() {
         return rotateArm(ALGAE_THROW_ANGLE);
     }
 
@@ -243,29 +150,6 @@ public class AlgaeSubsystem extends SubsystemBase {
         return armRemovalCommand;
     }
 
-    /**
-     * Spins the algae wheel in a given direction
-     * 
-     * @param clockwise true if clockwise, false if counterclockwise
-     * @return Command to spin the algae wheel
-     */
-    public Command spinWheel(boolean clockwise) {
-        return Commands.runOnce(
-            () -> setWheelDirection(clockwise)
-        );
-    }
-
-    /**
-     * Command to stop the algae wheel
-     * 
-     * @return Command to stop the algae wheel
-     */
-    public Command stopWheel() {
-        return Commands.runOnce(
-            () -> wheelMotor.stopMotor()
-        );
-    };
-
     private void setSetpoint(double rotations) {
 
         if(RobotBase.isSimulation()) {
@@ -273,16 +157,6 @@ public class AlgaeSubsystem extends SubsystemBase {
         }
 
         positionController.setReference(rotations, ControlType.kPosition);
-
-    }
-
-    private void setWheelDirection(boolean clockwise) {
-
-        if (clockwise) {
-            wheelMotor.set(CW_WHEEL_SPEED);
-        } else {
-            wheelMotor.set(CCW_WHEEL_SPEED);
-        }
 
     }
 }
