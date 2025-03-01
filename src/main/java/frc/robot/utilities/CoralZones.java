@@ -25,61 +25,61 @@ public class CoralZones {
 	}
 
 	public static Command findCoralZone(
-            boolean leftSide,
+            boolean rightSide,
             DriveSubsystem driveSubsystem
         ) {
 
         System.out.println("Finding Coral Zone");
 
 		//LEFT SIDE
-		if (leftSide && inZone_AL_BC(driveSubsystem.getPose())) {
+		if (rightSide && inZone_AL_BC(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone AL_BC");
 			return driveToReef("A");
 		}
-		if (leftSide && inZone_BC_DE(driveSubsystem.getPose())) {
+		if (rightSide && inZone_BC_DE(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone BC_DE");
 			return driveToReef("C");
 		}
-		if (leftSide && inZone_DE_FG(driveSubsystem.getPose())) {
+		if (rightSide && inZone_DE_FG(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone DE_FG");
 			return driveToReef("F");
 		}
-		if (leftSide && inZone_FG_HI(driveSubsystem.getPose())) {
+		if (rightSide && inZone_FG_HI(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone FG_HI");
 			return driveToReef("H");
 		}
-		if (leftSide && inZone_HI_JK(driveSubsystem.getPose())) {
+		if (rightSide && inZone_HI_JK(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone HI_JK");
 			return driveToReef("J");
 		}
-		if (leftSide && inZone_JK_AL(driveSubsystem.getPose())) {
+		if (rightSide && inZone_JK_AL(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone JK_AL");
 			return driveToReef("K");
 		}
 		
 
 		//RIGHT SIDE
-		if (!leftSide && inZone_AL_BC(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_AL_BC(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone AL_BC");
 			return driveToReef("B");
 		}
-		if (!leftSide && inZone_BC_DE(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_BC_DE(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone BC_DE");
 			return driveToReef("D");
 		}
-		if (!leftSide && inZone_DE_FG(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_DE_FG(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone DE_FG");
 			return driveToReef("E");
 		}
-		if (!leftSide && inZone_FG_HI(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_FG_HI(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone FG_HI");
 			return driveToReef("G");
 		}
-		if (!leftSide && inZone_HI_JK(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_HI_JK(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone HI_JK");
 			return driveToReef("I");
 		}
-		if (!leftSide && inZone_JK_AL(driveSubsystem.getPose())) {
+		if (!rightSide && inZone_JK_AL(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone JK_AL");
 			return driveToReef("L");
 		}

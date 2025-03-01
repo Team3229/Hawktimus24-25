@@ -88,87 +88,105 @@ public class RobotContainer {
 				driveSubsystem.driveFieldOriented(
 						driveAngularVelocity));
 
-		driverController.b_Hazard().onTrue(
-			Commands.runOnce(
-				() -> driveSubsystem.getCurrentCommand().cancel()
-			)
-		);
+
 
 		buttonBoard.b_1().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L1)
+			coralSubsystem.elevatorSpit(ReefHeight.L1)
 		// L1
 		);
 
 		buttonBoard.b_2().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L2)
+			coralSubsystem.elevatorSpit(ReefHeight.L2)
 		// L2
 		);
 
 		buttonBoard.b_3().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L3)
+			coralSubsystem.elevatorSpit(ReefHeight.L3)
 		// L3
 		);
 
 		buttonBoard.b_4().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L4)
+			coralSubsystem.elevatorSpit(ReefHeight.L4)
 		// L4
 		);
 
 		buttonBoard.b_5().onTrue(
-			Commands.runOnce(
-				() -> algaeSubsystem.removeUpperAlgae().schedule()
-			)
+			algaeSubsystem.removeUpperAlgae()
+			// remove algae from the upper section of the reef
+
 		);
 
 		buttonBoard.b_6().onTrue(
-			Commands.runOnce(
-				() -> algaeSubsystem.removeLowerAlgae().schedule()
-			)
+			algaeSubsystem.removeLowerAlgae()
+			// remove algae from the lower section of the reef
+
 		);
 
 		buttonBoard.b_7().onTrue(
-			Commands.runOnce(
-				() -> algaeSubsystem.intakeAlgae().schedule()
-			)
+			algaeSubsystem.intakeAlgae()
+			// intake/stow algae
+
 		);
 
 		buttonBoard.b_8().onTrue(
-			Commands.runOnce(
-				() -> algaeSubsystem.scoreAlgae().schedule()
-			)
+			algaeSubsystem.scoreAlgae()
+			// score/realease algae
+
 		);	
+
+		buttonBoard.b_9().onTrue(
+			Commands.runOnce(() -> {
+				coralSubsystem.spit().schedule();
+				//manual eject
+
+			})
+		);
+
+		buttonBoard.b_10().onTrue(
+			Commands.runOnce(() -> {
+				driveSubsystem.getCurrentCommand().cancel();
+				// cancels ONLY DRIVING on buttonboard
+
+			})
+		);
 
 		driverController.b_3().onTrue(
 			Commands.runOnce(() -> {
 				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
+				//drive to the coral human player zones
 			})
 		);
     
-		driverController.b_4()
+		driverController.b_Trigger()
 		.and(buttonBoard.joy_R())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(true, driveSubsystem).schedule();
-				},
-				driveSubsystem
-				)
-			);
+				}, driveSubsystem
+				//drive to the right coral zones
+			));
 
-		driverController.b_4()
+		driverController.b_Trigger()
 		.and(buttonBoard.joy_L())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(false, driveSubsystem).schedule();
-				},
-				driveSubsystem
-				)
-			);
-		
+				}, driveSubsystem
+				//drive to the left coral zones
+			));
+
+		driverController.b_Hazard().onTrue(
+				Commands.runOnce(() -> {
+					driveSubsystem.getCurrentCommand().cancel();
+					// cancels ALL DRIVING on driver controller
+			})
+		);
 		if (RobotBase.isSimulation()) {
 			driverController.b_5().onTrue(
 				Commands.runOnce(
 					() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get()),
 					driveSubsystem
+					// resets the odometry to the simulation pose
 				)
 			);
 		}

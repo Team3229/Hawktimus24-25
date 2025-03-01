@@ -53,6 +53,10 @@ public class CoralSubsystem extends SubsystemBase {
         );
     }
 
+    public Command spit () {
+        return spitterSubsystem.spit();
+    }
+
     public Distance getElevatorPos() {
         return elevatorSubsystem.getElevatorPos();
     }
