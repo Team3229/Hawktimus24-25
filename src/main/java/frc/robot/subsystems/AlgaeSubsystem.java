@@ -36,8 +36,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     private static final double ALGAE_GROUND_COLLECT_ANGLE = Degrees.of(90).in(Rotations);
     private static final double ALGAE_HOLD_ANGLE = Degrees.of(45).in(Rotations);
     private static final double ALGAE_SCORE_ANGLE = Degrees.of(70).in(Rotations);
-    private static final int ARM_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int WHEEL_MOTOR_CAN_ID = -1; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int ARM_MOTOR_CAN_ID = 18; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
+    private static final int WHEEL_MOTOR_CAN_ID = 19    ; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int MOTOR_CAN_ID = 15; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
     private static final int algaeForwardSoftLimit = 0;
     private static final int algaeReverseSoftLimit = 0;
@@ -109,11 +109,12 @@ public class AlgaeSubsystem extends SubsystemBase {
                 .andThen(upperAlgaeRemmovalPosition())
                 .andThen(stopWheel())
                 .alongWith(armHome());
+    }
 
     public double getPosition() {
-        return algaeMotor.getEncoder().getPosition();
+        return armMotor.getEncoder().getPosition();
     }
-    }
+    
 
     /**
      * Command to get ready to collect algae from the ground
