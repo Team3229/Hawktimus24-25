@@ -113,32 +113,27 @@ public class RobotContainer {
 		buttonBoard.b_5().onTrue(
 			algaeSubsystem.removeUpperAlgae()
 			// remove algae from the upper section of the reef
-
 		);
 
 		buttonBoard.b_6().onTrue(
 			algaeSubsystem.removeLowerAlgae()
 			// remove algae from the lower section of the reef
-
 		);
 
 		buttonBoard.b_7().onTrue(
 			algaeSubsystem.intakeAlgae()
 			// intake/stow algae
-
 		);
 
 		buttonBoard.b_8().onTrue(
 			algaeSubsystem.scoreAlgae()
 			// score/realease algae
-
 		);	
 
 		buttonBoard.b_9().onTrue(
 			Commands.runOnce(() -> {
 				coralSubsystem.spit().schedule();
 				//manual eject
-
 			})
 		);
 
@@ -146,8 +141,17 @@ public class RobotContainer {
 			Commands.runOnce(() -> {
 				driveSubsystem.getCurrentCommand().cancel();
 				// cancels ONLY DRIVING on buttonboard
-
 			})
+		);
+
+		buttonBoard.joy_U().whileTrue(
+			climbSubsystem.engageClimb()
+			//climbs the robot up
+		);
+
+		buttonBoard.joy_D().whileTrue(
+			climbSubsystem.disengageClimb()
+			//climbs the robot down
 		);
 
 		driverController.b_3().onTrue(
