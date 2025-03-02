@@ -7,12 +7,15 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -145,13 +148,24 @@ public class RobotContainer {
 		);
 
 		buttonBoard.joy_U().whileTrue(
-			climbSubsystem.engageClimb()
+			Commands.runOnce(() -> {
+				if(Timer.getMatchTime() < 130) {
+					climbSubsystem.engageClimb();
+				}
+				System.out.println("Climb Up");
+			})
 			//climbs the robot up
+			/* the time thing SHOULD work but it might not (we don't have an fms to test with)
+			it works all the time right now so testing won't be messed with */
 		);
 
 		buttonBoard.joy_D().whileTrue(
-			climbSubsystem.disengageClimb()
-			//climbs the robot down
+			Commands.runOnce(() -> {
+				if(Timer.getMatchTime() < 130) {
+					climbSubsystem.engageClimb();
+				}
+				System.out.println("Climb Down");
+			})
 		);
 
 		driverController.b_3().onTrue(
