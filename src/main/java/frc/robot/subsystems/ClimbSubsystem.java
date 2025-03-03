@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -45,6 +46,32 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public double getPosition() {
         return climbMotor.getEncoder().getPosition();
+    }
+
+    public void setSpeed(double speed) {
+        climbMotor.set(speed);
+    }
+
+    public void stop() {
+        climbMotor.stopMotor();
+    }
+
+    public Command engageClimb() {
+        return runEnd(() -> {
+            setSpeed(1);
+        },
+        () -> {
+            stop();
+        });
+    }
+
+    public Command disengageClimb() {
+        return runEnd(() -> {
+            setSpeed(-1);
+        },
+        () -> {
+            stop();
+        });
     }
 
     @Override

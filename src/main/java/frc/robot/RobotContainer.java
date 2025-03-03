@@ -7,12 +7,15 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,11 +23,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
-import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.utilities.CoralStationPathing;
 import frc.robot.utilities.CoralZones;
@@ -87,78 +90,121 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				driveSubsystem.driveFieldOriented(
 						driveAngularVelocity));
-		
-		driverController.b_Trigger().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4)
-		);
 
-		driverController.b_Hazard().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3)
-		);
 
-		driverController.b_3().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2)
-		);
-
-		// driverController.b_Hazard().onTrue(
-		// 	Commands.runOnce(
-		// 		driveSubsystem.getCurrentCommand()::cancel
-		// 	)
-		// );
 
 		buttonBoard.b_1().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L1)
+			coralSubsystem.elevatorSpit(ReefHeight.L1)
 		// L1
 		);
 
 		buttonBoard.b_2().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L2)
+			coralSubsystem.elevatorSpit(ReefHeight.L2)
 		// L2
 		);
 
 		buttonBoard.b_3().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L3)
+			coralSubsystem.elevatorSpit(ReefHeight.L3)
 		// L3
 		);
 
 		buttonBoard.b_4().onTrue(
-				coralSubsystem.elevatorSpit(ReefHeight.L4)
+			coralSubsystem.elevatorSpit(ReefHeight.L4)
 		// L4
+		);
+
+		buttonBoard.b_5().onTrue(
+			algaeSubsystem.removeUpperAlgae()
+			// remove algae from the upper section of the reef
+		);
+
+		buttonBoard.b_6().onTrue(
+			algaeSubsystem.removeLowerAlgae()
+			// remove algae from the lower section of the reef
+		);
+
+		buttonBoard.b_7().onTrue(
+			algaeSubsystem.intakeAlgae()
+			// intake/stow algae
+		);
+
+		buttonBoard.b_8().onTrue(
+			algaeSubsystem.scoreAlgae()
+			// score/realease algae
+		);	
+
+		buttonBoard.b_9().onTrue(
+			Commands.runOnce(() -> {
+				coralSubsystem.spit().schedule();
+				//manual eject
+			})
+		);
+
+		buttonBoard.b_10().onTrue(
+			Commands.runOnce(() -> {
+				driveSubsystem.getCurrentCommand().cancel();
+				// cancels ONLY DRIVING on buttonboard
+			})
+		);
+
+		buttonBoard.joy_U().whileTrue(
+			Commands.runOnce(() -> {
+				if(Timer.getMatchTime() < 130) {
+					climbSubsystem.engageClimb();
+				}
+				System.out.println("Climb Up");
+			})
+			//climbs the robot up
+			/* the time thing SHOULD work but it might not (we don't have an fms to test with)
+			it works all the time right now so testing won't be messed with */
+		);
+
+		buttonBoard.joy_D().whileTrue(
+			Commands.runOnce(() -> {
+				if(Timer.getMatchTime() < 130) {
+					climbSubsystem.engageClimb();
+				}
+				System.out.println("Climb Down");
+			})
 		);
 
 		driverController.b_3().onTrue(
 			Commands.runOnce(() -> {
 				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
+				//drive to the coral human player zones
 			})
 		);
     
-		driverController.b_4()
-		.and(driverController.p_Left())
-		.or(buttonBoard.joy_L())
+		driverController.b_Trigger()
+		.and(buttonBoard.joy_R())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(true, driveSubsystem).schedule();
-				},
-				driveSubsystem
-				)
-			);
+				}, driveSubsystem
+				//drive to the right coral zones
+			));
 
-		driverController.b_4()
-		.and(driverController.p_Right())
-		.or(buttonBoard.joy_R())
+		driverController.b_Trigger()
+		.and(buttonBoard.joy_L())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(false, driveSubsystem).schedule();
-				},
-				driveSubsystem
-				)
-			);
-		
+				}, driveSubsystem
+				//drive to the left coral zones
+			));
+
+		driverController.b_Hazard().onTrue(
+				Commands.runOnce(() -> {
+					driveSubsystem.getCurrentCommand().cancel();
+					// cancels ALL DRIVING on driver controller
+			})
+		);
 		if (RobotBase.isSimulation()) {
 			driverController.b_5().onTrue(
 				Commands.runOnce(
 					() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get()),
 					driveSubsystem
+					// resets the odometry to the simulation pose
 				)
 			);
 		}
@@ -168,7 +214,7 @@ public class RobotContainer {
 		SmartDashboard.putData(coralSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
-		SmartDashboard.putData("Autonomous", autoChooser);
+		SmartDashboard.putData(autoChooser);
 	}
 
 	public Command getAutonomousCommand() {

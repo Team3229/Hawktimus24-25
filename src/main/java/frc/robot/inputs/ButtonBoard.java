@@ -11,8 +11,14 @@ public class ButtonBoard {
         controller = new CommandGenericHID(port);
     }
 
-    public Trigger joy_L() {return controller.povLeft();}
-    public Trigger joy_R() {return controller.povRight();}
+    public Trigger joy_L() {return controller.axisLessThan(0, -0.1);}
+    //x axis left
+    public Trigger joy_R() {return controller.axisGreaterThan(0, 0.1);}
+    //x axis right
+    public Trigger joy_U() {return controller.axisGreaterThan(1, 0.1);}
+    //y axis up
+    public Trigger joy_D() {return controller.axisLessThan(1, -0.1);}
+    //y axis down
 
     public Trigger b_1() {return controller.button(1);}
     public Trigger b_2() {return controller.button(2);}
