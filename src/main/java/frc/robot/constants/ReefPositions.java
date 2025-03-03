@@ -1,8 +1,5 @@
 package frc.robot.constants;
 
-import static edu.wpi.first.units.Units.Inch;
-import static edu.wpi.first.units.Units.Meter;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import lombok.AllArgsConstructor;

@@ -7,12 +7,10 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -84,6 +82,8 @@ public class RobotContainer {
 				() -> driverController.a_X() * -1)
 				.withControllerRotationAxis(() -> -driverController.a_Z())
 				.deadband(0.1)
+				.cubeRotationControllerAxis(true)
+				.cubeTranslationControllerAxis(true)
 				.scaleTranslation(0.8)
 				.allianceRelativeControl(true);
 
