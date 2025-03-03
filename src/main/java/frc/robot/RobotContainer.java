@@ -95,22 +95,22 @@ public class RobotContainer {
 
 		buttonBoard.b_1().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L1)
-		// L1
+		// L1 coral
 		);
 
 		buttonBoard.b_2().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L2)
-		// L2
+		// L2 coral
 		);
 
 		buttonBoard.b_3().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L3)
-		// L3
+		// L3 coral
 		);
 
 		buttonBoard.b_4().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L4)
-		// L4
+		// L4 coral
 		);
 
 		buttonBoard.b_5().onTrue(
@@ -136,7 +136,7 @@ public class RobotContainer {
 		buttonBoard.b_9().onTrue(
 			Commands.runOnce(() -> {
 				coralSubsystem.spit().schedule();
-				//manual eject
+				// manual eject
 			})
 		);
 
@@ -147,26 +147,41 @@ public class RobotContainer {
 			})
 		);
 
-		buttonBoard.joy_U().whileTrue(
+				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
+		buttonBoard.joy_U()
+		.and(driverController.b_9()).onTrue(
 			Commands.runOnce(() -> {
-				if(Timer.getMatchTime() < 130) {
-					climbSubsystem.engageClimb();
-				}
-				System.out.println("Climb Up");
+				climbSubsystem.engageClimb();
+				// climb up
 			})
-			//climbs the robot up
-			/* the time thing SHOULD work but it might not (we don't have an fms to test with)
-			it works all the time right now so testing won't be messed with */
 		);
 
-		buttonBoard.joy_D().whileTrue(
+		buttonBoard.joy_D()
+		.and(driverController.b_9()).onTrue(
 			Commands.runOnce(() -> {
-				if(Timer.getMatchTime() < 130) {
-					climbSubsystem.engageClimb();
-				}
-				System.out.println("Climb Down");
+				climbSubsystem.disengageClimb();
+				// climb down
 			})
 		);
+
+				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
+		// buttonBoard.joy_U().whileTrue(
+		// 	Commands.runOnce(() -> {
+		// 		if(Timer.getMatchTime() < 130) {
+		// 			climbSubsystem.engageClimb();
+		// 		}
+		// 		System.out.println("Climb Up");
+		// 	})
+		// );
+
+		// buttonBoard.joy_D().whileTrue(
+		// 	Commands.runOnce(() -> {
+		// 		if(Timer.getMatchTime() < 130) {
+		// 			climbSubsystem.engageClimb();
+		// 		}
+		// 		System.out.println("Climb Down");
+		// 	})
+		// );
 
 		driverController.b_3().onTrue(
 			Commands.runOnce(() -> {
@@ -212,6 +227,7 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
+		SmartDashboard.putData(climbSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData(autoChooser);
