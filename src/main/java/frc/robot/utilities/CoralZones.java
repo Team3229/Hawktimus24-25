@@ -4,6 +4,8 @@ import org.ironmaple.utils.FieldMirroringUtils;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
@@ -99,7 +101,6 @@ public class CoralZones {
 
     private static Command driveToReef(String reef) {
         try {
-
             PathConstraints constraints = new PathConstraints(
 			    4, 4.0,
 			    4, Units.degreesToRadians(720)
