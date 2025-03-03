@@ -134,6 +134,7 @@ public class RobotContainer {
     
 		driverController.b_4()
 		.and(driverController.p_Left())
+		.or(buttonBoard.joy_L())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(true, driveSubsystem).schedule();
@@ -144,6 +145,7 @@ public class RobotContainer {
 
 		driverController.b_4()
 		.and(driverController.p_Right())
+		.or(buttonBoard.joy_R())
 			.onTrue(
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(false, driveSubsystem).schedule();
@@ -166,7 +168,7 @@ public class RobotContainer {
 		SmartDashboard.putData(coralSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
-		SmartDashboard.putData(autoChooser);
+		SmartDashboard.putData("Autonomous", autoChooser);
 	}
 
 	public Command getAutonomousCommand() {

@@ -24,7 +24,7 @@ public enum ReefPositions {
     J(new Pose2d(5.150, 5.125, Rotation2d.fromDegrees(060))),
     K(new Pose2d(4.125, 5.290, Rotation2d.fromDegrees(120))),
     L(new Pose2d(3.920, 5.180, Rotation2d.fromDegrees(120))),
-    Center(new Pose2d(Inch.of(176.75).in(Meter), Inch.of(158.501).in(Meter), Rotation2d.fromDegrees(0)));
+    Center(new Pose2d(4.489337, 4.025923, Rotation2d.fromDegrees(0)));
 
     Pose2d position;
 
