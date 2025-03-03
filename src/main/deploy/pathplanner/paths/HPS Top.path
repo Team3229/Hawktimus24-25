@@ -3,29 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.775,
-        "y": 2.725
+        "x": 1.1507575455309769,
+        "y": 6.795056384477467
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.697625000000001,
-        "y": 2.066875
-      },
-      "isLocked": false,
-      "linkedName": "Coral E"
-    },
-    {
-      "anchor": {
-        "x": 2.5886249999999995,
-        "y": 3.6593749999999994
-      },
-      "prevControl": {
-        "x": 2.6828720082297104,
-        "y": 2.9129386948206846
-      },
-      "nextControl": {
-        "x": 2.46675,
-        "y": 4.624625
+        "x": 1.0073634364432154,
+        "y": 6.999844395549715
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +20,8 @@
         "y": 6.92
       },
       "prevControl": {
-        "x": 1.7535927934782614,
-        "y": 6.593229279891304
+        "x": 1.1891051090877616,
+        "y": 6.715211988927752
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,10 +45,10 @@
     "rotation": -54.196655891628986
   },
   "reversed": false,
-  "folder": "REEF-HPT",
+  "folder": "HPS Lineup",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -59.99999999999999
+    "velocity": 0.5,
+    "rotation": -54.196655891628986
   },
   "useDefaultConstraints": true
 }
