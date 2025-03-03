@@ -13,7 +13,11 @@
     "S3-REEF",
     "HPS Lineup"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "S1",
+    "S2",
+    "S3"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
