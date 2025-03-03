@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.125,
-        "y": 5.3
+        "x": 3.684069293478261,
+        "y": 5.059281589673912
       },
       "prevControl": {
-        "x": 4.39675,
-        "y": 5.350999999999999
+        "x": 3.955819293478261,
+        "y": 5.110281589673911
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "S2-REEF",

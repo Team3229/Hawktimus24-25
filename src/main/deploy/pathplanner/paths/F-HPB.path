@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.0,
-        "y": 2.85
+        "x": 5.458,
+        "y": 3.092
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.862026820947212,
-        "y": 3.2304321138024217
+        "x": 5.747187488988458,
+        "y": 3.3033496104326328
       },
       "isLocked": false,
       "linkedName": "Coral F"
+    },
+    {
+      "anchor": {
+        "x": 3.594650135869565,
+        "y": 2.036914062499999
+      },
+      "prevControl": {
+        "x": 4.866521354570445,
+        "y": 2.612385675872584
+      },
+      "nextControl": {
+        "x": 2.7389736659070962,
+        "y": 1.6497541744122506
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,15 +36,20 @@
         "y": 1.24
       },
       "prevControl": {
-        "x": 1.3833170000000006,
-        "y": 1.4642499999999992
+        "x": 1.3621060073284346,
+        "y": 1.4253945420549117
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "HPB"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8219178082191617,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -48,7 +69,7 @@
   "folder": "REEF-HPB",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

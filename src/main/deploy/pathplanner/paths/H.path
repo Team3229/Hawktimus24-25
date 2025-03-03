@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.107180813694812,
-        "y": 4.258760245901638
+        "x": 5.896135816113299,
+        "y": 4.49233143
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.857180813694812,
-        "y": 4.258760245901638
+        "x": 5.64613719292633,
+        "y": 4.493161131524812
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.730122950819672,
-        "y": 4.258760245901638
+        "x": 5.79,
+        "y": 4.492
       },
       "prevControl": {
-        "x": 5.980122950819672,
-        "y": 4.258760245901638
+        "x": 6.120630587268722,
+        "y": 4.491040079699804
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral H"
     }
   ],
   "rotationTargets": [],

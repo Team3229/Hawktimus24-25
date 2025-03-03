@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.175,
-        "y": 4.1
+        "x": 3.21,
+        "y": 3.55733714
       },
       "prevControl": {
-        "x": 2.175,
-        "y": 4.1
+        "x": 2.21,
+        "y": 3.55733714
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral B"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "HPB-REEF",

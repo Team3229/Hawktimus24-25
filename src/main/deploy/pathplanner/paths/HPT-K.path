@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.125,
-        "y": 5.3
+        "x": 3.684069293478261,
+        "y": 5.059281589673912
       },
       "prevControl": {
-        "x": 2.8806249999999993,
-        "y": 5.979875
+        "x": 2.43969429347826,
+        "y": 5.739156589673912
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "HPT-REEF",

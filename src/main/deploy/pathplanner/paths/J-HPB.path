@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.16,
-        "y": 5.1
+        "x": 4.73971108886368,
+        "y": 5.376257825503405
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.0295000000000005,
-        "y": 6.667124999999999
+        "x": 3.076019021739131,
+        "y": 6.394607676630435
       },
       "isLocked": false,
       "linkedName": "Coral J"
@@ -69,7 +69,7 @@
   "folder": "REEF-HPB",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -16,32 +16,32 @@
     },
     {
       "anchor": {
-        "x": 3.8951250000000006,
-        "y": 1.8897499999999992
+        "x": 4.57229959238955,
+        "y": 2.0249915081590872
       },
       "prevControl": {
-        "x": 2.927132812500001,
-        "y": 1.464374999999999
+        "x": 3.6043074048895503,
+        "y": 1.5996165081590872
       },
       "nextControl": {
-        "x": 4.863117187500002,
-        "y": 2.315125000000001
+        "x": 5.540291779889554,
+        "y": 2.4503665081590893
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.75,
-        "y": 3.6
+        "x": 5.79,
+        "y": 4.152
       },
       "prevControl": {
-        "x": 5.959625000000001,
-        "y": 2.161374999999999
+        "x": 5.999625000000001,
+        "y": 2.713374999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral G"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "HPB-REEF",

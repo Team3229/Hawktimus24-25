@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.877218860827253,
-        "y": 2.714192292182531
+        "x": 4.12,
+        "y": 2.539
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.046096101054866,
-        "y": 2.9287743940087183
+        "x": 4.2888772402276105,
+        "y": 2.7535821018261872
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.9799180327868857,
-        "y": 2.832223360655737
+        "x": 4.21,
+        "y": 2.68
       },
       "prevControl": {
-        "x": 3.8349633098624953,
-        "y": 2.628537012802197
+        "x": 4.06504527707561,
+        "y": 2.47631365214646
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral D"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.37641797514612
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Reef Lineup",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": 59.08132275013778
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5257208869767216,
-        "y": 2.815456277958124
+        "x": 3.8724866048947373,
+        "y": 2.651631925236696
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6935487558291804,
-        "y": 3.1031611959909116
+        "x": 4.040314473747195,
+        "y": 2.939336843269484
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6322745901639335,
-        "y": 3.0120389344262293
+        "x": 3.981,
+        "y": 2.821
       },
       "prevControl": {
-        "x": 3.520471191288945,
-        "y": 2.7884321366762497
+        "x": 3.869196601125011,
+        "y": 2.5973932022500206
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral C"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.37641797514612
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Reef Lineup",

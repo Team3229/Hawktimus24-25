@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.775,
-        "y": 2.725
+        "x": 5.28,
+        "y": 2.99
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.558838397991176,
-        "y": 3.04861276621516
+        "x": 4.2682744565217385,
+        "y": 2.1799847146739126
       },
       "isLocked": false,
       "linkedName": "Coral E"
@@ -48,7 +48,7 @@
   "folder": "REEF-HPB",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

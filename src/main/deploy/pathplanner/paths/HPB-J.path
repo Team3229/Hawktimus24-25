@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.881192,
+        "x": 0.881,
         "y": 1.24
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5679420000000013,
+        "x": 2.567750000000001,
         "y": 1.7079999999999995
       },
       "isLocked": false,
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 5.16,
-        "y": 5.1
+        "x": 4.73971108886368,
+        "y": 5.376257825503405
       },
       "prevControl": {
-        "x": 4.109196749032288,
-        "y": 6.082176341625828
+        "x": 3.688907837895967,
+        "y": 6.358434167129233
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "HPB-REEF",

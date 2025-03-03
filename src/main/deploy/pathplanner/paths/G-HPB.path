@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.75,
-        "y": 3.6
+        "x": 5.79,
+        "y": 4.152
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.583625,
-        "y": 2.3904999999999994
+        "x": 5.830129076086957,
+        "y": 3.6285750679347815
       },
       "isLocked": false,
       "linkedName": "Coral G"
+    },
+    {
+      "anchor": {
+        "x": 5.216117527173914,
+        "y": 2.3945906929347816
+      },
+      "prevControl": {
+        "x": 5.663213315217392,
+        "y": 2.4661260190217367
+      },
+      "nextControl": {
+        "x": 4.5558573082436675,
+        "y": 2.288949057905944
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 1.24
       },
       "prevControl": {
-        "x": 1.4613170000000009,
-        "y": 0.9279999999999993
+        "x": 1.1099651541232012,
+        "y": 1.340810931711407
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +64,7 @@
   "folder": "REEF-HPB",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

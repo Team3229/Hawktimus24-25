@@ -13,7 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer; // for the backup climb controls
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -186,7 +186,7 @@ public class RobotContainer {
 		driverController.b_3().onTrue(
 			Commands.runOnce(() -> {
 				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
-				//drive to the coral human player zones
+				// drive to the coral human player zones
 			})
 		);
     
@@ -196,7 +196,7 @@ public class RobotContainer {
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(true, driveSubsystem).schedule();
 				}, driveSubsystem
-				//drive to the right coral zones
+				// drive to the right coral zones
 			));
 
 		driverController.b_Trigger()
@@ -205,7 +205,7 @@ public class RobotContainer {
 				Commands.runOnce(() -> {
 					CoralZones.findCoralZone(false, driveSubsystem).schedule();
 				}, driveSubsystem
-				//drive to the left coral zones
+				// drive to the left coral zones
 			));
 
 		driverController.b_Hazard().onTrue(

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6773648288140224,
-        "y": 1.7281555252633727
+        "x": 1.817843304601438,
+        "y": 1.512505976186567
       },
       "isLocked": false,
       "linkedName": "HPB"
     },
     {
       "anchor": {
-        "x": 4.78,
-        "y": 2.725
+        "x": 5.28,
+        "y": 2.99
       },
       "prevControl": {
-        "x": 3.7051453975914934,
-        "y": 1.942137297986982
+        "x": 4.365558760451539,
+        "y": 2.1030683711250004
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral E"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
