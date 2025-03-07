@@ -12,7 +12,7 @@ import frc.robot.constants.ReefHeight;
 
 /**
  * Connection between: the Spitter, Elevator, and Catcher Subsystems for the
- * manipuler functions.
+ * manipulator functions.
  */
 public class CoralSubsystem extends SubsystemBase {
 
