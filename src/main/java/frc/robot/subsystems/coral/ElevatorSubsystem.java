@@ -25,19 +25,20 @@ import frc.robot.constants.ReefHeight;
 public class ElevatorSubsystem extends SubsystemBase {
 
     // CAN ID for the motor controller
-    private static final int MOTOR_CAN_ID = 13;
+    private static final int MOTOR_CAN_ID = 7;
     
     // Maximum speed of the elevator motor
-    private static final double MAX_SPEED = 1;
+    private static final double UP_MAX_SPEED = 0.5;
+    private static final double DOWN_MAX_SPEED = 0.2;
     
     // Current limit for the motor controller
     private static final int CURRENT_LIMIT = 80;
     
     // Tolerance for the elevator position
-    private static final Distance POSITION_TOLERANCE = Inch.of(0.5);
+    private static final Distance POSITION_TOLERANCE = Inch.of(1);
 
     // Base height of the elevator
-    public static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.588230);
+    public static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.75);
     
     // Radius of the sprocket used in the elevator mechanism
     private static final Distance SPROCKET_RADIUS = Inch.of(0.7);
@@ -46,13 +47,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final Distance SPROCKET_CIRCUMFERENCE = SPROCKET_RADIUS.times(2 * Math.PI);
 
     // Maximum height the elevator can reach
-    private static final Distance MAX_ELEVATOR_HEIGHT = Inch.of(30);
+    private static final Distance MAX_ELEVATOR_HEIGHT = Inch.of(42.25);
 
     // Conversion factor for the elevator position, considering the 2-stage nature of the Swyft Elevator
     private static final double POSITION_CONVERSION_FACTOR = SPROCKET_CIRCUMFERENCE.in(Inch) / 2;
 
     // PID controller constants
-    private static final double kP = 0.1;
+    private static final double kP = 0.03;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
 
@@ -89,8 +90,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         motorConfig.closedLoop
             .pid(kP, kI, kD)
             .outputRange(
-                -MAX_SPEED,
-                MAX_SPEED
+                -DOWN_MAX_SPEED,
+                UP_MAX_SPEED
             );
         
         elevatorMotor.configure(
@@ -124,6 +125,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public Distance getElevatorRelativeHeight(ReefHeight reefPosition) {
         return reefPosition.getHeight().minus(ELEVATOR_BASE_HEIGHT);
+    }
+
+    public void disableElevator() {
+        positionController.setReference(0, ControlType.kDutyCycle);
     }
 
     private void setSetpoint(ReefHeight reefPosition) {
