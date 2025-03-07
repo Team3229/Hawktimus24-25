@@ -1,9 +1,12 @@
 package frc.robot.subsystems.coral;
 
+import static edu.wpi.first.units.Units.Inch;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,7 +43,11 @@ public class CoralSubsystem extends SubsystemBase {
         NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
         NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
         NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
-        NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral).withTimeout(2));
+        if (RobotBase.isReal()) {
+            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral));
+        } else {
+            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral).withTimeout(2));
+        }
     }
 
     /**
@@ -53,7 +60,7 @@ public class CoralSubsystem extends SubsystemBase {
         );
     }
 
-    public Command spit () {
+    public Command spit() {
         return spitterSubsystem.spit();
     }
 
@@ -69,5 +76,6 @@ public class CoralSubsystem extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addBooleanProperty("Spitter has Coral", spitterSubsystem::hasCoral, null);
         builder.addBooleanProperty("Catcher has Coral", catcherSubsystem::hasCoral, null);
+        builder.addDoubleProperty("Elevator Height", () -> elevatorSubsystem.getElevatorPos().in(Inch), null);
     }
 }

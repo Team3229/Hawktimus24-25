@@ -1,6 +1,8 @@
 package frc.robot.subsystems.coral;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -60,21 +62,22 @@ public class CatcherSubsystem extends SubsystemBase{
             .forwardSoftLimitEnabled(true)
             .forwardSoftLimit(FEED_ANGLE)
             .reverseSoftLimitEnabled(true)
-            .reverseSoftLimit(CATCH_ANGLE);       
+            .reverseSoftLimit(CATCH_ANGLE);
+            
+        catcherMotor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         
         coral = new Trigger(this::hasCoral);
-
         
     }
 
-    public Command feedAngle () {
+    public Command feedAngle() {
         return Commands.runOnce(
             () -> {
                 positionController.setReference(FEED_ANGLE, ControlType.kPosition);
             }, this );
     }
     
-    public Command catchAngle () {
+    public Command catchAngle() {
         return Commands.runOnce(
             () -> {
                 positionController.setReference(CATCH_ANGLE, ControlType.kPosition);

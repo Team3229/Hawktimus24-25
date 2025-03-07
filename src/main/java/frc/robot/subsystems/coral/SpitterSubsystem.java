@@ -1,6 +1,8 @@
 package frc.robot.subsystems.coral;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -26,6 +28,8 @@ public class SpitterSubsystem extends SubsystemBase {
 
         motorConfig = new SparkMaxConfig();
         motorConfig.smartCurrentLimit(38);
+
+        spitterMotor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
     }
 
