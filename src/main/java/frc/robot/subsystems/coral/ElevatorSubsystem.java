@@ -1,5 +1,6 @@
 package frc.robot.subsystems.coral;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inch;
 
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -11,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -28,11 +30,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final int MOTOR_CAN_ID = 7;
     
     // Maximum speed of the elevator motor
-    private static final double UP_MAX_SPEED = 0.5;
-    private static final double DOWN_MAX_SPEED = 0.2;
+    private static final double UP_MAX_SPEED = 0.8;
+    private static final double DOWN_MAX_SPEED = 0.4;
     
     // Current limit for the motor controller
-    private static final int CURRENT_LIMIT = 80;
+    private static final Current CURRENT_LIMIT = Amps.of(80);
     
     // Tolerance for the elevator position
     private static final Distance POSITION_TOLERANCE = Inch.of(1);
@@ -53,7 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final double POSITION_CONVERSION_FACTOR = SPROCKET_CIRCUMFERENCE.in(Inch) / 2;
 
     // PID controller constants
-    private static final double kP = 0.03;
+    private static final double kP = 0.08;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
 
@@ -78,7 +80,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         motorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR);
         
-        motorConfig.smartCurrentLimit(CURRENT_LIMIT);
+        motorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
         motorConfig.idleMode(IdleMode.kBrake);
 
         motorConfig.softLimit
@@ -114,7 +116,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
             @Override
             public boolean isFinished() {
-                return getElevatorPos().minus(getElevatorRelativeHeight(reefPosition)).abs(Inch) < POSITION_TOLERANCE.in(Inch);
+                return getElevatorPose().minus(getElevatorRelativeHeight(reefPosition)).abs(Inch) < POSITION_TOLERANCE.in(Inch);
             }
         };
 
@@ -134,14 +136,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     private void setSetpoint(ReefHeight reefPosition) {
 
         if (RobotBase.isSimulation()) {
-            elevatorHeight = elevatorHeight.plus(getElevatorRelativeHeight(reefPosition).minus(getElevatorPos()).times(0.2));
+            elevatorHeight = elevatorHeight.plus(getElevatorRelativeHeight(reefPosition).minus(getElevatorPose()).times(0.2));
         }
         
         positionController.setReference(getElevatorRelativeHeight(reefPosition).in(Inch), ControlType.kPosition);
 
     }
 
-    public Distance getElevatorPos() {
+    public Distance getElevatorPose() {
 
         if (RobotBase.isSimulation()) {
             return elevatorHeight;

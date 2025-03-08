@@ -1,35 +1,50 @@
 package frc.robot.subsystems.coral;
 
+import static edu.wpi.first.units.Units.Amps;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class SpitterSubsystem extends SubsystemBase {
 
-    private static final double INTAKE_SPEED = 0.5;
-    private static final double SPIT_SPEED = -0.5;
     private SparkMax spitterMotor;
     private DigitalInput spitterSensor;
     private SparkMaxConfig motorConfig;
 
-    private static final int CAN_ID = 14;
-    private static final int SENSOR_PORT = 0;
+    private static final int CAN_ID = 6;
+    private static final int SENSOR_PORT = 8;
+
+    private static final double INTAKE_SPEED = 0.3;
+    // private static final double SPIT_SPEED = 0.8;
+    private static final double SPIT_SPEED = 0.4;
+    private static final Current CURRENT_LIMIT = Amps.of(80);
+    private static final boolean INVERTED = true;
 
     public SpitterSubsystem() {
+
         super();
         spitterMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         spitterSensor = new DigitalInput(SENSOR_PORT);
 
         motorConfig = new SparkMaxConfig();
-        motorConfig.smartCurrentLimit(38);
+        motorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
 
-        spitterMotor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        motorConfig.inverted(INVERTED);
+
+        spitterMotor.configure(
+            motorConfig,
+            ResetMode.kNoResetSafeParameters,
+            PersistMode.kNoPersistParameters
+        );
 
     }
 
@@ -38,7 +53,11 @@ public class SpitterSubsystem extends SubsystemBase {
      * 
      * @return True if the spitter has coral, false otherwise.
      */
-    protected boolean hasCoral() {
+    public Trigger hasCoral() {
+        return new Trigger(this::sensor);
+    }
+
+    private boolean sensor() {
         return !spitterSensor.get();
     }
 
@@ -49,22 +68,28 @@ public class SpitterSubsystem extends SubsystemBase {
      */
     public Command intake() {
         return new Command() {
+
+            @Override
+            public void initialize() {
+                System.out.println("Intake");
+            }
+
             @Override
             public void execute() {
                 spitterMotor.set(INTAKE_SPEED);
             }
 
-            // @Override
-            // public boolean isFinished() {
-            //     return hasCoral();
-            // }
+            @Override
+            public boolean isFinished() {
+                return hasCoral().getAsBoolean();
+            }
 
             @Override
             public void end(boolean interrupted) {
                 spitterMotor.stopMotor();
             }
 
-        }.withTimeout(2);
+        };
     }
 
     /**
@@ -74,20 +99,26 @@ public class SpitterSubsystem extends SubsystemBase {
      */
     public Command spit() {
         return new Command() {
+
+            @Override
+            public void initialize() {
+                System.out.println("Spit");
+            }
+
             @Override
             public void execute() {
                 spitterMotor.set(SPIT_SPEED);
             }
 
-            // @Override
-            // public boolean isFinished() {
-            //     return !hasCoral();
-            // }
+            @Override
+            public boolean isFinished() {
+                return !hasCoral().getAsBoolean();
+            }
 
             @Override
             public void end(boolean interrupted) {
                 spitterMotor.stopMotor();
             }
-        }.withTimeout(2);
+        };
     }
 }

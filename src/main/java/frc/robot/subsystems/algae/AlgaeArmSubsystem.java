@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 
@@ -13,7 +14,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.units.measure.Angle;   
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,36 +29,49 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private SparkMax armMotor;
     private SparkMaxConfig armMotorConfig;
     private SparkClosedLoopController positionController;
-    private static final Angle POSITION_TOLERANCE = Degrees.of(3);
-    private static final double ARM_REMOVAL_POSITION = Degrees.of(135).in(Rotations); // ( ━☞´◔‿◔`)━☞ Replace with actual
-                                                                                     // position pls
-    private static final double ARM_HOME_POSITION = Degrees.of(0).in(Rotations); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
-    private static final double ALGAE_THROW_ANGLE = Degrees.of(200).in(Rotations);
-    private static final double ALGAE_GROUND_COLLECT_ANGLE = Degrees.of(90).in(Rotations);
-    private static final double ALGAE_HOLD_ANGLE = Degrees.of(45).in(Rotations);
-    private static final double ALGAE_SCORE_ANGLE = Degrees.of(70).in(Rotations);
-    private static final int ARM_MOTOR_CAN_ID = 18; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int algaeForwardSoftLimit = 0;
-    private static final int algaeReverseSoftLimit = 0;
-    private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
 
+    private static final int CAN_ID = 9; 
+    private static final Current CURRENT_LIMIT = Amps.of(80); // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
     private static final double kP = 0.1;
+    private static final double kI = 0;
+    private static final double kD = 0;
+
+    private static final Angle POSITION_TOLERANCE = Degrees.of(3);
+    
+    private static final Angle REMOVAL_POSITION = Degrees.of(135); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
+    private static final Angle HOME_POSITION = Degrees.of(0); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
+    private static final Angle THROW_ANGLE = Degrees.of(200);
+    private static final Angle GROUND_COLLECT_ANGLE = Degrees.of(90);
+    private static final Angle HOLD_ANGLE = Degrees.of(45);
+    private static final Angle SCORE_ANGLE = Degrees.of(70);
+    private static final Angle FORWARD_LIMIT = Degrees.of(0);
+    private static final Angle REVERSE_LIMIT = Degrees.of(0);
 
     public AlgaeArmSubsystem() {
 
-        armMotor = new SparkMax(ARM_MOTOR_CAN_ID, MotorType.kBrushless);
+        armMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         armMotorConfig = new SparkMaxConfig();
 
         armMotorConfig.inverted(true); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
 
-        armMotorConfig.smartCurrentLimit(algaeSmartCurrentLimit);
+        armMotorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
         armMotorConfig.idleMode(IdleMode.kBrake);
 
         armMotorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-                .forwardSoftLimitEnabled(algaeForwardSoftLimit > 0)
-                .forwardSoftLimit(algaeForwardSoftLimit)
-                .reverseSoftLimitEnabled(algaeReverseSoftLimit > 0)
-                .reverseSoftLimit(algaeReverseSoftLimit);
+                .forwardSoftLimitEnabled(FORWARD_LIMIT.in(Degrees) > 0)
+                .forwardSoftLimit(FORWARD_LIMIT.in(Degrees))
+                .reverseSoftLimitEnabled(REVERSE_LIMIT.in(Degrees) > 0)
+                .reverseSoftLimit(REVERSE_LIMIT.in(Degrees));
+
+        armMotorConfig.closedLoop
+            .pid(
+                kP,
+                kI,
+                kD
+            );
+
+
+        //ABSOLUTE ENCODER IMPLEMENT
 
         armMotor.configure(
                 armMotorConfig,
@@ -66,8 +81,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         positionController = armMotor.getClosedLoopController();
     }
 
-    public double getPosition() {
-        return armMotor.getEncoder().getPosition();
+    public Angle getPosition() {
+        return Degrees.of(armMotor.getEncoder().getPosition());
     }
 
     /**
@@ -77,7 +92,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      * @return
      */
     public Command upToRemoveAlgaeFromReef() {
-        return rotateArm(ARM_REMOVAL_POSITION);
+        return rotateArm(REMOVAL_POSITION);
     }
 
     /**
@@ -86,7 +101,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      * @return
      */
     public Command home() {
-        return rotateArm(ARM_HOME_POSITION);
+        return rotateArm(HOME_POSITION);
     }
 
     /**
@@ -95,7 +110,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      *         (i.e. the algae is thrown off the arm and not into the robot)
      */
     public Command upperAlgaeRemovalPosition() {
-        return rotateArm(ALGAE_THROW_ANGLE);
+        return rotateArm(THROW_ANGLE);
     }
 
     /**
@@ -105,14 +120,14 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      * @return
      */
     public Command readyingCollectPosition() {
-        return rotateArm(ALGAE_GROUND_COLLECT_ANGLE);
+        return rotateArm(GROUND_COLLECT_ANGLE);
     }
 
     /**
      * * Command to rotate the arm to a position where algae can be scored
      */
     public Command scorePosition() {
-        return rotateArm(ALGAE_SCORE_ANGLE);
+        return rotateArm(SCORE_ANGLE);
     }
 
     /**
@@ -121,7 +136,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      * @return
      */
     public Command intakePosition() {
-        return rotateArm(ALGAE_HOLD_ANGLE);
+        return rotateArm(HOLD_ANGLE);
     }
 
     /**
@@ -130,18 +145,18 @@ public class AlgaeArmSubsystem extends SubsystemBase {
      * @param rotations
      * @return
      */
-    protected Command rotateArm(double rotations) {
+    protected Command rotateArm(Angle angle) {
 
         Command armRemovalCommand = new Command() {
             @Override
             public void initialize() {
-                setSetpoint(rotations);
+                setSetpoint(angle);
             }
 
             @Override
             public boolean isFinished() {
                 return Math.abs(armMotor.getEncoder().getPosition()
-                - rotations) < POSITION_TOLERANCE.in(Rotations);
+                - angle.in(Rotations)) < POSITION_TOLERANCE.in(Rotations);
             }
         };
 
@@ -150,13 +165,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         return armRemovalCommand;
     }
 
-    private void setSetpoint(double rotations) {
+    private void setSetpoint(Angle angle) {
 
         if(RobotBase.isSimulation()) {
-            armMotor.getEncoder().setPosition((rotations - armMotor.getEncoder().getPosition()) * kP);
+            armMotor.getEncoder().setPosition((angle.in(Rotations) - armMotor.getEncoder().getPosition()) * kP);
         }
 
-        positionController.setReference(rotations, ControlType.kPosition);
+        positionController.setReference(angle.in(Rotations), ControlType.kPosition);
 
     }
 }

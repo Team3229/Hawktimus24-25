@@ -117,10 +117,14 @@ public class DriveSubsystem extends SubsystemBase {
 
 		swerveDrive.pushOffsetsToEncoders();
 
-		swerveDrive.getGyro().setOffset(new Rotation3d(0, 0, Math.PI));
+		swerveDrive.getGyro().setOffset(new Rotation3d(0, 0, 0));
 
-		swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
-		swerveDrive.getMapleSimDrive().get().config.bumperWidthY = Inch.of(33.954922);
+		try {
+			swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
+			swerveDrive.getMapleSimDrive().get().config.bumperWidthY = Inch.of(33.954922);
+		} catch (Exception e) {
+
+		}
 
 		setupPathPlanner();
 	}

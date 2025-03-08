@@ -1,5 +1,6 @@
 package frc.robot.subsystems.algae;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
  * Subsystem for the algae removal and intake.
  */
 public class AlgaeSubsystem extends SubsystemBase {
+    
     private AlgaeArmSubsystem arm;
     private AlgaeWheelSubsystem wheel;
 
@@ -96,7 +98,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return double representing the position of the arm
      */
-    public double getPosition() {
+    public Angle getPosition() {
         return arm.getPosition();
     }
 }

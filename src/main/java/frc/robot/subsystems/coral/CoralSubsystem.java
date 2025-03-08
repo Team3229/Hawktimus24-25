@@ -1,16 +1,17 @@
 package frc.robot.subsystems.coral;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inch;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.ReefHeight;
 
 /**
@@ -23,7 +24,7 @@ public class CoralSubsystem extends SubsystemBase {
     SpitterSubsystem spitterSubsystem;
     CatcherSubsystem catcherSubsystem;
     
-    public CoralSubsystem(Trigger catchTrigger) {
+    public CoralSubsystem() {
 
         super();
 
@@ -31,23 +32,24 @@ public class CoralSubsystem extends SubsystemBase {
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
 
-        // catcherSubsystem.getCoral().onTrue(catcherSubsystem.feedAngle()
-        //         .alongWith(spitterSubsystem.intake())
-        //         .andThen(catcherSubsystem.catchAngle()));
-
-        catchTrigger.onTrue(catcherSubsystem.feedAngle()
+        catcherSubsystem.hasCoral().onTrue(
+            Commands.waitSeconds(0.25).andThen(
+            catcherSubsystem.feedAngle()
                 .alongWith(spitterSubsystem.intake())
-                .andThen(catcherSubsystem.catchAngle()));
+                .andThen(catcherSubsystem.catchAngle()))
+        );
 
         NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4));
         NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
         NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
         NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
+
         if (RobotBase.isReal()) {
-            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral));
+            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem.hasCoral()));
         } else {
-            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem::hasCoral).withTimeout(2));
+            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem.hasCoral()).withTimeout(2));
         }
+
     }
 
     /**
@@ -64,18 +66,21 @@ public class CoralSubsystem extends SubsystemBase {
         return spitterSubsystem.spit();
     }
 
-    public Distance getElevatorPos() {
-        return elevatorSubsystem.getElevatorPos();
+    public Distance getElevatorPose() {
+        return elevatorSubsystem.getElevatorPose();
     }
 
-    public double getFeederAngle() {
-        return catcherSubsystem.getFeederAngle();
+    public Angle getFeederAngle() {
+        return catcherSubsystem.getAngle();
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addBooleanProperty("Spitter has Coral", spitterSubsystem::hasCoral, null);
-        builder.addBooleanProperty("Catcher has Coral", catcherSubsystem::hasCoral, null);
-        builder.addDoubleProperty("Elevator Height", () -> elevatorSubsystem.getElevatorPos().in(Inch), null);
+        builder.addBooleanProperty("Spitter has Coral", spitterSubsystem.hasCoral(), null);
+        builder.addBooleanProperty("Catcher has Coral", catcherSubsystem.hasCoral(), null);
+        builder.addDoubleProperty("Elevator Height", () -> elevatorSubsystem.getElevatorPose().in(Inch), null);
+        builder.addDoubleProperty("Catcher Angle", () -> getFeederAngle().in(Degrees), null);
+        builder.addBooleanProperty("Catcher Limit Switch", () -> catcherSubsystem.limit().getAsBoolean(), null);
+        builder.addDoubleProperty("Catcher Current", () -> catcherSubsystem.getDraw(), null);
     }
 }

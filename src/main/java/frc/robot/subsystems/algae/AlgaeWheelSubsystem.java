@@ -19,31 +19,31 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
 
     private SparkMax wheelMotor;
     private SparkMaxConfig wheelMotorConfig;
-    private static final int CW_WHEEL_SPEED = 1;
-    private static final int CCW_WHEEL_SPEED = -1;
-    private static final int WHEEL_MOTOR_CAN_ID = 19; // ( ━☞´◔‿◔`)━☞ Replace with actual CAN ID pls
-    private static final int algaeForwardSoftLimit = 0;
-    private static final int algaeReverseSoftLimit = 0;
-    private static final int algaeSmartCurrentLimit = 80; // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
+
+    private static final int CAN_ID = 18;
+    
+    private static final boolean INVERTED = true;
+    private static final IdleMode IDLE_MODE = IdleMode.kBrake;
+
+    private static final int CW_SPEED = 1;
+    private static final int CCW_SPEED = -1;
+    private static final int CURRENT_LIMIT = 80;
 
     public AlgaeWheelSubsystem() {
-        wheelMotor = new SparkMax(WHEEL_MOTOR_CAN_ID, MotorType.kBrushless);
+
+        wheelMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         wheelMotorConfig = new SparkMaxConfig();
 
-        wheelMotorConfig.inverted(true); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
+        wheelMotorConfig.inverted(INVERTED);
 
-        wheelMotorConfig.smartCurrentLimit(algaeSmartCurrentLimit);
-        wheelMotorConfig.idleMode(IdleMode.kBrake);
-        wheelMotorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-                .forwardSoftLimitEnabled(algaeForwardSoftLimit > 0)
-                .forwardSoftLimit(algaeForwardSoftLimit)
-                .reverseSoftLimitEnabled(algaeReverseSoftLimit > 0)
-                .reverseSoftLimit(algaeReverseSoftLimit);
+        wheelMotorConfig.smartCurrentLimit(CURRENT_LIMIT);
+        wheelMotorConfig.idleMode(IDLE_MODE);
 
         wheelMotor.configure(
                 wheelMotorConfig,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kNoPersistParameters);
+        
     }
 
     /**
@@ -72,9 +72,9 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
     private void setWheelDirection(boolean clockwise) {
 
         if (clockwise) {
-            wheelMotor.set(CW_WHEEL_SPEED);
+            wheelMotor.set(CW_SPEED);
         } else {
-            wheelMotor.set(CCW_WHEEL_SPEED);
+            wheelMotor.set(CCW_SPEED);
         }
 
     }

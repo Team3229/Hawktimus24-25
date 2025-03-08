@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -38,8 +39,8 @@ public class RobotContainer {
 	ButtonBoard buttonBoard;
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
-	ClimbSubsystem climbSubsystem;
-	AlgaeSubsystem algaeSubsystem;
+	// ClimbSubsystem climbSubsystem;
+	// AlgaeSubsystem algaeSubsystem;
 
 	VisualizerSubsystem visualizerSubsystem;
 
@@ -49,9 +50,9 @@ public class RobotContainer {
 
 		driverController = new FlightStick(0);
 		buttonBoard = new ButtonBoard(1);
-		climbSubsystem = new ClimbSubsystem();
-		coralSubsystem = new CoralSubsystem(driverController.b_3());
-		algaeSubsystem = new AlgaeSubsystem();
+		// climbSubsystem = new ClimbSubsystem();
+		coralSubsystem = new CoralSubsystem();
+		// algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 				"swerve",
 				MetersPerSecond.of(5.0),
@@ -61,12 +62,12 @@ public class RobotContainer {
 					return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
 				});
 
-		visualizerSubsystem = new VisualizerSubsystem(
-			() -> coralSubsystem.getElevatorPos().in(Meters),
-			coralSubsystem::getFeederAngle,
-			climbSubsystem::getPosition,
-			algaeSubsystem::getPosition
-		);
+		// visualizerSubsystem = new VisualizerSubsystem(
+		// 	() -> coralSubsystem.getElevatorPose().in(Meters),
+		// 	() -> coralSubsystem.getFeederAngle().in(Degrees),
+		// 	() -> climbSubsystem.getCurrentAngle().in(Degrees),
+		// 	() -> algaeSubsystem.getPosition().in(Degrees)
+		// );
 
 		configureBindings();
 		initTelemetery();
@@ -78,20 +79,25 @@ public class RobotContainer {
 
 		SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
 				driveSubsystem.getSwerveDrive(),
-				() -> driverController.a_Y() * -1,
-				() -> driverController.a_X() * -1)
+				() -> -driverController.a_Y(),
+				() -> -driverController.a_X())
 				.withControllerRotationAxis(() -> -driverController.a_Z())
 				.deadband(0.1)
 				.cubeRotationControllerAxis(true)
 				.cubeTranslationControllerAxis(true)
 				.scaleTranslation(0.8)
+				.scaleRotation(0.6)
 				.allianceRelativeControl(true);
 
 		driveSubsystem.setDefaultCommand(
 				driveSubsystem.driveFieldOriented(
 						driveAngularVelocity));
 
-
+		driverController.b_10().onTrue(
+			Commands.runOnce(
+				driveSubsystem::zeroGyroWithAlliance
+			)
+		);
 
 		buttonBoard.b_1().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L1)
@@ -113,25 +119,25 @@ public class RobotContainer {
 		// L4 coral
 		);
 
-		buttonBoard.b_5().onTrue(
-			algaeSubsystem.removeUpperAlgae()
-			// remove algae from the upper section of the reef
-		);
+		// buttonBoard.b_5().onTrue(
+		// 	algaeSubsystem.removeUpperAlgae()
+		// 	// remove algae from the upper section of the reef
+		// );
 
-		buttonBoard.b_6().onTrue(
-			algaeSubsystem.removeLowerAlgae()
-			// remove algae from the lower section of the reef
-		);
+		// buttonBoard.b_6().onTrue(
+		// 	algaeSubsystem.removeLowerAlgae()
+		// 	// remove algae from the lower section of the reef
+		// );
 
-		buttonBoard.b_7().onTrue(
-			algaeSubsystem.intakeAlgae()
-			// intake/stow algae
-		);
+		// buttonBoard.b_7().onTrue(
+		// 	algaeSubsystem.intakeAlgae()
+		// 	// intake/stow algae
+		// );
 
-		buttonBoard.b_8().onTrue(
-			algaeSubsystem.scoreAlgae()
-			// score/realease algae
-		);	
+		// buttonBoard.b_8().onTrue(
+		// 	algaeSubsystem.scoreAlgae()
+		// 	// score/realease algae
+		// );	
 
 		buttonBoard.b_9().onTrue(
 			Commands.runOnce(() -> {
@@ -140,29 +146,29 @@ public class RobotContainer {
 			})
 		);
 
-		buttonBoard.b_10().onTrue(
-			Commands.runOnce(() -> {
-				driveSubsystem.getCurrentCommand().cancel();
-				// cancels ONLY DRIVING on buttonboard
-			})
-		);
+		// buttonBoard.b_10().onTrue(
+		// 	Commands.runOnce(() -> {
+		// 		driveSubsystem.getCurrentCommand().cancel();
+		// 		// cancels ONLY DRIVING on buttonboard
+		// 	})
+		// );
 
-				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
-		buttonBoard.joy_U()
-		.and(driverController.b_9()).onTrue(
-			Commands.runOnce(() -> {
-				climbSubsystem.engageClimb();
-				// climb up
-			})
-		);
+		// 		//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
+		// buttonBoard.joy_U()
+		// .and(driverController.b_9()).onTrue(
+		// 	Commands.runOnce(() -> {
+		// 		climbSubsystem.engageClimb();
+		// 		// climb up
+		// 	})
+		// );
 
-		buttonBoard.joy_D()
-		.and(driverController.b_9()).onTrue(
-			Commands.runOnce(() -> {
-				climbSubsystem.disengageClimb();
-				// climb down
-			})
-		);
+		// buttonBoard.joy_D()
+		// .and(driverController.b_9()).onTrue(
+		// 	Commands.runOnce(() -> {
+		// 		climbSubsystem.disengageClimb();
+		// 		// climb down
+		// 	})
+		// );
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
 		// buttonBoard.joy_U().whileTrue(
@@ -227,7 +233,7 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		SmartDashboard.putData(climbSubsystem);
+		// SmartDashboard.putData(climbSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData(autoChooser);
