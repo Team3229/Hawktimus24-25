@@ -29,63 +29,66 @@ public class CoralZones {
             DriveSubsystem driveSubsystem
         ) {
 
+		Command out = Commands.none();
+
         System.out.println("Finding Coral Zone");
 
 		//LEFT SIDE
 		if (rightSide && inZone_AL_BC(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone AL_BC");
-			return driveToReef("A");
+			out = driveToReef("A");
 		}
 		if (rightSide && inZone_BC_DE(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone BC_DE");
-			return driveToReef("C");
+			out = driveToReef("C");
 		}
 		if (rightSide && inZone_DE_FG(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone DE_FG");
-			return driveToReef("F");
+			out = driveToReef("F");
 		}
 		if (rightSide && inZone_FG_HI(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone FG_HI");
-			return driveToReef("H");
+			out = driveToReef("H");
 		}
 		if (rightSide && inZone_HI_JK(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone HI_JK");
-			return driveToReef("J");
+			out = driveToReef("J");
 		}
 		if (rightSide && inZone_JK_AL(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone JK_AL");
-			return driveToReef("K");
+			out = driveToReef("K");
 		}
 		
 
 		//RIGHT SIDE
 		if (!rightSide && inZone_AL_BC(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone AL_BC");
-			return driveToReef("B");
+			out = driveToReef("B");
 		}
 		if (!rightSide && inZone_BC_DE(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone BC_DE");
-			return driveToReef("D");
+			out = driveToReef("D");
 		}
 		if (!rightSide && inZone_DE_FG(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone DE_FG");
-			return driveToReef("E");
+			out = driveToReef("E");
 		}
 		if (!rightSide && inZone_FG_HI(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone FG_HI");
-			return driveToReef("G");
+			out = driveToReef("G");
 		}
 		if (!rightSide && inZone_HI_JK(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone HI_JK");
-			return driveToReef("I");
+			out = driveToReef("I");
 		}
 		if (!rightSide && inZone_JK_AL(driveSubsystem.getPose())) {
             System.out.println("Robot is in zone JK_AL");
-			return driveToReef("L");
+			out = driveToReef("L");
 		}
 
-		System.out.println("Robot is not positioned inside a zone");
-		return Commands.none();
+		out.addRequirements(driveSubsystem);
+
+		return out;
 
 	}
 
@@ -93,8 +96,8 @@ public class CoralZones {
         try {
 
             PathConstraints constraints = new PathConstraints(
-			    4, 4.0,
-			    4, Units.degreesToRadians(720)
+			    0.5, 1.0,
+			    1.0, Units.degreesToRadians(720)
 		    );
 
             return AutoBuilder.pathfindThenFollowPath(

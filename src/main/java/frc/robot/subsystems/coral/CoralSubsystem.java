@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Inch;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -32,34 +33,54 @@ public class CoralSubsystem extends SubsystemBase {
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
 
+        registerCommands();
+
         catcherSubsystem.hasCoral().onTrue(
-            Commands.waitSeconds(0.25).andThen(
-            catcherSubsystem.feedAngle()
-                .alongWith(spitterSubsystem.intake())
-                .andThen(catcherSubsystem.catchAngle()))
+            feedCommand()
         );
 
-        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4));
-        NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
-        NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
-        NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
+    }
 
-        if (RobotBase.isReal()) {
-            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem.hasCoral()));
-        } else {
-            NamedCommands.registerCommand("Wait for Intake", Commands.waitUntil(catcherSubsystem.hasCoral()).withTimeout(2));
-        }
+    // @Override
+    // public void periodic() {
+    //     if (catcherSubsystem.hasCoral().getAsBoolean() && !feedCommand().isScheduled()) {
+    //         feedCommand().schedule();
+    //     }
+    // }
 
+    public Command feedCommand() {
+        return
+        runOnce(
+            () -> System.out.println("Feeding...")
+        )
+        .andThen(
+            Commands.parallel(
+                catcherSubsystem.feedAngle(),
+                spitterSubsystem.intake()
+            )
+        )
+        .andThen(
+            catcherSubsystem.catchAngle()
+        )
+        .handleInterrupt(
+            () -> catcherSubsystem.disableCatcher()
+        )
+        .withTimeout(
+            2
+        );
     }
 
     /**
      * Connect elevator to spit
      */
     public Command elevatorSpit(ReefHeight reefHeight) {
-        return elevatorSubsystem.goToLevel(reefHeight)
-            .andThen(spitterSubsystem.spit())
-            .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base)
-        );
+        return
+            (
+                elevatorSubsystem.goToLevel(reefHeight)
+                    .andThen(spitterSubsystem.spit())
+                    .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
+            )
+        .onlyIf(spitterSubsystem.hasCoral());
     }
 
     public Command spit() {
@@ -73,6 +94,18 @@ public class CoralSubsystem extends SubsystemBase {
     public Angle getFeederAngle() {
         return catcherSubsystem.getAngle();
     }
+
+    private void registerCommands() {
+        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4));
+        NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
+        NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
+        NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
+    
+        NamedCommands.registerCommand("Wait for Intake", 
+            Commands.waitUntil(catcherSubsystem.hasCoral())
+            .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
+        );
+    }    
 
     @Override
     public void initSendable(SendableBuilder builder) {

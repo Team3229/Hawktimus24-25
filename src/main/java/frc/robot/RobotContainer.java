@@ -59,7 +59,7 @@ public class RobotContainer {
 				new Pose2d(2, 4, new Rotation2d()),
 				TelemetryVerbosity.HIGH,
 				() -> {
-					return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), 0);
+					return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), driveSubsystem.getRobotVelocity().omegaRadiansPerSecond);
 				});
 
 		// visualizerSubsystem = new VisualizerSubsystem(
@@ -134,17 +134,16 @@ public class RobotContainer {
 		// 	// intake/stow algae
 		// );
 
-		// buttonBoard.b_8().onTrue(
-		// 	algaeSubsystem.scoreAlgae()
-		// 	// score/realease algae
-		// );	
-
 		buttonBoard.b_9().onTrue(
-			Commands.runOnce(() -> {
-				coralSubsystem.spit().schedule();
-				// manual eject
-			})
+			coralSubsystem.feedCommand()
 		);
+
+		// buttonBoard.b_9().onTrue(
+		// 	Commands.runOnce(() -> {
+		// 		coralSubsystem.spit().schedule();
+		// 		// manual eject
+		// 	})
+		// );
 
 		// buttonBoard.b_10().onTrue(
 		// 	Commands.runOnce(() -> {

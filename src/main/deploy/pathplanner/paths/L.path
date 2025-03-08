@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5304209025371582,
-        "y": 4.835976927176813
+        "x": 3.5304197807330544,
+        "y": 4.835976165596235
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 4.913
       },
       "prevControl": {
-        "x": 3.2793144114721744,
-        "y": 5.184342249336182
+        "x": 3.281005265467872,
+        "y": 5.185497841155095
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -150.0
   },
   "reversed": false,
   "folder": "Reef Lineup",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": -60.25511870305778
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

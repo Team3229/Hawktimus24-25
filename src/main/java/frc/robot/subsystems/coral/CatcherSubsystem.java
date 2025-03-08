@@ -28,7 +28,7 @@ public class CatcherSubsystem extends SubsystemBase{
     private SparkClosedLoopController positionController;
 
     //25 degrees in cad (NEEDS TO BE TESTED)
-    private static final Angle FEED_ANGLE = Degrees.of(45);
+    private static final Angle FEED_ANGLE = Degrees.of(50);
     private static final Angle CATCH_ANGLE = Degrees.of(0);
 
     private static final double CONVERSION_FACTOR = (1.0/5.0)*360.0;
@@ -36,13 +36,16 @@ public class CatcherSubsystem extends SubsystemBase{
     private static final int CAN_ID = 5;
     private static final int SENSOR_PORT = 9;
     private static final int LIMIT_PORT = 7;
+
+    private static final Angle POSITION_TOLERANCE = Degrees.of(5);
     
-    private static final double MAX_SPEED = 0.1;
+    private static final double UP_MAX_SPEED = 0.15;
+    private static final double DOWN_MAX_SPEED = 0.05;
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
     private static final double kP = 0.1;
     private static final double kI = 0.0;
-    private static final double kD = 0.0;
+    private static final double kD = 0.5;
 
     
     public CatcherSubsystem() {
@@ -66,8 +69,8 @@ public class CatcherSubsystem extends SubsystemBase{
                 kD
             )
             .outputRange(
-                -MAX_SPEED,
-                MAX_SPEED
+                -DOWN_MAX_SPEED,
+                UP_MAX_SPEED
             );
 
         motorConfig.encoder
@@ -88,34 +91,47 @@ public class CatcherSubsystem extends SubsystemBase{
         );
 
         limit().onTrue(
-            Commands.runOnce(this::zeroFeeder, this).ignoringDisable(true)
-        );
-
-        hasCoral().onFalse(
-            catchAngle()
+            Commands.runOnce(this::zeroFeeder).ignoringDisable(true)
         );
         
     }
 
     public Command feedAngle() {
 
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 System.out.println("Feed");
                 positionController.setReference(FEED_ANGLE.in(Degrees), ControlType.kPosition);
             },
             this
-        ).handleInterrupt(() -> positionController.setReference(0, ControlType.kDutyCycle));
+        )
+        .until(
+            hasCoral().negate()
+        );
     }
     
     public Command catchAngle() {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 System.out.println("Reset Catcher");
-                positionController.setReference(0, ControlType.kDutyCycle);
+                positionController.setReference(CATCH_ANGLE.in(Degrees), ControlType.kPosition);
             },
             this
+        )
+        .until(
+            () -> atTarget(CATCH_ANGLE)
+        )
+        .finallyDo(
+            () -> disableCatcher()
         );
+    }
+
+    void disableCatcher() {
+        positionController.setReference(0, ControlType.kDutyCycle);
+    }
+
+    private boolean atTarget(Angle target) {
+        return Math.abs(getAngle().minus(target).in(Degrees)) < POSITION_TOLERANCE.in(Degrees);
     }
 
     public Angle getAngle() {

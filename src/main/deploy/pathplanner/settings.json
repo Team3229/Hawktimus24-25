@@ -18,7 +18,7 @@
     "S2",
     "S3"
   ],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 0.5,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
