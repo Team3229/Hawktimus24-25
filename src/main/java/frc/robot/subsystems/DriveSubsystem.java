@@ -16,7 +16,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -53,13 +52,18 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /**
- * The SwerveDrivetrain class represents a swerve drive subsystem for a robot using YAGSL.
- * It provides methods to control the robot's movement, including driving to specific poses,
- * following trajectories, and handling various driving commands.
- * This class integrates with PathPlanner for autonomous path planning and execution.
- * It also supports telemetry, odometry, and various drive modes such as field-relative and robot-relative control.
+ * The SwerveDrivetrain class represents a swerve drive subsystem for a robot
+ * using YAGSL.It provides methods to control the robot's movement, including
+ * driving to specific poses, following trajectories, and handling various
+ * driving commands.This class integrates with PathPlanner for autonomous path
+ * planning and execution. It also supports telemetry, odometry, and various
+ * drive modes such as field-relative and robot-relative control.
  */
 public class DriveSubsystem extends SubsystemBase {
+
+	private static final double kD = 0.0;
+	private static final double kI = 0.0;
+	private static final double kP = 4.5;
 
 	/**
 	 * Swerve drive object.
@@ -71,18 +75,17 @@ public class DriveSubsystem extends SubsystemBase {
 	/**
 	 * Initialize {@link SwerveDrive}
 	 *
-	 * @param parser		 The parser to create the swerve drive.
+	 * @param parser             The parser to create the swerve drive.
 	 * @param maxChassisVelocity The maximum chassis velocity of the robot.
-	 * @param initialPose       The initial pose of the robot.
-	 * @param verbosity      The verbosity level for telemetry.
+	 * @param initialPose        The initial pose of the robot.
+	 * @param verbosity          The verbosity level for telemetry.
 	 */
 	public DriveSubsystem(
-		String path,
-		LinearVelocity maxChassisVelocity,
-		Pose2d initialPose,
-		TelemetryVerbosity verbosity,
-		Supplier<PoseEstimate> visionPoseEstimate
-	) {
+			String path,
+			LinearVelocity maxChassisVelocity,
+			Pose2d initialPose,
+			TelemetryVerbosity verbosity,
+			Supplier<PoseEstimate> visionPoseEstimate) {
 
 		super();
 
@@ -91,14 +94,13 @@ public class DriveSubsystem extends SubsystemBase {
 		SwerveDriveTelemetry.verbosity = verbosity;
 
 		this.visionPoseEstimate = visionPoseEstimate;
-		
+
 		try {
 			swerveDrive = new SwerveParser(
-				new File(Filesystem.getDeployDirectory(), path)
-			).createSwerveDrive(
-				maxChassisVelocity.in(MetersPerSecond),
-				initialPose
-			);
+					new File(Filesystem.getDeployDirectory(), path))
+					.createSwerveDrive(
+							maxChassisVelocity.in(MetersPerSecond),
+							initialPose);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -106,14 +108,12 @@ public class DriveSubsystem extends SubsystemBase {
 		swerveDrive.setHeadingCorrection(false);
 		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
-			true,
-			true,
-			0.1
-		);
+				true,
+				true,
+				0.1);
 		swerveDrive.setModuleEncoderAutoSynchronize(
-			false,
-			1
-		);
+				false,
+				1);
 
 		swerveDrive.pushOffsetsToEncoders();
 
@@ -149,46 +149,43 @@ public class DriveSubsystem extends SubsystemBase {
 			config = RobotConfig.fromGUISettings();
 
 			final boolean enableFeedforward = true;
-			
+
 			// Configure AutoBuilder last
 			AutoBuilder.configure(
-				() -> {
-					if (RobotBase.isSimulation()) {
-						return swerveDrive.field.getRobotPose();
-					} else {
-						return swerveDrive.getPose();
-					}
-				},
-				// Robot pose supplier
-				this::resetOdometry,
-				// Method to reset odometry (will be called if your auto has a starting pose)
-				this::getRobotVelocity,
-				// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-				(speedsRobotRelative, moduleFeedForwards) -> {
-					if (enableFeedforward) {
-						swerveDrive.drive(
-							speedsRobotRelative,
-							swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
-							moduleFeedForwards.linearForces()
-						);
-					} else {
-						swerveDrive.setChassisSpeeds(speedsRobotRelative);
-					}
-				},
-				new PPHolonomicDriveController(
-						new PIDConstants(5.0, 0.0, 0.0),
-						new PIDConstants(5.0, 0.0, 0.0)
-				),
-				config,
-				() -> {
-					var alliance = DriverStation.getAlliance();
-					if (alliance.isPresent()) {
-						return alliance.get() == DriverStation.Alliance.Red;
-					}
-					return false;
-				},
-				this
-			);
+					() -> {
+						if (RobotBase.isSimulation()) {
+							return swerveDrive.field.getRobotPose();
+						} else {
+							return swerveDrive.getPose();
+						}
+					},
+					// Robot pose supplier
+					this::resetOdometry,
+					// Method to reset odometry (will be called if your auto has a starting pose)
+					this::getRobotVelocity,
+					// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+					(speedsRobotRelative, moduleFeedForwards) -> {
+						if (enableFeedforward) {
+							swerveDrive.drive(
+									speedsRobotRelative,
+									swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+									moduleFeedForwards.linearForces());
+						} else {
+							swerveDrive.setChassisSpeeds(speedsRobotRelative);
+						}
+					},
+					new PPHolonomicDriveController(
+							new PIDConstants(kP, kI, kD),
+							new PIDConstants(kP, kI, kD)),
+					config,
+					() -> {
+						var alliance = DriverStation.getAlliance();
+						if (alliance.isPresent()) {
+							return alliance.get() == DriverStation.Alliance.Red;
+						}
+						return false;
+					},
+					this);
 
 		} catch (Exception e) {
 			// Handle exception as needed
@@ -221,15 +218,14 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveToPose(Pose2d pose) {
 		// Create the constraints to use while pathfinding
 		PathConstraints constraints = new PathConstraints(
-			0.1, 1.0,
-			swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720)
-		);
+				0.1, 1.0,
+				swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
 
 		// Since AutoBuilder is configured, we can use it to build pathfinding commands
 		return AutoBuilder.pathfindToPose(
-			pose,
-			constraints,
-			edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+				pose,
+				constraints,
+				edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
 		).withName("DriveToPose");
 	}
 
@@ -294,23 +290,19 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return Drive command.
 	 */
 	public Command driveCommand(
-		DoubleSupplier translationX,
-		DoubleSupplier translationY,
-		DoubleSupplier angularRotationX
-	) {
+			DoubleSupplier translationX,
+			DoubleSupplier translationY,
+			DoubleSupplier angularRotationX) {
 		return run(() -> {
 			// Make the robot move
 			drive(
-				SwerveMath.scaleTranslation(
-					new Translation2d(
-						translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-						translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()
-					),
-					0.8
-				),
-				Math.pow(angularRotationX.getAsDouble(), 3) * 50,
-				true
-			);
+					SwerveMath.scaleTranslation(
+							new Translation2d(
+									translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+									translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+							0.8),
+					Math.pow(angularRotationX.getAsDouble(), 3) * 50,
+					true);
 		});
 	}
 
@@ -339,11 +331,10 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative) {
 		swerveDrive.drive(
-			translation,
-			rotation,
-			fieldRelative,
-			false
-		); // Open loop is disabled since it shouldn't be used most of the time.
+				translation,
+				rotation,
+				fieldRelative,
+				false); // Open loop is disabled since it shouldn't be used most of the time.
 	}
 
 	/**
@@ -456,7 +447,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void zeroGyroWithAlliance() {
 		if (isRedAlliance()) {
-			zeroGyro();	
+			zeroGyro();
 			// Set the pose 180 degrees
 			resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
 		} else {
@@ -499,12 +490,11 @@ public class DriveSubsystem extends SubsystemBase {
 	public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY) {
 		Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
 		return swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
-			scaledInputs.getY(),
-			headingX,
-			headingY,
-			getHeading().getRadians(),
-			3.0
-		);
+				scaledInputs.getY(),
+				headingX,
+				headingY,
+				getHeading().getRadians(),
+				3.0);
 	}
 
 	/**
@@ -598,6 +588,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public SwerveDrive getSwerveDrive() {
 		return swerveDrive;
-	}	
-			
+	}
+
 }
