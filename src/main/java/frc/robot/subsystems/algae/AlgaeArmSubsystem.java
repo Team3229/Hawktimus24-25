@@ -34,7 +34,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private static final double kP = 0.1;
     private static final double kI = 0;
     private static final double kD = 0;
-    private static final Angle ENCODER_OFFSET = Degrees.of(304);
 
     private static final Angle POSITION_TOLERANCE = Degrees.of(3);
     
@@ -93,11 +92,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     }
 
     public Angle getPosition() {
-        return Degrees.of(getAbsoluteEncoderPosition()).minus(ENCODER_OFFSET);
-    }
-
-    public double getAbsoluteEncoderPosition() {
-        return armMotor.getAbsoluteEncoder().getPosition();
+        return Degrees.of(armMotor.getAbsoluteEncoder().getPosition());
     }
 
     /**
