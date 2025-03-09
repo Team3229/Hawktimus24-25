@@ -40,7 +40,7 @@ public class RobotContainer {
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
 	// ClimbSubsystem climbSubsystem;
-	// AlgaeSubsystem algaeSubsystem;
+	AlgaeSubsystem algaeSubsystem;
 
 	VisualizerSubsystem visualizerSubsystem;
 
@@ -52,7 +52,7 @@ public class RobotContainer {
 		buttonBoard = new ButtonBoard(1);
 		// climbSubsystem = new ClimbSubsystem();
 		coralSubsystem = new CoralSubsystem();
-		// algaeSubsystem = new AlgaeSubsystem();
+		algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 				"swerve",
 				MetersPerSecond.of(5.0),
@@ -119,20 +119,20 @@ public class RobotContainer {
 		// L4 coral
 		);
 
-		// buttonBoard.b_5().onTrue(
-		// 	algaeSubsystem.removeUpperAlgae()
-		// 	// remove algae from the upper section of the reef
-		// );
+		buttonBoard.b_5().onTrue(
+			algaeSubsystem.removeUpperAlgae()
+			// remove algae from the upper section of the reef
+		);
 
-		// buttonBoard.b_6().onTrue(
-		// 	algaeSubsystem.removeLowerAlgae()
-		// 	// remove algae from the lower section of the reef
-		// );
+		buttonBoard.b_6().onTrue(
+			algaeSubsystem.removeLowerAlgae()
+			// remove algae from the lower section of the reef
+		);
 
-		// buttonBoard.b_7().onTrue(
-		// 	algaeSubsystem.intakeAlgae()
-		// 	// intake/stow algae
-		// );
+		buttonBoard.b_7().onTrue(
+			algaeSubsystem.intakeAlgae()
+			// intake/stow algae
+		);
 
 		buttonBoard.b_9().onTrue(
 			coralSubsystem.feedCommand()
@@ -233,6 +233,7 @@ public class RobotContainer {
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
 		// SmartDashboard.putData(climbSubsystem);
+		SmartDashboard.putData(algaeSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData(autoChooser);

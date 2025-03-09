@@ -1,6 +1,9 @@
 package frc.robot.subsystems.algae;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,7 +30,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     public Command removeLowerAlgae() {
         return readyForRemoval(true)
                 .andThen(new WaitCommand(2))
-                .andThen(home());
+                .andThen(home())
+                .handleInterrupt(() -> wheel.stopWheel());
     }
 
     /**
@@ -40,7 +44,8 @@ public class AlgaeSubsystem extends SubsystemBase {
         return readyForRemoval(false)
                 .andThen(new WaitCommand(1))
                 .andThen(arm.upperAlgaeRemovalPosition())
-                .andThen(home());
+                .andThen(home())
+                .handleInterrupt(() -> wheel.stopWheel());
     }
 
     /**
@@ -50,7 +55,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to remove algae from the reef
      */
     public Command readyForRemoval(boolean clockwise) {
-        return Commands.parallel(arm.upToRemoveAlgaeFromReef(), wheel.spin(clockwise));
+        return wheel.spin(clockwise)
+        .andThen(arm.upToRemoveAlgaeFromReef());
     }
 
     /**
@@ -79,7 +85,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command intakeAlgae() {
         return arm.intakePosition()
-                .andThen(wheel.stop());
+                .andThen(wheel.stop())
+                .handleInterrupt(() -> wheel.stopWheel());
     }
 
     /**
@@ -90,7 +97,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     public Command scoreAlgae() {
         return Commands.parallel(arm.scorePosition(), wheel.spin(false))
                 .andThen(new WaitCommand(2))
-                .andThen(home());
+                .andThen(home())
+                .handleInterrupt(() -> wheel.stopWheel());
     }
 
     /**
@@ -100,5 +108,13 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Angle getPosition() {
         return arm.getPosition();
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Arm Angle", () -> getPosition().in(Degrees), null);
+        builder.addDoubleProperty("Arm Abs Angle", () -> arm.getAbsoluteEncoderPosition(), null);
+        builder.addDoubleProperty("Arm Current", () -> arm.getDraw(), null);
+        builder.addDoubleProperty("Wheel Current", () -> wheel.getDraw(), null);
     }
 }

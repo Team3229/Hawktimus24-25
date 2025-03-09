@@ -2,9 +2,8 @@ package frc.robot.subsystems.algae;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -27,7 +26,7 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
 
     private static final int CW_SPEED = 1;
     private static final int CCW_SPEED = -1;
-    private static final int CURRENT_LIMIT = 80;
+    private static final int CURRENT_LIMIT = 1;
 
     public AlgaeWheelSubsystem() {
 
@@ -65,9 +64,13 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
      */
     public Command stop() {
         return Commands.runOnce(
-            () -> wheelMotor.stopMotor()
+            () -> stopWheel()
         );
     };
+
+    protected void stopWheel() {
+        wheelMotor.stopMotor();
+    }
 
     private void setWheelDirection(boolean clockwise) {
 
@@ -77,5 +80,8 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
             wheelMotor.set(CCW_SPEED);
         }
 
+    }
+    public double getDraw() {
+        return wheelMotor.getOutputCurrent();
     }
 }
