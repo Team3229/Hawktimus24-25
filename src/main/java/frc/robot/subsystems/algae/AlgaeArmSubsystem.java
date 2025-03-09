@@ -30,20 +30,20 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private SparkClosedLoopController positionController;
 
     private static final int CAN_ID = 9; 
-    private static final Current CURRENT_LIMIT = Amps.of(1); // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
+    private static final Current CURRENT_LIMIT = Amps.of(2); // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
     private static final double kP = 0.1;
     private static final double kI = 0;
     private static final double kD = 0;
 
     private static final Angle POSITION_TOLERANCE = Degrees.of(3);
     
-    private static final Angle REMOVAL_POSITION = Degrees.of(135); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
+    private static final Angle REMOVAL_POSITION = Degrees.of(168); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
     private static final Angle HOME_POSITION = Degrees.of(0); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
-    private static final Angle THROW_ANGLE = Degrees.of(200);
+    private static final Angle THROW_ANGLE = Degrees.of(190);
     private static final Angle GROUND_COLLECT_ANGLE = Degrees.of(90);
     private static final Angle HOLD_ANGLE = Degrees.of(45);
     private static final Angle SCORE_ANGLE = Degrees.of(70);
-    private static final Angle FORWARD_LIMIT = Degrees.of(0);
+    private static final Angle FORWARD_LIMIT = Degrees.of(200);
     private static final Angle REVERSE_LIMIT = Degrees.of(0);
     
     private static final double POSITION_CONVERSION_FACTOR = 360;

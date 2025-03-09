@@ -28,10 +28,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return
      */
     public Command removeLowerAlgae() {
-        return readyForRemoval(true)
-                .andThen(new WaitCommand(2))
-                .andThen(home())
-                .handleInterrupt(() -> wheel.stopWheel());
+        return readyForRemoval(true);
     }
 
     /**
@@ -41,11 +38,10 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to remove algae from the upper part of the reef
      */
     public Command removeUpperAlgae() {
-        return readyForRemoval(false)
-                .andThen(new WaitCommand(1))
-                .andThen(arm.upperAlgaeRemovalPosition())
-                .andThen(home())
-                .handleInterrupt(() -> wheel.stopWheel());
+        return readyForRemoval(false);
+    }
+    public Command throwUpperAlgae(){
+        return arm.upperAlgaeRemovalPosition();
     }
 
     /**
@@ -55,8 +51,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to remove algae from the reef
      */
     public Command readyForRemoval(boolean clockwise) {
-        return wheel.spin(clockwise)
-        .andThen(arm.upToRemoveAlgaeFromReef());
+        return arm.upToRemoveAlgaeFromReef()
+        .andThen(wheel.spin(clockwise));
     }
 
     /**
@@ -96,9 +92,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command scoreAlgae() {
         return Commands.parallel(arm.scorePosition(), wheel.spin(false))
-                .andThen(new WaitCommand(2))
-                .andThen(home())
-                .handleInterrupt(() -> wheel.stopWheel());
+                 .handleInterrupt(() -> wheel.stopWheel());
     }
 
     /**

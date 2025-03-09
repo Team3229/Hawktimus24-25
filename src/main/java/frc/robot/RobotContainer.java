@@ -123,6 +123,11 @@ public class RobotContainer {
 			algaeSubsystem.removeUpperAlgae()
 			// remove algae from the upper section of the reef
 		);
+		
+		buttonBoard.b_5().onFalse(
+			algaeSubsystem.throwUpperAlgae()
+			// Throws upper algae
+		);
 
 		buttonBoard.b_6().onTrue(
 			algaeSubsystem.removeLowerAlgae()
@@ -145,12 +150,10 @@ public class RobotContainer {
 		// 	})
 		// );
 
-		// buttonBoard.b_10().onTrue(
-		// 	Commands.runOnce(() -> {
-		// 		driveSubsystem.getCurrentCommand().cancel();
-		// 		// cancels ONLY DRIVING on buttonboard
-		// 	})
-		// );
+		buttonBoard.b_10().onTrue(	
+				algaeSubsystem.home()
+		);
+		// Sets the algae arm to home
 
 		// 		//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		// buttonBoard.joy_U()
