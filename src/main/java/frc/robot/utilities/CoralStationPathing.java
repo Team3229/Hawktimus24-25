@@ -1,11 +1,9 @@
 package frc.robot.utilities;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
@@ -20,37 +18,38 @@ public class CoralStationPathing {
 
     public static Command findHumanZones(DriveSubsystem driveSubsystem) {
 
+        Command out = Commands.none();
+
         if (Alliance.getAlliance() == AllianceColor.Blue) {
+
             if (aboveZone(driveSubsystem.getPose())) {
                 System.out.println("Robot is above zone");
-                return driveToPlayerStation("HPS Top"); 
+                out = driveToPlayerStation("HPS Top"); 
             }
 
             System.out.println("Robot is bellow zone");
-            return driveToPlayerStation("HPS Bottom");
+            out = driveToPlayerStation("HPS Bottom");
         } 
 
         if (aboveZone(driveSubsystem.getPose())) {
             System.out.println("Robot is above zone");
-            return driveToPlayerStation("HPS Bottom"); //these are flipped as red
+            out = driveToPlayerStation("HPS Bottom"); //these are flipped as red
         }
 
         System.out.println("Robot is bellow zone");
-        return driveToPlayerStation("HPS Top"); //these are flipped as red
+        out = driveToPlayerStation("HPS Top"); //these are flipped as red
+
+        out.addRequirements(driveSubsystem);
+
+        return out;
 
     }
 
     private static Command driveToPlayerStation(String hps) {
         try {
-
-            PathConstraints constraints = new PathConstraints(
-			    4, 4.0,
-			    4, Units.degreesToRadians(720)
-		    );
-
             return AutoBuilder.pathfindThenFollowPath(
                 PathPlannerPath.fromPathFile(hps),
-                constraints
+                PathFindingConstraints.SEMIAUTO_ROBOT_CONSTRAINTS
             );
 
         } catch (Exception e) {

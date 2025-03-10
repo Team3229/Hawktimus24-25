@@ -48,12 +48,12 @@
     },
     {
       "anchor": {
-        "x": 5.28,
-        "y": 2.99
+        "x": 5.242485166273221,
+        "y": 2.9557204413977467
       },
       "prevControl": {
-        "x": 4.446375000000001,
-        "y": 2.721875
+        "x": 4.408860166273222,
+        "y": 2.6875954413977463
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,16 +65,16 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "HPT-REEF",

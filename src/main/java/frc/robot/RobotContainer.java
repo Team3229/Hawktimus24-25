@@ -4,15 +4,11 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-// import edu.wpi.first.wpilibj.Timer; // for the backup climb controls
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,13 +47,13 @@ public class RobotContainer {
 		coralSubsystem = new CoralSubsystem();
 		// algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
-				"swerve",
-				MetersPerSecond.of(5.0),
-				new Pose2d(2, 4, new Rotation2d()),
-				TelemetryVerbosity.HIGH,
-				() -> {
-					return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), driveSubsystem.getRobotVelocity().omegaRadiansPerSecond);
-				});
+			"swerve",
+			DriveSubsystem.MAX_VELOCITY,
+			new Pose2d(2, 4, new Rotation2d()),
+			TelemetryVerbosity.HIGH,
+			() -> {
+				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), driveSubsystem.getRobotVelocity().omegaRadiansPerSecond);
+			});
 
 		// visualizerSubsystem = new VisualizerSubsystem(
 		// 	() -> coralSubsystem.getElevatorPose().in(Meters),
@@ -72,43 +68,81 @@ public class RobotContainer {
 
 	private void configureBindings() {
 
-		DriverStation.silenceJoystickConnectionWarning(true);
+		configDriveControls();
+		configManipControls();
+		configSimControls();
+
+		if (RobotBase.isSimulation()) {
+			configSimControls();	
+		}
+
+	}
+
+	private void configDriveControls() {
 
 		SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
-				driveSubsystem.getSwerveDrive(),
-				() -> -driverController.a_Y(),
-				() -> -driverController.a_X())
-				.withControllerRotationAxis(() -> -driverController.a_Z())
-				.deadband(0.1)
-				.cubeRotationControllerAxis(true)
-				.cubeTranslationControllerAxis(true)
-				.scaleTranslation(0.8)
-				.scaleRotation(0.6)
-				.allianceRelativeControl(true);
+			driveSubsystem.getSwerveDrive(),
+			() -> -driverController.a_Y(),
+			() -> -driverController.a_X()
+		).withControllerRotationAxis(
+			() -> -driverController.a_Z()
+		)
+			.deadband(0.05)
+			.cubeRotationControllerAxis(true)
+			.cubeTranslationControllerAxis(true)
+			.scaleTranslation(0.8)
+			.scaleRotation(0.8)
+			.allianceRelativeControl(true);
 
 		driveSubsystem.setDefaultCommand(
-				driveSubsystem.driveFieldOriented(
-						driveAngularVelocity));
-
-		driverController.b_10().onTrue(
-			Commands.runOnce(
-				driveSubsystem::zeroGyroWithAlliance
+			driveSubsystem.driveFieldOriented(
+				driveAngularVelocity
 			)
 		);
 
+		driverController.b_10().onTrue(
+			driveSubsystem.zeroGyroWithAllianceCommand()
+		);
+
+		driverController.b_3().onTrue(
+			CoralStationPathing.findHumanZones(driveSubsystem)
+		);
+    
+		driverController.b_Trigger()
+			.and(buttonBoard.joy_R())
+				.onTrue(
+					CoralZones.findCoralZone(true, driveSubsystem)
+				);
+
+		driverController.b_Trigger()
+			.and(buttonBoard.joy_L())
+				.onTrue(
+					CoralZones.findCoralZone(false, driveSubsystem)
+				);
+
+		driverController.b_Hazard().onTrue(
+				Commands.runOnce(() -> {
+					driveSubsystem.getCurrentCommand().cancel();
+					// cancels ALL DRIVING on driver controller
+			})
+		);
+
+	}
+
+	private void configManipControls() {
+
+		// Coral Controls
+
 		buttonBoard.b_1().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L1)
-		// L1 coral
 		);
 
 		buttonBoard.b_2().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L2)
-		// L2 coral
 		);
 
 		buttonBoard.b_3().onTrue(
 			coralSubsystem.elevatorSpit(ReefHeight.L3)
-		// L3 coral
 		);
 
 		buttonBoard.b_4().onTrue(
@@ -161,6 +195,9 @@ public class RobotContainer {
 		// );
 		// Sets the algae arm to home
 
+
+		// Climb Controls
+
 		// 		//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		// buttonBoard.joy_U()
 		// .and(driverController.b_9()).onTrue(
@@ -196,47 +233,15 @@ public class RobotContainer {
 		// 		System.out.println("Climb Down");
 		// 	})
 		// );
+	}
 
-		driverController.b_3().onTrue(
-			Commands.runOnce(() -> {
-				CoralStationPathing.findHumanZones(driveSubsystem).schedule();
-				// drive to the coral human player zones
-			})
+	private void configSimControls() {
+		driverController.b_5().onTrue(
+			Commands.runOnce(
+				() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get())
+				// resets the odometry to the simulation pose
+			)
 		);
-    
-		driverController.b_Trigger()
-		.and(buttonBoard.joy_R())
-			.onTrue(
-				Commands.runOnce(() -> {
-					CoralZones.findCoralZone(true, driveSubsystem).schedule();
-				}, driveSubsystem
-				// drive to the right coral zones
-			));
-
-		driverController.b_Trigger()
-		.and(buttonBoard.joy_L())
-			.onTrue(
-				Commands.runOnce(() -> {
-					CoralZones.findCoralZone(false, driveSubsystem).schedule();
-				}, driveSubsystem
-				// drive to the left coral zones
-			));
-
-		driverController.b_Hazard().onTrue(
-				Commands.runOnce(() -> {
-					driveSubsystem.getCurrentCommand().cancel();
-					// cancels ALL DRIVING on driver controller
-			})
-		);
-		if (RobotBase.isSimulation()) {
-			driverController.b_5().onTrue(
-				Commands.runOnce(
-					() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get()),
-					driveSubsystem
-					// resets the odometry to the simulation pose
-				)
-			);
-		}
 	}
 
 	public void initTelemetery() {

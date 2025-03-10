@@ -61,9 +61,21 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
  */
 public class DriveSubsystem extends SubsystemBase {
 
-	private static final double kD = 0.0;
-	private static final double kI = 0.0;
-	private static final double kP = 4.5;
+	public static final LinearVelocity MAX_VELOCITY = MetersPerSecond.of(5.0);
+
+	private static final PIDConstants TRANSLATION_CONSTANTS =
+		new PIDConstants(
+			4.5,
+			0.0,
+			0.0
+		);
+
+	private static final PIDConstants ROTATION_CONSTANTS =
+		new PIDConstants(
+			4.5,
+			0.0,
+			0.0
+		);
 
 	/**
 	 * Swerve drive object.
@@ -175,8 +187,9 @@ public class DriveSubsystem extends SubsystemBase {
 						}
 					},
 					new PPHolonomicDriveController(
-							new PIDConstants(kP, kI, kD),
-							new PIDConstants(kP, kI, kD)),
+						TRANSLATION_CONSTANTS,
+						ROTATION_CONSTANTS
+					),
 					config,
 					() -> {
 						var alliance = DriverStation.getAlliance();
@@ -453,6 +466,12 @@ public class DriveSubsystem extends SubsystemBase {
 		} else {
 			zeroGyro();
 		}
+	}
+
+	public Command zeroGyroWithAllianceCommand() {
+		return runOnce(
+			this::zeroGyroWithAlliance
+		);
 	}
 
 	/**
