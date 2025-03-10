@@ -48,7 +48,7 @@
   "folder": "Reef Lineup",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": 59.08132275013778
+    "rotation": -29.999999999999996
   },
   "useDefaultConstraints": true
 }
