@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.071242246076293,
-        "y": 5.324143796107911
+        "x": 7.12366116352754,
+        "y": 4.892660098000191
       },
       "isLocked": false,
       "linkedName": "S3"
     },
     {
       "anchor": {
-        "x": 4.519125,
-        "y": 5.604500000000001
+        "x": 4.53375,
+        "y": 5.7215
       },
       "prevControl": {
-        "x": 5.08402654113707,
-        "y": 5.540439000489612
+        "x": 4.907354786520887,
+        "y": 5.667936012204319
       },
       "nextControl": {
-        "x": 4.04625,
-        "y": 5.658125
+        "x": 4.161662110777342,
+        "y": 5.774846509135607
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1945587138875084,
+        "y": 5.238875
+      },
+      "prevControl": {
+        "x": 3.294630909444969,
+        "y": 5.467972262481046
+      },
+      "nextControl": {
+        "x": 3.0188672788868005,
+        "y": 4.836661112557933
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +52,8 @@
         "y": 3.90729691621132
       },
       "prevControl": {
-        "x": 3.0726837138875083,
-        "y": 5.145546916211319
+        "x": 3.2038513751269715,
+        "y": 4.7367593409281765
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,8 +79,8 @@
   "reversed": false,
   "folder": "S3-REEF",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

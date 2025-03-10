@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.9868852459016395,
-        "y": 7.2197233606557365
+        "x": 5.08737615534911,
+        "y": 5.92274676558284
       },
       "isLocked": false,
       "linkedName": "S1"
@@ -17,11 +17,27 @@
     {
       "anchor": {
         "x": 3.1945587138875084,
+        "y": 5.195
+      },
+      "prevControl": {
+        "x": 3.2253394008143244,
+        "y": 5.4430978623694966
+      },
+      "nextControl": {
+        "x": 3.1021217752881185,
+        "y": 4.4499416806383945
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1945587138875084,
         "y": 3.90729691621132
       },
       "prevControl": {
-        "x": 2.9219583040514427,
-        "y": 4.892926014571976
+        "x": 3.0858749999999997,
+        "y": 4.9853749999999994
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +64,7 @@
   "folder": "S1-REEF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 5.458,
-        "y": 3.09
+        "x": 5.53,
+        "y": 3.12
       },
       "prevControl": {
-        "x": 4.628375000000001,
-        "y": 2.484375
+        "x": 4.700375000000001,
+        "y": 2.5143750000000002
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral F"
     }
   ],
   "rotationTargets": [],
@@ -74,7 +74,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "HPT-REEF",
