@@ -32,71 +32,70 @@ public class CoralZones {
 	}
 
 	public static Command findCoralZone(
-            boolean leftSide,
-            DriveSubsystem driveSubsystem
-        ) {
+        boolean leftSide,
+        DriveSubsystem driveSubsystem
+    ) {
+		return Commands.runOnce(() -> {
+			reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
-		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
+			System.out.println("Finding Coral Zone");
 
-        System.out.println("Finding Coral Zone");
+			//LEFT SIDE
+			if (leftSide && inZone_AL_BC(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone AL_BC");
+				driveToReef("A").schedule();
+			}
+			if (leftSide && inZone_BC_DE(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone BC_DE");
+				driveToReef("C").schedule();
+			}
+			if (leftSide && inZone_DE_FG(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone DE_FG");
+				driveToReef("F").schedule();
+			}
+			if (leftSide && inZone_FG_HI(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone FG_HI");
+				driveToReef("H").schedule();
+			}
+			if (leftSide && inZone_HI_JK(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone HI_JK");
+				driveToReef("J").schedule();
+			}
+			if (leftSide && inZone_JK_AL(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone JK_AL");
+				driveToReef("K").schedule();
+			}
+			
 
-		//LEFT SIDE
-		if (leftSide && inZone_AL_BC(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone AL_BC");
-			return driveToReef("A");
+			//RIGHT SIDE
+			if (!leftSide && inZone_AL_BC(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone AL_BC");
+				driveToReef("B").schedule();
+			}
+			if (!leftSide && inZone_BC_DE(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone BC_DE");
+				driveToReef("D").schedule();
+			}
+			if (!leftSide && inZone_DE_FG(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone DE_FG");
+				driveToReef("E").schedule();
+			}
+			if (!leftSide && inZone_FG_HI(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone FG_HI");
+				driveToReef("G").schedule();
+			}
+			if (!leftSide && inZone_HI_JK(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone HI_JK");
+				driveToReef("I").schedule();
+			}
+			if (!leftSide && inZone_JK_AL(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
+				System.out.println("Robot is in zone JK_AL");
+				driveToReef("L").schedule();
+			}
 		}
-		if (leftSide && inZone_BC_DE(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone BC_DE");
-			return driveToReef("C");
-		}
-		if (leftSide && inZone_DE_FG(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone DE_FG");
-			return driveToReef("F");
-		}
-		if (leftSide && inZone_FG_HI(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone FG_HI");
-			return driveToReef("H");
-		}
-		if (leftSide && inZone_HI_JK(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone HI_JK");
-			return driveToReef("J");
-		}
-		if (leftSide && inZone_JK_AL(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone JK_AL");
-			return driveToReef("K");
-		}
+	);
+}
 		
-
-		//RIGHT SIDE
-		if (!leftSide && inZone_AL_BC(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone AL_BC");
-			return driveToReef("B");
-		}
-		if (!leftSide && inZone_BC_DE(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone BC_DE");
-			return driveToReef("D");
-		}
-		if (!leftSide && inZone_DE_FG(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone DE_FG");
-			return driveToReef("E");
-		}
-		if (!leftSide && inZone_FG_HI(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone FG_HI");
-			return driveToReef("G");
-		}
-		if (!leftSide && inZone_HI_JK(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone HI_JK");
-			return driveToReef("I");
-		}
-		if (!leftSide && inZone_JK_AL(driveSubsystem.getPose(), Alliance.getAlliance() == AllianceColor.Blue)) {
-            System.out.println("Robot is in zone JK_AL");
-			return driveToReef("L");
-		}
-
-		System.out.println("Robot is not positioned inside a zone");
-		return Commands.none();
-
-	}
 
     private static Command driveToReef(String reef) {
         try {
