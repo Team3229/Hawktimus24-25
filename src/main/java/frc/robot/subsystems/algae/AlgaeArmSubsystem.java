@@ -2,7 +2,6 @@ package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotations;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,6 +11,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
@@ -30,46 +30,56 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private SparkClosedLoopController positionController;
 
     private static final int CAN_ID = 9; 
-    private static final Current CURRENT_LIMIT = Amps.of(2); // ( ━☞´◔‿◔`)━☞ Replace with actual current limit pls
-    private static final double kP = 0.1;
+    private static final Current CURRENT_LIMIT = Amps.of(40);
+    private static final double kP = 0.008;
     private static final double kI = 0;
-    private static final double kD = 0;
+    private static final double kD = 1.45;
 
-    private static final Angle POSITION_TOLERANCE = Degrees.of(3);
+    private static final Angle POSITION_TOLERANCE = Degrees.of(5);
     
-    private static final Angle REMOVAL_POSITION = Degrees.of(168); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
-    private static final Angle HOME_POSITION = Degrees.of(0); // ( ━☞´◔‿◔`)━☞ Replace with actual position pls
-    private static final Angle THROW_ANGLE = Degrees.of(190);
+    private static final Angle REMOVAL_POSITION = Degrees.of(154); 
+    private static final Angle HOME_POSITION = Degrees.of(0);
+    private static final Angle THROW_ANGLE = Degrees.of(195);
     private static final Angle GROUND_COLLECT_ANGLE = Degrees.of(90);
-    private static final Angle HOLD_ANGLE = Degrees.of(45);
+    private static final Angle HOLD_ANGLE = Degrees.of(50);
     private static final Angle SCORE_ANGLE = Degrees.of(70);
     private static final Angle FORWARD_LIMIT = Degrees.of(200);
     private static final Angle REVERSE_LIMIT = Degrees.of(0);
+    private static final double UP_MAX_SPEED = 0.6;
+    private static final double DOWN_MAX_SPEED = 0.125;
     
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 20;
 
     public AlgaeArmSubsystem() {
+        super();
 
         armMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         armMotorConfig = new SparkMaxConfig();
+        positionController = armMotor.getClosedLoopController();
 
-        armMotorConfig.inverted(false); // ( ━☞´◔‿◔`)━☞ Replace with actual inversion pls
+        armMotorConfig.inverted(false); 
 
         armMotorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
         armMotorConfig.idleMode(IdleMode.kBrake);
 
-        armMotorConfig.softLimit // ( ━☞´◔‿◔`)━☞ Replace with actual soft limit pls
-                .forwardSoftLimitEnabled(FORWARD_LIMIT.in(Degrees) > 0)
+        armMotorConfig.softLimit 
+                .forwardSoftLimitEnabled(true)
                 .forwardSoftLimit(FORWARD_LIMIT.in(Degrees))
-                .reverseSoftLimitEnabled(REVERSE_LIMIT.in(Degrees) > 0)
+                .reverseSoftLimitEnabled(true)
                 .reverseSoftLimit(REVERSE_LIMIT.in(Degrees));
 
         armMotorConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .positionWrappingEnabled(true)
             .pid(
                 kP,
                 kI,
                 kD
+            )
+            .outputRange(
+                -DOWN_MAX_SPEED,
+                UP_MAX_SPEED
             );
         
         armMotorConfig.absoluteEncoder
@@ -78,21 +88,21 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         armMotorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
 
-
         //ABSOLUTE ENCODER IMPLEMENT
 
         armMotor.configure(
-                armMotorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kNoPersistParameters);
-
-        positionController = armMotor.getClosedLoopController();
-
-        seedInternalEncoder();
+            armMotorConfig,
+            ResetMode.kNoResetSafeParameters,
+            PersistMode.kNoPersistParameters
+        );
     }
 
     public Angle getPosition() {
         return Degrees.of(armMotor.getAbsoluteEncoder().getPosition());
+    }
+
+    public Angle getRelativePosition() {
+        return Degrees.of(armMotor.getEncoder().getPosition());
     }
 
     /**
@@ -152,21 +162,22 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     /**
      * Command that rotates the arm to a given position
      * 
-     * @param rotations
+     * @param degrees
      * @return
      */
     protected Command rotateArm(Angle angle) {
 
+        Angle desiredAngle = angle;
         Command armRemovalCommand = new Command() {
             @Override
             public void initialize() {
-                setSetpoint(angle);
+                setSetpoint(desiredAngle);
             }
 
             @Override
             public boolean isFinished() {
-                return Math.abs(armMotor.getEncoder().getPosition()
-                - angle.in(Rotations)) < POSITION_TOLERANCE.in(Rotations);
+                return Math.abs(getPosition().minus(desiredAngle).in(Degrees))
+                 < POSITION_TOLERANCE.in(Degrees);
             }
         };
 
@@ -178,17 +189,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private void setSetpoint(Angle angle) {
 
         if(RobotBase.isSimulation()) {
-            armMotor.getEncoder().setPosition((angle.in(Rotations) - armMotor.getEncoder().getPosition()) * kP);
+            armMotor.getEncoder().setPosition((angle.in(Degrees) - armMotor.getEncoder().getPosition()) * kP);
         }
 
-        positionController.setReference(angle.in(Rotations), ControlType.kPosition);
+        positionController.setReference(angle.in(Degrees), ControlType.kPosition);
 
     }
     public double getDraw() {
         return armMotor.getOutputCurrent();
-    }
-
-    private void seedInternalEncoder() {
-        armMotor.getEncoder().setPosition(getPosition().in(Degrees));
     }
 }

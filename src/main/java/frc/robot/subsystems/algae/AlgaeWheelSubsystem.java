@@ -26,7 +26,7 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
 
     private static final int CW_SPEED = 1;
     private static final int CCW_SPEED = -1;
-    private static final int CURRENT_LIMIT = 1;
+    private static final int CURRENT_LIMIT = 20;
 
     public AlgaeWheelSubsystem() {
 

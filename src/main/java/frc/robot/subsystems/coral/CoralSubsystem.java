@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Inch;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;

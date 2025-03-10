@@ -81,8 +81,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command intakeAlgae() {
         return arm.intakePosition()
-                .andThen(wheel.stop())
-                .handleInterrupt(() -> wheel.stopWheel());
+                .andThen(new WaitCommand(1))
+                .andThen(wheel.stop());
     }
 
     /**
@@ -104,10 +104,12 @@ public class AlgaeSubsystem extends SubsystemBase {
         return arm.getPosition();
     }
 
+
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Arm Angle", () -> getPosition().in(Degrees), null);
         builder.addDoubleProperty("Arm Current", () -> arm.getDraw(), null);
         builder.addDoubleProperty("Wheel Current", () -> wheel.getDraw(), null);
+        builder.addDoubleProperty("Relative Angle", () -> arm.getRelativePosition().in(Degrees), null);
     }
 }

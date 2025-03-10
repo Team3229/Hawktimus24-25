@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -22,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
-import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
@@ -40,7 +37,7 @@ public class RobotContainer {
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
 	// ClimbSubsystem climbSubsystem;
-	AlgaeSubsystem algaeSubsystem;
+	// AlgaeSubsystem algaeSubsystem;
 
 	VisualizerSubsystem visualizerSubsystem;
 
@@ -52,7 +49,7 @@ public class RobotContainer {
 		buttonBoard = new ButtonBoard(1);
 		// climbSubsystem = new ClimbSubsystem();
 		coralSubsystem = new CoralSubsystem();
-		algaeSubsystem = new AlgaeSubsystem();
+		// algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 				"swerve",
 				MetersPerSecond.of(5.0),
@@ -119,40 +116,49 @@ public class RobotContainer {
 		// L4 coral
 		);
 
-		buttonBoard.b_5().onTrue(
-			algaeSubsystem.removeUpperAlgae()
-			// remove algae from the upper section of the reef
-		);
-		
-		buttonBoard.b_5().onFalse(
-			algaeSubsystem.throwUpperAlgae()
-			// Throws upper algae
-		);
-
-		buttonBoard.b_6().onTrue(
-			algaeSubsystem.removeLowerAlgae()
-			// remove algae from the lower section of the reef
-		);
-
-		buttonBoard.b_7().onTrue(
-			algaeSubsystem.intakeAlgae()
-			// intake/stow algae
-		);
-
 		buttonBoard.b_9().onTrue(
-			coralSubsystem.feedCommand()
-		);
+				coralSubsystem.feedCommand()
+			);
 
-		// buttonBoard.b_9().onTrue(
-		// 	Commands.runOnce(() -> {
-		// 		coralSubsystem.spit().schedule();
-		// 		// manual eject
-		// 	})
+		// buttonBoard.b_5().onTrue(
+		// 	algaeSubsystem.removeUpperAlgae()
+		// 	// remove algae from the upper section of the reef
+		// );
+		
+		// buttonBoard.b_5().onFalse(
+		// 	algaeSubsystem.throwUpperAlgae()
+		// 	// Throws upper algae
 		// );
 
-		buttonBoard.b_10().onTrue(	
-				algaeSubsystem.home()
-		);
+		// buttonBoard.b_6().onTrue(
+		// 	algaeSubsystem.removeLowerAlgae()
+		// 	// remove algae from the lower section of the reef
+		// );
+
+		// buttonBoard.b_6().onFalse(
+		// 	algaeSubsystem.intakeAlgae()
+		// 	// intakes algae to a hold
+		// );
+
+		// buttonBoard.b_7().onTrue(
+		// 	algaeSubsystem.readyForCollection()
+		// 	// getting ready to collect from ground		
+		// );
+
+		// buttonBoard.b_7().onFalse(
+		// 	algaeSubsystem.intakeAlgae()
+		// 	// intake/stow algae
+		// );
+
+		// buttonBoard.b_8().onTrue(
+		// 	algaeSubsystem.scoreAlgae()
+		// 	//Scores algae
+		// );
+
+	
+		// buttonBoard.b_10().onTrue(	
+		// 		algaeSubsystem.home()
+		// );
 		// Sets the algae arm to home
 
 		// 		//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
@@ -236,7 +242,7 @@ public class RobotContainer {
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
 		// SmartDashboard.putData(climbSubsystem);
-		SmartDashboard.putData(algaeSubsystem);
+		// SmartDashboard.putData(algaeSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData(autoChooser);
