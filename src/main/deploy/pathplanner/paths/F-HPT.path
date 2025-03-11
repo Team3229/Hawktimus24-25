@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.42775,
-        "y": 2.9
+        "x": 2.5514266304347823,
+        "y": 2.7105383831521737
       },
       "prevControl": {
-        "x": 3.12,
-        "y": 2.075
+        "x": 3.2436766304347824,
+        "y": 1.885538383152174
       },
       "nextControl": {
-        "x": 1.91679479223977,
-        "y": 3.5089390341671214
+        "x": 2.0404714226745524,
+        "y": 3.319477417319295
       },
       "isLocked": false,
       "linkedName": null
@@ -44,7 +44,12 @@
       "linkedName": "HPT"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2763507528786574,
+      "rotationDegrees": 25.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

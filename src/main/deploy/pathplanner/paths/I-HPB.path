@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.071408647852655,
-        "y": 4.652378906476315
+        "x": 6.52163722826087,
+        "y": 4.97582370923913
       },
       "isLocked": false,
       "linkedName": "Coral I"
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -119.99999999999999
+      "rotationDegrees": 150.0
     }
   ],
   "constraintZones": [],
