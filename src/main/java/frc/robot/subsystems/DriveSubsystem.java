@@ -65,14 +65,14 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			4.5,
+			5.0,
 			0.0,
 			0.0
 		);
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			4.5,
+			4.0,
 			0.0,
 			0.0
 		);

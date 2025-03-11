@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.units.measure.Current;
@@ -39,6 +40,8 @@ public class SpitterSubsystem extends SubsystemBase {
         motorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
 
         motorConfig.inverted(INVERTED);
+
+        motorConfig.idleMode(IdleMode.kBrake);
 
         spitterMotor.configure(
             motorConfig,

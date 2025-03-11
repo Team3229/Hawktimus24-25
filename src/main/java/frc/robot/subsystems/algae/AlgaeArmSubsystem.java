@@ -29,11 +29,11 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private SparkMaxConfig armMotorConfig;
     private SparkClosedLoopController positionController;
 
-    private static final int CAN_ID = 9; 
+    private static final int CAN_ID = 9;
     private static final Current CURRENT_LIMIT = Amps.of(40);
-    private static final double kP = 0.008;
+    private static final double kP = 0.005;
     private static final double kI = 0;
-    private static final double kD = 1.45;
+    private static final double kD = 8;
 
     private static final Angle POSITION_TOLERANCE = Degrees.of(5);
     
@@ -50,6 +50,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 20;
+
+    private static final Angle INTERNAL_HOME_OFFSET = Degrees.of(270);
 
     public AlgaeArmSubsystem() {
         super();
@@ -71,7 +73,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
         armMotorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .positionWrappingEnabled(true)
+            // .positionWrappingEnabled(true)
             .pid(
                 kP,
                 kI,
@@ -83,10 +85,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
             );
         
         armMotorConfig.absoluteEncoder
+            .zeroOffset(0.6231295)
             .positionConversionFactor(POSITION_CONVERSION_FACTOR);
 
         armMotorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
+
+        armMotorConfig.closedLoopRampRate(1);
 
         //ABSOLUTE ENCODER IMPLEMENT
 
@@ -98,11 +103,11 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     }
 
     public Angle getPosition() {
-        return Degrees.of(armMotor.getAbsoluteEncoder().getPosition());
+        return Degrees.of(armMotor.getAbsoluteEncoder().getPosition()).minus(INTERNAL_HOME_OFFSET);
     }
 
     public Angle getRelativePosition() {
-        return Degrees.of(armMotor.getEncoder().getPosition());
+        return Degrees.of(armMotor.getEncoder().getPosition()).minus(INTERNAL_HOME_OFFSET);
     }
 
     /**
@@ -192,7 +197,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
             armMotor.getEncoder().setPosition((angle.in(Degrees) - armMotor.getEncoder().getPosition()) * kP);
         }
 
-        positionController.setReference(angle.in(Degrees), ControlType.kPosition);
+        positionController.setReference(angle.plus(INTERNAL_HOME_OFFSET).in(Degrees), ControlType.kPosition);
 
     }
     public double getDraw() {
