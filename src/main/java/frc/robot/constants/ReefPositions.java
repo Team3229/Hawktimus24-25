@@ -9,21 +9,21 @@ import lombok.Getter;
 @Getter
 public enum ReefPositions {
     
-    A(new Pose2d(3.190, 4.180, Rotation2d.fromDegrees(180))),
-    B(new Pose2d(3.190, 3.860, Rotation2d.fromDegrees(180))),
-    C(new Pose2d(3.685, 2.981, Rotation2d.fromDegrees(240))),
-    D(new Pose2d(3.970, 2.810, Rotation2d.fromDegrees(240))),
-    E(new Pose2d(4.990, 2.800, Rotation2d.fromDegrees(300))),
-    F(new Pose2d(5.280, 2.970, Rotation2d.fromDegrees(300))),
-    G(new Pose2d(5.800, 3.850, Rotation2d.fromDegrees(000))),
-    H(new Pose2d(5.800, 4.180, Rotation2d.fromDegrees(000))),
-    I(new Pose2d(5.280, 5.080, Rotation2d.fromDegrees(060))),
-    J(new Pose2d(5.000, 5.240, Rotation2d.fromDegrees(060))),
-    K(new Pose2d(3.990, 5.250, Rotation2d.fromDegrees(120))),
-    L(new Pose2d(3.690, 5.080, Rotation2d.fromDegrees(120))),
+    A(new Pose2d(3.100, 3.907, Rotation2d.fromDegrees(270))),
+    B(new Pose2d(3.100, 3.573, Rotation2d.fromDegrees(270))),
+    C(new Pose2d(3.902, 2.745, Rotation2d.fromDegrees(330))),
+    D(new Pose2d(4.231, 2.689, Rotation2d.fromDegrees(330))),
+    E(new Pose2d(5.242, 2.966, Rotation2d.fromDegrees(30))),
+    F(new Pose2d(5.530, 3.120, Rotation2d.fromDegrees(30))),
+    G(new Pose2d(5.790, 4.152, Rotation2d.fromDegrees(90))),
+    H(new Pose2d(5.790, 4.492, Rotation2d.fromDegrees(90))),
+    I(new Pose2d(4.985, 5.235, Rotation2d.fromDegrees(150))),
+    J(new Pose2d(4.740, 5.376, Rotation2d.fromDegrees(150))),
+    K(new Pose2d(3.684, 5.059, Rotation2d.fromDegrees(210))),
+    L(new Pose2d(3.466, 4.913, Rotation2d.fromDegrees(210))),
     Center(new Pose2d(4.489337, 4.025923, Rotation2d.fromDegrees(0))),
-    HPST(new Pose2d(1.038, 6.949, Rotation2d.fromDegrees(-54.011))),
-    HPSB(new Pose2d(0.890, 1.240, Rotation2d.fromDegrees(54.011)));
+    HPST(new Pose2d(1.079, 7.040, Rotation2d.fromDegrees(-54))),
+    HPSB(new Pose2d(1.079, 0.987, Rotation2d.fromDegrees(54)));
 
     Pose2d position;
 

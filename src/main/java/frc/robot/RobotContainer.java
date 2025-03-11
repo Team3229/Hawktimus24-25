@@ -116,7 +116,7 @@ public class RobotContainer {
 		// Coral Controls
 
 		buttonBoard.b_1().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L1)
+			coralSubsystem.spit()
 		);
 
 		buttonBoard.b_2().onTrue(

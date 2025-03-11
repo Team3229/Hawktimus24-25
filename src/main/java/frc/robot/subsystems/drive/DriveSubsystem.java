@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
+import static edu.wpi.first.units.Units.Radians;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -58,22 +60,22 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			4.5,
+			2.5,
 			0.0,
-			0.3
+			0.0
 		);
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			5.0,
+			6.0,
 			0.0,
-			0.2
+			0.0
 		);
 
 	private static final double TRANSLATION_ERROR_TOLERANCE = 0.1;
-	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.1;
-	private static final double ROTATION_ERROR_TOLERANCE = 0.1;
-	private static final double ROTATION_VELOCITY_TOLERANCE = 0.1;
+	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.05;
+	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(1).in(Radians);
+	private static final double ROTATION_VELOCITY_TOLERANCE = 0.05;
 
     private PIDController xTranslationPID = new PIDController(
         TRANSLATION_CONSTANTS.kP,
@@ -134,6 +136,8 @@ public class DriveSubsystem extends SubsystemBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), swerveDrive.getYaw()));
 
 		swerveDrive.setHeadingCorrection(false);
 		swerveDrive.setCosineCompensator(RobotBase.isReal());
@@ -245,15 +249,24 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveToPose(Supplier<Pose2d> pose) {
 		return driveFieldOriented(
             getInputStream(
-                () -> xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond),
-                () -> yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond),
-                () -> rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity()
+                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.25),
+                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.25),
+                () -> restrictToMax(rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity(), 0.5)
             ).allianceRelativeControl(false)
+
         ).ignoringDisable(false)
 		.until(
 			() -> xTranslationPID.atSetpoint() && yTranslationPID.atSetpoint() && rotationPID.atSetpoint()
 		);
     }
+
+	private double restrictToMax(double in, double restrict) {
+		if (Math.abs(in) > Math.abs(restrict)) {
+			return (in < 0) ? -restrict : restrict;
+		} else {
+			return in;
+		}
+	}
 
 	/**
 	 * Returns a Command that centers the modules of the SwerveDrive subsystem.
@@ -300,9 +313,6 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return The robot's pose
 	 */
 	public Pose2d getPose() {
-		if (RobotBase.isSimulation()) {
-			return swerveDrive.field.getRobotPose();
-		}
 		return swerveDrive.getPose();
 	}
 

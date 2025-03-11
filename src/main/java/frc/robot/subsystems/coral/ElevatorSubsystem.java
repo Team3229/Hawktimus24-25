@@ -2,6 +2,7 @@ package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.InchesPerSecond;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -12,8 +13,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final int MOTOR_CAN_ID = 7;
     
     // Maximum speed of the elevator motor
-    private static final double UP_MAX_SPEED = 0.8;
+    private static final double UP_MAX_SPEED = 1;
     private static final double DOWN_MAX_SPEED = 0.4;
     
     // Current limit for the motor controller
@@ -38,6 +41,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     
     // Tolerance for the elevator position
     private static final Distance POSITION_TOLERANCE = Inch.of(1);
+
+    private static final LinearVelocity VELOCITY_TOLERANCE = InchesPerSecond.of(2);
 
     // Base height of the elevator
     public static final Distance ELEVATOR_BASE_HEIGHT = Inch.of(35.75);
@@ -57,11 +62,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     // PID controller constants
     private static final double kP = 0.08;
     private static final double kI = 0.0;
-    private static final double kD = 0.0;
+    private static final double kD = 2;
 
     private SparkMax elevatorMotor;
     private SparkMaxConfig motorConfig;
     private SparkClosedLoopController positionController;
+
+    private PIDController toleranceController = new PIDController(kP, kI, kD);
 
     private Distance elevatorHeight;
 
@@ -103,6 +110,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
 
         elevatorHeight = Inch.of(0);
+
+        toleranceController.setTolerance(POSITION_TOLERANCE.in(Inch), VELOCITY_TOLERANCE.in(InchesPerSecond));
         
     }
 
@@ -116,7 +125,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
             @Override
             public boolean isFinished() {
-                return getElevatorPose().minus(getElevatorRelativeHeight(reefPosition)).abs(Inch) < POSITION_TOLERANCE.in(Inch);
+                // return getElevatorPose().minus(getElevatorRelativeHeight(reefPosition)).abs(Inch) < POSITION_TOLERANCE.in(Inch);
+                return atSetpoint();
             }
         };
 
@@ -140,6 +150,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         
         positionController.setReference(getElevatorRelativeHeight(reefPosition).in(Inch), ControlType.kPosition);
+        toleranceController.setSetpoint(getElevatorRelativeHeight(reefPosition).in(Inch));
 
     }
 
@@ -155,6 +166,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Elevator Position", () -> elevatorMotor.getEncoder().getPosition(), null);
+    }
+
+    private boolean atSetpoint() {
+        toleranceController.calculate(getElevatorPose().in(Inch));
+        return toleranceController.atSetpoint();
     }
 
 }
