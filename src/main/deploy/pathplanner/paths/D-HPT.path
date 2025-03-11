@@ -8,11 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5129999999969344,
-        "y": 2.857625000001948
+        "x": 3.5205063211756746,
+        "y": 3.056438664726681
       },
       "isLocked": false,
       "linkedName": "Coral D"
+    },
+    {
+      "anchor": {
+        "x": 2.9389096467391305,
+        "y": 3.3066661005434774
+      },
+      "prevControl": {
+        "x": 3.1516665299442144,
+        "y": 3.175385832990207
+      },
+      "nextControl": {
+        "x": 2.7261527635340466,
+        "y": 3.437946368096748
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9731827445652175,
+        "y": 6.555562160326087
+      },
+      "prevControl": {
+        "x": 2.1742681084147475,
+        "y": 6.361201059808348
+      },
+      "nextControl": {
+        "x": 1.7934260832632316,
+        "y": 6.729307786796404
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,15 +52,20 @@
         "y": 6.92
       },
       "prevControl": {
-        "x": 2.1338427934785242,
-        "y": 6.183729279888296
+        "x": 1.3871620091855643,
+        "y": 6.784491439006737
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "HPT"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": -29.999999999999996
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
