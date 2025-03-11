@@ -67,14 +67,14 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			6.0,
+			6.5,
 			0.0,
 			0.0
 		);
 
-	private static final double TRANSLATION_ERROR_TOLERANCE = 0.1;
+	private static final double TRANSLATION_ERROR_TOLERANCE = 0.05;
 	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.05;
-	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(1).in(Radians);
+	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(0.25).in(Radians);
 	private static final double ROTATION_VELOCITY_TOLERANCE = 0.05;
 
     private PIDController xTranslationPID = new PIDController(

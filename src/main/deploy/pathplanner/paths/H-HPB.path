@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.79,
-        "y": 4.49233143
+        "y": 4.42
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.0149286684782615,
-        "y": 2.3528617527173914
+        "y": 2.280530322717391
       },
       "isLocked": false,
       "linkedName": "Coral H"

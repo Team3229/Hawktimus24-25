@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.28,
-        "y": 2.99
+        "x": 5.187,
+        "y": 2.929
       },
       "prevControl": {
-        "x": 4.365558760451539,
-        "y": 2.1030683711250004
+        "x": 4.272558760451539,
+        "y": 2.042068371125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral E"
     }
   ],
   "rotationTargets": [],

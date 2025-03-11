@@ -47,6 +47,6 @@
     "{\"name\":\"Feeder\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.275,\"y\":-0.12},\"size\":{\"width\":0.45,\"length\":0.133},\"borderRadius\":0.05,\"strokeWidth\":0.01,\"filled\":false}}",
     "{\"name\":\"Algae Arm\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.042,\"y\":-0.288},\"size\":{\"width\":0.1,\"length\":0.19685},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
     "{\"name\":\"Chassis\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.0,\"y\":0.0},\"size\":{\"width\":0.6858,\"length\":0.6858},\"borderRadius\":0.05,\"strokeWidth\":0.01,\"filled\":false}}",
-    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.3,\"y\":0.243},\"end\":{\"x\":-0.3,\"y\":0.5},\"strokeWidth\":0.02}}"
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.23,\"y\":0.2},\"end\":{\"x\":-0.23,\"y\":0.5},\"strokeWidth\":0.02}}"
   ]
 }
