@@ -3,11 +3,9 @@ package frc.robot.utilities;
 import org.ironmaple.utils.FieldMirroringUtils;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.hawklibraries.utilities.Alliance;
@@ -99,15 +97,9 @@ public class CoralZones {
 
     private static Command driveToReef(String reef) {
         try {
-
-            PathConstraints constraints = new PathConstraints(
-			    4, 4.0,
-			    4, Units.degreesToRadians(720)
-		    );
-
             return AutoBuilder.pathfindThenFollowPath(
                 PathPlannerPath.fromPathFile(reef),
-                constraints
+                PathFindingConstraints.SEMIAUTO_ROBOT_CONSTRAINTS
             );
 
         } catch (Exception e) {

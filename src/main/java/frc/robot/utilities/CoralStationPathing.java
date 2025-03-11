@@ -12,37 +12,37 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class CoralStationPathing {
 
-    private static double at16To21(double x) {
+    private static double centerLine(double x) {
 		return 4.025900;
 	}
 
     public static Command findHumanZones(DriveSubsystem driveSubsystem) {
 
-        Command out = Commands.none();
+        return Commands.runOnce(() -> {
+            Command out = Commands.none();
 
-        if (Alliance.getAlliance() == AllianceColor.Blue) {
+            if (Alliance.getAlliance() == AllianceColor.Blue) {
 
-            if (aboveZone(driveSubsystem.getPose())) {
+                if (aboveZone(driveSubsystem.getPose())) {
+                    System.out.println("Robot is above zone");
+                    out = driveToPlayerStation("HPS Top"); 
+                } else {
+                    System.out.println("Robot is bellow zone");
+                    out = driveToPlayerStation("HPS Bottom");
+                }
+            } else if (aboveZone(driveSubsystem.getPose())) {
                 System.out.println("Robot is above zone");
-                out = driveToPlayerStation("HPS Top"); 
+                out = driveToPlayerStation("HPS Bottom"); //these are flipped as red
+            } else {
+                System.out.println("Robot is bellow zone");
+                out = driveToPlayerStation("HPS Top"); //these are flipped as red
             }
 
-            System.out.println("Robot is bellow zone");
-            out = driveToPlayerStation("HPS Bottom");
-        } 
+            out.addRequirements(driveSubsystem);
 
-        if (aboveZone(driveSubsystem.getPose())) {
-            System.out.println("Robot is above zone");
-            out = driveToPlayerStation("HPS Bottom"); //these are flipped as red
-        }
+            out.schedule();
 
-        System.out.println("Robot is bellow zone");
-        out = driveToPlayerStation("HPS Top"); //these are flipped as red
-
-        out.addRequirements(driveSubsystem);
-
-        return out;
-
+        });
     }
 
     private static Command driveToPlayerStation(String hps) {
@@ -59,7 +59,7 @@ public class CoralStationPathing {
     }
 
     private static boolean aboveZone(Pose2d robotPose) {
-		return (robotPose.getY() > at16To21(robotPose.getX()));
+		return (robotPose.getY() > centerLine(robotPose.getX()));
 	}
     
 }
