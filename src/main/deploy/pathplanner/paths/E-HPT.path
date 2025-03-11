@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.242485166273221,
-        "y": 2.9557204413977467
+        "x": 5.242,
+        "y": 2.966
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.105572802142278,
-        "y": 1.8476412973768808
+        "x": 4.105087635869057,
+        "y": 1.8579208559791343
       },
       "isLocked": false,
       "linkedName": "Coral E"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.046,
-        "y": 6.92
+        "x": 1.079,
+        "y": 7.04
       },
       "prevControl": {
-        "x": 2.396433423913044,
-        "y": 6.454220448369565
+        "x": 2.4294334239130437,
+        "y": 6.574220448369565
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.196655891628986
+    "rotation": -54.011
   },
   "reversed": false,
   "folder": "REEF-HPT",

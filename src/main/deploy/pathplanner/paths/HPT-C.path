@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.045711,
-        "y": 6.92
+        "x": 1.079,
+        "y": 7.04
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.312975543478261,
-        "y": 6.1561565896739125
+        "x": 2.346264543478261,
+        "y": 6.276156589673913
       },
       "isLocked": false,
       "linkedName": "HPT"
@@ -25,7 +25,7 @@
       },
       "nextControl": {
         "x": 2.7439528874994084,
-        "y": 3.344008769396602
+        "y": 3.3440087693966016
       },
       "isLocked": false,
       "linkedName": null
@@ -64,7 +64,7 @@
   "folder": "HPT-REEF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.196655891628986
+    "rotation": -54.011
   },
   "useDefaultConstraints": true
 }

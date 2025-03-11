@@ -34,18 +34,13 @@ public class CoralSubsystem extends SubsystemBase {
 
         registerCommands();
 
-        catcherSubsystem.hasCoral().onTrue(
+        catcherSubsystem.hasCoral()
+        .debounce(0.25)
+        .onTrue(
             feedCommand()
         );
 
     }
-
-    // @Override
-    // public void periodic() {
-    //     if (catcherSubsystem.hasCoral().getAsBoolean() && !feedCommand().isScheduled()) {
-    //         feedCommand().schedule();
-    //     }
-    // }
 
     public Command feedCommand() {
         return

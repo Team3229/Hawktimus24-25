@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.045711,
-        "y": 6.92
+        "x": 1.079,
+        "y": 7.04
       },
       "prevControl": {
-        "x": 1.1891051090877616,
-        "y": 6.715211988927752
+        "x": 1.222394109087762,
+        "y": 6.835211988927752
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.196655891628986
+    "rotation": -54.011
   },
   "reversed": false,
   "folder": "HPS Lineup",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": -54.196655891628986
+    "rotation": -54.011
   },
   "useDefaultConstraints": true
 }

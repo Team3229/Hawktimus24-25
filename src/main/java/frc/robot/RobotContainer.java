@@ -6,9 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,13 +13,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
-import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
-import frc.robot.utilities.CoralStationPathing;
-import frc.robot.utilities.CoralZones;
+import frc.robot.subsystems.drive.DriveSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
@@ -48,12 +41,8 @@ public class RobotContainer {
 		// algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 			"swerve",
-			DriveSubsystem.MAX_VELOCITY,
-			new Pose2d(2, 4, new Rotation2d()),
-			TelemetryVerbosity.HIGH,
-			() -> {
-				return VisionSubsystem.getMT2Pose(driveSubsystem.getHeading(), driveSubsystem.getRobotVelocity().omegaRadiansPerSecond);
-			});
+			TelemetryVerbosity.HIGH
+		);
 
 		// visualizerSubsystem = new VisualizerSubsystem(
 		// 	() -> coralSubsystem.getElevatorPose().in(Meters),
@@ -70,21 +59,14 @@ public class RobotContainer {
 
 		configDriveControls();
 		configManipControls();
-		configSimControls();
-
-		if (RobotBase.isSimulation()) {
-			configSimControls();	
-		}
 
 	}
 
 	private void configDriveControls() {
 
-		SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
-			driveSubsystem.getSwerveDrive(),
+		SwerveInputStream driveAngularVelocity = driveSubsystem.getInputStream(
 			() -> -driverController.a_Y(),
-			() -> -driverController.a_X()
-		).withControllerRotationAxis(
+			() -> -driverController.a_X(),
 			() -> -driverController.a_Z()
 		)
 			.deadband(0.05)
@@ -105,19 +87,19 @@ public class RobotContainer {
 		);
 
 		driverController.b_3().onTrue(
-			CoralStationPathing.findHumanZones(driveSubsystem)
+			driveSubsystem.driveToPlayerStation()
 		);
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())
 				.onTrue(
-					CoralZones.findCoralZone(true, driveSubsystem)
+					driveSubsystem.driveToReef(true)
 				);
 
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_L())
 				.onTrue(
-					CoralZones.findCoralZone(false, driveSubsystem)
+					driveSubsystem.driveToReef(false)
 				);
 
 		driverController.b_Hazard().onTrue(
@@ -134,7 +116,7 @@ public class RobotContainer {
 		// Coral Controls
 
 		buttonBoard.b_1().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L1)
+			coralSubsystem.spit()
 		);
 
 		buttonBoard.b_2().onTrue(
@@ -233,15 +215,6 @@ public class RobotContainer {
 		// 		System.out.println("Climb Down");
 		// 	})
 		// );
-	}
-
-	private void configSimControls() {
-		driverController.b_5().onTrue(
-			Commands.runOnce(
-				() -> driveSubsystem.resetOdometry(driveSubsystem.getSwerveDrive().getSimulationDriveTrainPose().get())
-				// resets the odometry to the simulation pose
-			)
-		);
 	}
 
 	public void initTelemetery() {

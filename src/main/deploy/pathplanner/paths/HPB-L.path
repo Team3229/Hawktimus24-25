@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.89,
-        "y": 1.24
+        "x": 1.079,
+        "y": 0.987
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9068149267542913,
-        "y": 1.261443229509921
+        "x": 2.095814926754291,
+        "y": 1.008443229509921
       },
       "isLocked": false,
       "linkedName": "HPB"
@@ -64,7 +64,7 @@
   "folder": "HPB-REEF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 53.13010235415587
+    "rotation": 54.011392
   },
   "useDefaultConstraints": true
 }

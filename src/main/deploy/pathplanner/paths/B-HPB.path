@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.89,
-        "y": 1.24
+        "x": 1.079,
+        "y": 0.987
       },
       "prevControl": {
-        "x": 1.5822500000000006,
-        "y": 0.9523749999999993
+        "x": 1.7712500000000007,
+        "y": 0.6993749999999993
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.13010235415587
+    "rotation": 54.011392
   },
   "reversed": false,
   "folder": "REEF-HPB",
