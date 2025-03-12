@@ -83,7 +83,7 @@ public class RobotContainer {
 		);
 
 		driverController.b_10().onTrue(
-			driveSubsystem.zeroGyroWithAllianceCommand()
+			driveSubsystem.zeroGyroWithLimelight()
 		);
 
 		driverController.b_3().onTrue(

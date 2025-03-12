@@ -3,6 +3,7 @@ package frc.robot.subsystems.coral;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,6 +65,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final double kP = 0.08;
     private static final double kI = 0.0;
     private static final double kD = 2;
+
+    public static final Time L4_EXTRA_WAIT_TIME = Seconds.of(0.25);
 
     private SparkMax elevatorMotor;
     private SparkMaxConfig motorConfig;

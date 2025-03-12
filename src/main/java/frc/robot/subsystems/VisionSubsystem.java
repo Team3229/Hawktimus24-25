@@ -19,4 +19,16 @@ public class VisionSubsystem {
         }
         
     }
+
+    public static Rotation2d getMT1Rotation() {
+
+        PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+        if (mt1 != null && mt1.rawFiducials.length > 0 && mt1.rawFiducials[0].ambiguity < 0.5) {
+            return mt1.pose.getRotation();
+        } else {
+            return null;
+        }
+
+    }
 }

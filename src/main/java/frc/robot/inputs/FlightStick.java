@@ -35,6 +35,7 @@ public class FlightStick {
     public Trigger p_Down() {return controller.povDown();}
     public Trigger p_Left() {return controller.povLeft();}
     public Trigger p_Right() {return controller.povRight();}
+    public Trigger p_Any() {return controller.povCenter().negate();}
 
     private static double applyDeadzone(double input) {
         return (Math.abs(input) > kControllerDeadzone) ? 

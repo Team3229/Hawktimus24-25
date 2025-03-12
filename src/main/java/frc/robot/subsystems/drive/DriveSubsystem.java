@@ -21,6 +21,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
@@ -60,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			2.5,
+			7.0,
 			0.0,
 			0.0
 		);
@@ -72,8 +73,8 @@ public class DriveSubsystem extends SubsystemBase {
 			0.0
 		);
 
-	private static final double TRANSLATION_ERROR_TOLERANCE = 0.05;
-	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.05;
+	private static final double TRANSLATION_ERROR_TOLERANCE = 0.01;
+	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.01;
 	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(0.25).in(Radians);
 	private static final double ROTATION_VELOCITY_TOLERANCE = 0.05;
 
@@ -249,8 +250,8 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveToPose(Supplier<Pose2d> pose) {
 		return driveFieldOriented(
             getInputStream(
-                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.25),
-                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.25),
+                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.1),
+                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.1),
                 () -> restrictToMax(rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity(), 0.5)
             ).allianceRelativeControl(false)
 
@@ -344,6 +345,19 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command zeroGyroWithAllianceCommand() {
 		return runOnce(
 			this::zeroGyroWithAlliance
+		);
+	}
+
+	public Command zeroGyroWithLimelight() {
+		return runOnce(
+			() -> {
+
+				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
+
+				if (mt1 != null) {
+					swerveDrive.setGyro(new Rotation3d(mt1));
+				}
+			}
 		);
 	}
 
