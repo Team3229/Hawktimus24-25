@@ -107,7 +107,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Arm Angle", () -> getPosition().in(Degrees), null);
+        builder.addDoubleProperty("Arm Angle", () -> arm.getRawPosition().in(Degrees), null);
         builder.addDoubleProperty("Arm Current", () -> arm.getDraw(), null);
         builder.addDoubleProperty("Wheel Current", () -> wheel.getDraw(), null);
         builder.addDoubleProperty("Relative Angle", () -> arm.getRelativePosition().in(Degrees), null);
