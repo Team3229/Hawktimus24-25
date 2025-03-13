@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -25,7 +26,7 @@ public class RobotContainer {
 	ButtonBoard buttonBoard;
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
-	// ClimbSubsystem climbSubsystem;
+	ClimbSubsystem climbSubsystem;
 	// AlgaeSubsystem algaeSubsystem;
 
 	VisualizerSubsystem visualizerSubsystem;
@@ -36,7 +37,7 @@ public class RobotContainer {
 
 		driverController = new FlightStick(0);
 		buttonBoard = new ButtonBoard(1);
-		// climbSubsystem = new ClimbSubsystem();
+		climbSubsystem = new ClimbSubsystem();
 		coralSubsystem = new CoralSubsystem();
 		// algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
@@ -84,6 +85,10 @@ public class RobotContainer {
 
 		driverController.b_10().onTrue(
 			driveSubsystem.zeroGyroWithLimelight()
+		);
+
+		driverController.b_11().onTrue(
+			driveSubsystem.zeroGyroWithAllianceCommand()
 		);
 
 		driverController.b_3().onTrue(
@@ -180,22 +185,16 @@ public class RobotContainer {
 
 		// Climb Controls
 
-		// 		//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
-		// buttonBoard.joy_U()
-		// .and(driverController.b_9()).onTrue(
-		// 	Commands.runOnce(() -> {
-		// 		climbSubsystem.engageClimb();
-		// 		// climb up
-		// 	})
-		// );
+				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
+		buttonBoard.joy_U()
+		.and(driverController.b_9()).whileTrue(
+			climbSubsystem.engageClimb()
+		);
 
-		// buttonBoard.joy_D()
-		// .and(driverController.b_9()).onTrue(
-		// 	Commands.runOnce(() -> {
-		// 		climbSubsystem.disengageClimb();
-		// 		// climb down
-		// 	})
-		// );
+		buttonBoard.joy_D()
+		.and(driverController.b_9()).whileTrue(
+			climbSubsystem.disengageClimb()
+		);
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
 		// buttonBoard.joy_U().whileTrue(
@@ -219,7 +218,7 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		// SmartDashboard.putData(climbSubsystem);
+		SmartDashboard.putData(climbSubsystem);
 		// SmartDashboard.putData(algaeSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();

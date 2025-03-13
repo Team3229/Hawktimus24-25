@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotation;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -27,13 +28,13 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 100;
 
-    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(90);
-    private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-10);
+    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(15);
+    private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
 
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
-    private static final double CLIMB_SPEED = 0.8;
+    private static final double CLIMB_SPEED = 1;
     
     public ClimbSubsystem() {
 
@@ -62,9 +63,12 @@ public class ClimbSubsystem extends SubsystemBase {
             and double check that POSITION_CONVERSION_FACTOR is used correctly. */
             .reverseSoftLimit(REVERSE_SOFT_LIMIT.in(Degrees));
 
+        motorConfig.absoluteEncoder
+            .zeroCentered(true);
+
         motorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
 
-        motorConfig.inverted(true);
+        motorConfig.inverted(false);
 
         climbMotor.configure(
             motorConfig,
@@ -81,6 +85,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
+        System.out.println("Climbing at speed " + speed);
         climbMotor.set(speed * CLIMB_SPEED);
     }
 
@@ -90,7 +95,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public Command engageClimb() {
         return runEnd(() -> {
-            setSpeed(CLIMB_SPEED);
+            setSpeed(-CLIMB_SPEED);
         },
         () -> {
             stop();
@@ -99,7 +104,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public Command disengageClimb() {
         return runEnd(() -> {
-            setSpeed(-CLIMB_SPEED);
+            setSpeed(CLIMB_SPEED);
         },
         () -> {
             stop();
