@@ -187,12 +187,12 @@ public class RobotContainer {
 
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		buttonBoard.joy_U()
-		.and(driverController.b_9()).whileTrue(
+		/*.and(driverController.b_9())*/.whileTrue(
 			climbSubsystem.engageClimb()
 		);
 
 		buttonBoard.joy_D()
-		.and(driverController.b_9()).whileTrue(
+		/*.and(driverController.b_9())*/.whileTrue(
 			climbSubsystem.disengageClimb()
 		);
 

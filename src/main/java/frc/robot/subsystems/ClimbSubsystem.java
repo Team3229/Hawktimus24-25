@@ -4,7 +4,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotation;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -21,9 +20,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimbSubsystem extends SubsystemBase {
     
     private SparkMax climbMotor;
+    private SparkMax climbMotor2;
     private SparkMaxConfig motorConfig;
+    private SparkMaxConfig motorConfig2;
 
     private static final int CAN_ID = 8;
+    private static final int CAN_ID_2 = 4;
     
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 100;
@@ -31,25 +33,22 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(15);
     private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
 
-    private static final Current CURRENT_LIMIT = Amps.of(80);
+    private static final Current CURRENT_LIMIT = Amps.of(20);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
-    private static final double CLIMB_SPEED = 1;
+    private static final double CLIMB_SPEED = 0.5;
     
     public ClimbSubsystem() {
 
         super();
 
         climbMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
-        motorConfig = new SparkMaxConfig();
-        
+        climbMotor2 = new SparkMax(CAN_ID_2, MotorType.kBrushless);
+
+        motorConfig = getBaseConfig();
+
         motorConfig.absoluteEncoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR);
-
-        motorConfig.encoder
-            .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
-        
-        motorConfig.idleMode(IDLE_MODE);
 
         motorConfig.softLimit
             .forwardSoftLimitEnabled(true)
@@ -66,18 +65,42 @@ public class ClimbSubsystem extends SubsystemBase {
         motorConfig.absoluteEncoder
             .zeroCentered(true);
 
-        motorConfig.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
-
-        motorConfig.inverted(false);
-
         climbMotor.configure(
             motorConfig,
             ResetMode.kNoResetSafeParameters,
             PersistMode.kNoPersistParameters
         );
 
+        motorConfig2 = getBaseConfig();
+
+        motorConfig2.follow(
+            climbMotor,
+            true
+        );
+
+        climbMotor2.configure(
+            motorConfig2,
+            ResetMode.kNoResetSafeParameters,
+            PersistMode.kNoPersistParameters
+        );
+
         seedInternalEncoder();
 
+    }
+
+    private SparkMaxConfig getBaseConfig() {
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        config.encoder
+            .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
+        
+        config.smartCurrentLimit((int) CURRENT_LIMIT.in(Amps));
+
+        config.idleMode(IDLE_MODE);
+
+        config.openLoopRampRate(1);
+
+        return config;
     }
 
     public Angle getCurrentAngle() {
@@ -113,6 +136,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private void seedInternalEncoder() {
         climbMotor.getEncoder().setPosition(getCurrentAngle().in(Degrees));
+        climbMotor2.getEncoder().setPosition(getCurrentAngle().in(Degrees));
     }
 
     @Override
