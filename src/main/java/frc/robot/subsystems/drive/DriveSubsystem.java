@@ -61,9 +61,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			7.0,
+			8.5,
 			0.0,
-			0.0
+			0.5
 		);
 
 	private static final PIDConstants ROTATION_CONSTANTS =
@@ -73,10 +73,10 @@ public class DriveSubsystem extends SubsystemBase {
 			0.0
 		);
 
-	private static final double TRANSLATION_ERROR_TOLERANCE = 0.01;
-	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.01;
+	private static final double TRANSLATION_ERROR_TOLERANCE = 0.2;
+	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.005;
 	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(0.25).in(Radians);
-	private static final double ROTATION_VELOCITY_TOLERANCE = 0.05;
+	private static final double ROTATION_VELOCITY_TOLERANCE = 0.01;
 
     private PIDController xTranslationPID = new PIDController(
         TRANSLATION_CONSTANTS.kP,
@@ -250,8 +250,8 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveToPose(Supplier<Pose2d> pose) {
 		return driveFieldOriented(
             getInputStream(
-                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.1),
-                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.1),
+                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
+                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
                 () -> restrictToMax(rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity(), 0.5)
             ).allianceRelativeControl(false)
 
