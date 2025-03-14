@@ -39,9 +39,9 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
     private static final int CAN_ID = 9;
     private static final Current CURRENT_LIMIT = Amps.of(40);
-    private static final double kP = 0.008;
+    private static final double kP = 0.005;
     private static final double kI = 0;
-    private static final double kD = 0.1;
+    private static final double kD = 0.08;
 
     private static final Angle POSITION_TOLERANCE = Degrees.of(10);
     
