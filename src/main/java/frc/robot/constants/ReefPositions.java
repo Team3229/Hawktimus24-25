@@ -25,8 +25,8 @@ public enum ReefPositions {
     HPST(new Pose2d(1.079, 7.040, Rotation2d.fromDegrees(-54))),
     HPSB(new Pose2d(1.079, 0.987, Rotation2d.fromDegrees(54))),
 
-    ReefNorthWest(new Pose2d(3.850, 5.16, Rotation2d.fromDegrees(300))), //K+L
-    ReefWest(new Pose2d(3.174, 4.6, Rotation2d.fromDegrees(90))), //A+B
+    ReefNorthWest(new Pose2d(3.850, 5.16, Rotation2d.fromDegrees(30))), //K+L
+    ReefWest(new Pose2d(3.174, 4.043, Rotation2d.fromDegrees(90))), //A+B
     ReefSouthWest(new Pose2d(3.8, 2.91, Rotation2d.fromDegrees(150))), //C+D
     ReefSouthEast(new Pose2d(5.16, 2.9, Rotation2d.fromDegrees(210))), //E+F
     ReefEast(new Pose2d(5.8, 3.98, Rotation2d.fromDegrees(270))), //G+H
