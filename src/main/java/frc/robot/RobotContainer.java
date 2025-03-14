@@ -103,6 +103,10 @@ public class RobotContainer {
 		driverController.b_3().onTrue(
 			driveSubsystem.driveToPlayerStation()
 		);
+
+		driverController.b_4().onTrue(
+			driveSubsystem.driveToAlgaeZone()
+		);
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())

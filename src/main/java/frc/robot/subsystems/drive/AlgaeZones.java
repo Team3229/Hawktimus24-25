@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import org.ironmaple.utils.FieldMirroringUtils;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
 import frc.robot.constants.ReefPositions;
 
@@ -23,9 +24,10 @@ public class AlgaeZones {
 	}
 
 	public Pose2d findAlgaeZone(
-        Pose2d robotPose,
-		AllianceColor alliance
+        Pose2d robotPose
     ) {
+		
+		AllianceColor alliance = Alliance.getAlliance();
 		
 		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 

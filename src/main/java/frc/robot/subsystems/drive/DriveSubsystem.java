@@ -418,11 +418,11 @@ public class DriveSubsystem extends SubsystemBase {
 		});
     }
 
-	// public Command driveToAlgaeStation() {
-	// 	return driveToPose(() -> {
-	// 		return algaeZones.findAlgaeZone(getPose(), null);
-	// 	});
-	// }
+	public Command driveToAlgaeZone() {
+		return driveToPose(() -> {
+			return algaeZones.findAlgaeZone(getPose());
+		});
+	}
 
 	public Command driveToPlayerStation() {
 		return driveToPose(() -> {
