@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.640875,
-        "y": 2.4611490632763804
+        "x": 4.894500000000001,
+        "y": 2.133499999999999
       },
       "isLocked": false,
       "linkedName": "Coral F"
@@ -44,12 +44,7 @@
       "linkedName": "HPT"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.2763507528786574,
-      "rotationDegrees": 25.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

@@ -20,20 +20,15 @@
         "y": 0.987
       },
       "prevControl": {
-        "x": 1.282684426229508,
-        "y": 1.141956967213115
+        "x": 2.97375,
+        "y": 0.9147499999999991
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "HPB"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3259521700620007,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

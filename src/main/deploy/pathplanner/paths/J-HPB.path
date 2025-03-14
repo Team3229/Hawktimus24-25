@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.131307932875451,
-        "y": 6.394607676630435
+        "x": 3.4612500000000006,
+        "y": 6.677
       },
       "isLocked": false,
       "linkedName": "Coral J"
     },
     {
       "anchor": {
-        "x": 2.744624999999999,
+        "x": 2.6520000000000006,
         "y": 3.1962499999999996
       },
       "prevControl": {
-        "x": 2.881124999995854,
+        "x": 2.7884999999958553,
         "y": 4.6782500000010465
       },
       "nextControl": {
-        "x": 2.589736584385947,
+        "x": 2.4971115843859484,
         "y": 1.51460434470946
       },
       "isLocked": false,
@@ -44,12 +44,7 @@
       "linkedName": "HPB"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 51.3005240647538
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

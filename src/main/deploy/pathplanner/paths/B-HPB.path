@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.13575,
-        "y": 2.732249999999999
+        "x": 2.5155000000000003,
+        "y": 3.1085
       },
       "isLocked": false,
       "linkedName": "Coral B"
@@ -20,8 +20,8 @@
         "y": 0.987
       },
       "prevControl": {
-        "x": 1.7712500000000007,
-        "y": 0.6993749999999993
+        "x": 2.0962499999999995,
+        "y": 0.7587500000000011
       },
       "nextControl": null,
       "isLocked": false,

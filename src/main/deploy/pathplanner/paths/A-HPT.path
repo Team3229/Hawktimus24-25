@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1673220108695657,
-        "y": 5.084119126413041
+        "x": 2.0085000000000006,
+        "y": 3.771499999999999
       },
       "isLocked": false,
       "linkedName": "Coral A"
@@ -20,8 +20,8 @@
         "y": 7.04
       },
       "prevControl": {
-        "x": 2.0066436656901194,
-        "y": 6.869306780294062
+        "x": 2.964,
+        "y": 6.969499999999999
       },
       "nextControl": null,
       "isLocked": false,

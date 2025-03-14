@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.699117855592073,
-        "y": 5.486058326173957
+        "x": 7.566,
+        "y": 4.366249999999999
       },
       "isLocked": false,
       "linkedName": "S3"
@@ -20,8 +20,8 @@
         "y": 3.1008990632763807
       },
       "prevControl": {
-        "x": 5.728,
-        "y": 3.2557740632763803
+        "x": 5.976749999999999,
+        "y": 2.66
       },
       "nextControl": null,
       "isLocked": false,

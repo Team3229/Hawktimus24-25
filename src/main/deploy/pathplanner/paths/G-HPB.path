@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.72564530975512,
-        "y": 3.7598753335325354
+        "x": 6.15225,
+        "y": 3.5277499999999993
       },
       "isLocked": false,
       "linkedName": "Coral G"
@@ -44,12 +44,7 @@
       "linkedName": "HPB"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
