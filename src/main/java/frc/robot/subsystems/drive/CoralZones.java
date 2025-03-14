@@ -27,69 +27,75 @@ public class CoralZones {
         boolean leftSide,
         Pose2d robotPose
     ) {
+
+		AllianceColor alliance = Alliance.getAlliance();
 		
 		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
 		System.out.println("Finding Coral Zone");
 
 		//LEFT SIDE
-		if (leftSide && inZone_AL_BC(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_AL_BC(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone AL_BC");
-			return getReefPose("A");
+			return getReefPose("A", alliance == AllianceColor.Blue);
 		}
-		if (leftSide && inZone_BC_DE(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_BC_DE(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone BC_DE");
-			return getReefPose("C");
+			return getReefPose("C", alliance == AllianceColor.Blue);
 		}
-		if (leftSide && inZone_DE_FG(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_DE_FG(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone DE_FG");
-			return getReefPose("F");
+			return getReefPose("F", alliance == AllianceColor.Blue);
 		}
-		if (leftSide && inZone_FG_HI(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_FG_HI(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone FG_HI");
-			return getReefPose("H");
+			return getReefPose("H", alliance == AllianceColor.Blue);
 		}
-		if (leftSide && inZone_HI_JK(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_HI_JK(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone HI_JK");
-			return getReefPose("J");
+			return getReefPose("J", alliance == AllianceColor.Blue);
 		}
-		if (leftSide && inZone_JK_AL(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (leftSide && inZone_JK_AL(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone JK_AL");
-			return getReefPose("K");
+			return getReefPose("K", alliance == AllianceColor.Blue);
 		}
 		
 
 		//RIGHT SIDE
-		if (!leftSide && inZone_AL_BC(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_AL_BC(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone AL_BC");
-			return getReefPose("B");
+			return getReefPose("B", alliance == AllianceColor.Blue);
 		}
-		if (!leftSide && inZone_BC_DE(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_BC_DE(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone BC_DE");
-			return getReefPose("D");
+			return getReefPose("D", alliance == AllianceColor.Blue);
 		}
-		if (!leftSide && inZone_DE_FG(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_DE_FG(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone DE_FG");
-			return getReefPose("E");
+			return getReefPose("E", alliance == AllianceColor.Blue);
 		}
-		if (!leftSide && inZone_FG_HI(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_FG_HI(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone FG_HI");
-			return getReefPose("G");
+			return getReefPose("G", alliance == AllianceColor.Blue);
 		}
-		if (!leftSide && inZone_HI_JK(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_HI_JK(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone HI_JK");
-			return getReefPose("I");
+			return getReefPose("I", alliance == AllianceColor.Blue);
 		}
-		if (!leftSide && inZone_JK_AL(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (!leftSide && inZone_JK_AL(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone JK_AL");
-			return getReefPose("L");
+			return getReefPose("L", alliance == AllianceColor.Blue);
 		}
 
 		return null;
 	}		
 
-    private Pose2d getReefPose(String reef) {
-        return ReefPositions.valueOf(reef).getPosition();
+    private Pose2d getReefPose(String reef, boolean blue) {
+		if (blue) {
+			return ReefPositions.valueOf(reef).getPosition();
+		} else {
+			return FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.valueOf(reef).getPosition());
+		}
     }
 
 

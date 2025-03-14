@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Radians;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
@@ -160,7 +161,7 @@ public class DriveSubsystem extends SubsystemBase {
 			e.printStackTrace();
 		}
 
-		resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), swerveDrive.getYaw()));
+		resetOdometry(new Pose2d(2, 4, swerveDrive.getYaw()));
 
 		if (RobotBase.isSimulation()) {
 			swerveDrive.field.setRobotPose(new Pose2d(2, 4, new Rotation2d()));
@@ -210,6 +211,9 @@ public class DriveSubsystem extends SubsystemBase {
 	 * Setup AutoBuilder for PathPlanner.
 	 */
 	public void setupPathPlanner() {
+
+		NamedCommands.registerCommand("DriveToLeft", driveToReef(true));
+		NamedCommands.registerCommand("DriveToRight", driveToReef(false));
 
 		RobotConfig config;
 
@@ -337,7 +341,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void resetOdometry(Pose2d pose) {
 		if (pose == null) {
-			swerveDrive.resetOdometry(new Pose2d());
+			swerveDrive.resetOdometry(new Pose2d(2, 4, new Rotation2d()));
 			return;
 		}
 		swerveDrive.resetOdometry(pose);
