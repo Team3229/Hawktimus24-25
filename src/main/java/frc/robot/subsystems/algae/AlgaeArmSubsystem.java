@@ -15,11 +15,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -33,17 +35,19 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private SparkClosedLoopController positionController;
     private ArmFeedforward feedForward;
 
+    private Angle setpoint;
+
     private static final int CAN_ID = 9;
     private static final Current CURRENT_LIMIT = Amps.of(40);
-    private static final double kP = 0.005;
+    private static final double kP = 0.008;
     private static final double kI = 0;
-    private static final double kD = 0.0001;
+    private static final double kD = 0.1;
 
-    private static final Angle POSITION_TOLERANCE = Degrees.of(5);
+    private static final Angle POSITION_TOLERANCE = Degrees.of(10);
     
     private static final Angle REMOVAL_POSITION = Degrees.of(154); 
     private static final Angle HOME_POSITION = Degrees.of(0);
-    private static final Angle THROW_ANGLE = Degrees.of(195);
+    private static final Angle THROW_ANGLE = Degrees.of(205);
     private static final Angle GROUND_COLLECT_ANGLE = Degrees.of(90);
     private static final Angle HOLD_ANGLE = Degrees.of(50);
     private static final Angle SCORE_ANGLE = Degrees.of(70);
@@ -74,15 +78,14 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         armMotorConfig.idleMode(IdleMode.kBrake);
 
         armMotorConfig.softLimit 
-                .forwardSoftLimitEnabled(true)
+                .forwardSoftLimitEnabled(false)
                 .forwardSoftLimit(FORWARD_LIMIT.in(Degrees))
-                .reverseSoftLimitEnabled(true)
+                .reverseSoftLimitEnabled(false)
                 .reverseSoftLimit(REVERSE_LIMIT.in(Degrees));
 
         armMotorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .positionWrappingEnabled(true)
-            .positionWrappingInputRange(-180, 180)
+            .positionWrappingEnabled(false)
             .pid(
                 kP,
                 kI,
@@ -95,12 +98,12 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         
         armMotorConfig.absoluteEncoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR)
-            .zeroCentered(true);
+            .zeroCentered(false);
 
         armMotorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
 
-        armMotorConfig.closedLoopRampRate(2);
+        armMotorConfig.closedLoopRampRate(0);
 
         //ABSOLUTE ENCODER IMPLEMENT
 
@@ -112,10 +115,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     }
 
     public Angle getPosition() {
-        return Degrees.of(armMotor.getAbsoluteEncoder().getPosition());
-    }
-
-    public Angle getRawPosition() {
         return Degrees.of(armMotor.getAbsoluteEncoder().getPosition());
     }
 
@@ -207,20 +206,48 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         return armRemovalCommand;
     }
 
+    public Command disableAlgaeArm() {
+        return Commands.runOnce(
+            () -> {
+                positionController.setReference(0, ControlType.kDutyCycle);
+                setpoint = null;
+            }
+        );
+    }
+
     private void setSetpoint(Angle angle) {
 
-        if(RobotBase.isSimulation()) {
-            armMotor.getEncoder().setPosition((angle.in(Degrees) - armMotor.getEncoder().getPosition()) * kP);
-        }
+        setpoint = wrapTo360(angle);
 
-        if (getRawPosition().in(Degrees) < 0) {
-            positionController.setReference(0.05, ControlType.kDutyCycle);
-        } else {
-            positionController.setReference(angle.in(Degrees), ControlType.kPosition, ClosedLoopSlot.kSlot0, feedForward.calculate(angle.minus(Degrees.of(90)).in(Radians), 0));
+        if(RobotBase.isSimulation()) {
+            armMotor.getEncoder().setPosition((setpoint.in(Degrees) - armMotor.getEncoder().getPosition()) * kP);
         }
-        
 
     }
+
+    @Override
+    public void periodic() {
+
+        if (setpoint != null) {
+            if (getPosition().in(Degrees) > 300) {
+                positionController.setReference(wrapTo360(setpoint).plus(Degrees.of(360)).in(Degrees), ControlType.kPosition);
+            } else {
+                positionController.setReference(wrapTo360(setpoint).in(Degrees), ControlType.kPosition, ClosedLoopSlot.kSlot0, feedForward.calculate(MathUtil.inputModulus(getPosition().minus(Degrees.of(90)).in(Radians), 0, 2*Math.PI), 0));
+            }
+        } else {
+            positionController.setReference(0, ControlType.kDutyCycle);
+        }
+    }
+
+    private Angle wrapTo360(Angle angle) {
+
+        if (MathUtil.inputModulus(angle.in(Degrees), 0, 360) == 360) {
+            return Degrees.of(0);
+        }
+
+        return Degrees.of(MathUtil.inputModulus(angle.in(Degrees), 0, 360));
+    }
+
     public double getDraw() {
         return armMotor.getOutputCurrent();
     }
