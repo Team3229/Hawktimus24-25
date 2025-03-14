@@ -119,6 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
     );
 
     private CoralZones coralZones = new CoralZones();
+	private AlgaeZones algaeZones = new AlgaeZones();
     private CoralStationPathing coralStationPathing = new CoralStationPathing();
 
 	/**
@@ -416,6 +417,12 @@ public class DriveSubsystem extends SubsystemBase {
 			return coralZones.findCoralZone(leftSide, getPose());
 		});
     }
+
+	// public Command driveToAlgaeStation() {
+	// 	return driveToPose(() -> {
+	// 		return algaeZones.findAlgaeZone(getPose(), null);
+	// 	});
+	// }
 
 	public Command driveToPlayerStation() {
 		return driveToPose(() -> {
