@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import org.ironmaple.utils.FieldMirroringUtils;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
 import frc.robot.constants.ReefPositions;
 
@@ -24,44 +23,48 @@ public class AlgaeZones {
 	}
 
 	public Pose2d findAlgaeZone(
-        Pose2d robotPose
+        Pose2d robotPose,
+		AllianceColor alliance
     ) {
 		
 		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
 		System.out.println("Finding Algae Zone");
 
-		//LEFT SIDE
-		if (inZone_West(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
+		if (inZone_West(robotPose, alliance == AllianceColor.Blue)) {
+			System.out.println("Robot is in zone West");
+			return getReefPose("ReefWest", alliance == AllianceColor.Blue);
+		}
+		if (inZone_SouthWest(robotPose, alliance == AllianceColor.Blue)) {
+			System.out.println("Robot is in zone SouthWest");
+			return getReefPose("ReefSouthWest", alliance == AllianceColor.Blue);
+		}
+		if (inZone_SouthEast(robotPose, alliance == AllianceColor.Blue)) {
+			System.out.println("Robot is in zone SouthEast");
+			return getReefPose("ReefSouthEast", alliance == AllianceColor.Blue);
+		}
+		if (inZone_East(robotPose, alliance == AllianceColor.Blue)) {
 			System.out.println("Robot is in zone East");
-			return getReefPose("ReefWest");
+			return getReefPose("ReefEast", alliance == AllianceColor.Blue);
 		}
-		if (inZone_SouthWest(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone BC_DE");
-			return getReefPose("ReefSouthWest");
+		if (inZone_NorthEast(robotPose, alliance == AllianceColor.Blue)) {
+			System.out.println("Robot is in zone NorthEast");
+			return getReefPose("ReefNorthEast", alliance == AllianceColor.Blue);
 		}
-		if (inZone_SouthEast(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone DE_FG");
-			return getReefPose("ReefSouthEast");
-		}
-		if (inZone_East(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone FG_HI");
-			return getReefPose("ReefEast");
-		}
-		if (inZone_NorthEast(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone HI_JK");
-			return getReefPose("ReefNorthEast");
-		}
-		if (inZone_NorthWest(robotPose, Alliance.getAlliance() == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone JK_AL");
-			return getReefPose("ReefNorthWest");
+		if (inZone_NorthWest(robotPose, alliance == AllianceColor.Blue)) {
+			System.out.println("Robot is in zone NorthWest");
+			return getReefPose("ReefNorthWest", alliance == AllianceColor.Blue);
 		}
 
 		return null;
 	}		
 
-    private Pose2d getReefPose(String reef) {
-        return ReefPositions.valueOf(reef).getPosition();
+    private Pose2d getReefPose(String reef, boolean blue) {
+		if (blue) {
+			return ReefPositions.valueOf(reef).getPosition();
+		} else {
+			return FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.valueOf(reef).getPosition());
+		}
     }
 
 
