@@ -103,6 +103,10 @@ public class RobotContainer {
 		driverController.b_3().onTrue(
 			driveSubsystem.driveToPlayerStation()
 		);
+
+		driverController.b_4().onTrue(
+			driveSubsystem.driveToAlgaeZone()
+		);
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())
@@ -114,6 +118,7 @@ public class RobotContainer {
 			.and(buttonBoard.joy_L())
 				.onTrue(
 					driveSubsystem.driveToReef(false)
+					
 				);
 
 		driverController.b_Hazard().onTrue(

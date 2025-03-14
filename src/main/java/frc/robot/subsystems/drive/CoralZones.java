@@ -32,7 +32,7 @@ public class CoralZones {
 		
 		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
-		System.out.println("Finding Coral Zone");
+		System.out.println("Finding Algae Zone");
 
 		//LEFT SIDE
 		if (leftSide && inZone_AL_BC(robotPose, alliance == AllianceColor.Blue)) {

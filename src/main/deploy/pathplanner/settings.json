@@ -4,14 +4,15 @@
   "holonomicMode": true,
   "pathFolders": [
     "HPB-REEF",
+    "HPS Lineup",
     "HPT-REEF",
+    "Algae Lineup",
     "REEF-HPB",
     "REEF-HPT",
     "Reef Lineup",
     "S1-REEF",
     "S2-REEF",
-    "S3-REEF",
-    "HPS Lineup"
+    "S3-REEF"
   ],
   "autoFolders": [
     "S1",
