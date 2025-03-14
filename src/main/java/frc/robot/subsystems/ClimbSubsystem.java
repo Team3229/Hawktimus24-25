@@ -24,6 +24,8 @@ public class ClimbSubsystem extends SubsystemBase {
     private SparkMaxConfig motorConfig;
     private SparkMaxConfig motorConfig2;
 
+    private ClimbCamera camera;
+
     private static final int CAN_ID = 8;
     private static final int CAN_ID_2 = 4;
     
@@ -77,6 +79,8 @@ public class ClimbSubsystem extends SubsystemBase {
             ResetMode.kNoResetSafeParameters,
             PersistMode.kNoPersistParameters
         );
+
+        camera = new ClimbCamera();
 
         seedInternalEncoder();
 

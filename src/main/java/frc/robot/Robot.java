@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.utilities.Elastic;
 
 public class Robot extends TimedRobot {
@@ -14,6 +19,12 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+  }
+
+  @Override
+  public void robotInit() {
+      WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+      Elastic.selectTab("Match Start");
   }
 
   @Override
@@ -37,6 +48,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    Elastic.selectTab("Autonomous");
     m_robotContainer.getAutonomousCommand().schedule();
   }
 
@@ -48,6 +60,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Elastic.selectTab("Teleoperated");
+
+    new Trigger(
+      () -> DriverStation.getMatchTime() < 30
+    ).onTrue(
+      Commands.runOnce(
+        () -> Elastic.selectTab("Endgame")
+      )
+    );
+
     m_robotContainer.getAutonomousCommand().cancel();
   }
 
