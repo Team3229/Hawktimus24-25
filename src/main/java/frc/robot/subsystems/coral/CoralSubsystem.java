@@ -96,8 +96,8 @@ public class CoralSubsystem extends SubsystemBase {
         NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
         NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
     
-        NamedCommands.registerCommand("Wait for Intake", 
-            Commands.waitUntil(catcherSubsystem.hasCoral())
+        NamedCommands.registerCommand("Wait for Intake Completion", 
+            Commands.waitUntil(spitterSubsystem.hasCoral())
             .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
         );
     }    

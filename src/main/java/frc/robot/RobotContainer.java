@@ -83,6 +83,15 @@ public class RobotContainer {
 			)
 		);
 
+		driverController.b_9().toggleOnTrue(
+			Commands.runEnd(
+				() -> climbSubsystem.setSpeed(driverController.a_Y()),
+				() -> climbSubsystem.setSpeed(0),
+				driveSubsystem,
+				climbSubsystem
+			)
+		);
+
 		driverController.b_10().onTrue(
 			driveSubsystem.zeroGyroWithLimelight()
 		);
@@ -186,15 +195,15 @@ public class RobotContainer {
 		// Climb Controls
 
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
-		buttonBoard.joy_U()
-		/*.and(driverController.b_9())*/.whileTrue(
-			climbSubsystem.engageClimb()
-		);
+		// buttonBoard.joy_U()
+		// /*.and(driverController.b_9())*/.whileTrue(
+		// 	climbSubsystem.engageClimb()
+		// );
 
-		buttonBoard.joy_D()
-		/*.and(driverController.b_9())*/.whileTrue(
-			climbSubsystem.disengageClimb()
-		);
+		// buttonBoard.joy_D()
+		// /*.and(driverController.b_9())*/.whileTrue(
+		// 	climbSubsystem.disengageClimb()
+		// );
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
 		// buttonBoard.joy_U().whileTrue(
@@ -222,7 +231,7 @@ public class RobotContainer {
 		// SmartDashboard.putData(algaeSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
-		SmartDashboard.putData(autoChooser);
+		SmartDashboard.putData("Autonomous Chooser", autoChooser);
 	}
 
 	public Command getAutonomousCommand() {

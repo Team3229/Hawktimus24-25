@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utilities.Elastic;
 
 public class Robot extends TimedRobot {
 
@@ -23,6 +24,9 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.getAutonomousCommand().cancel();
+    if (m_robotContainer.driveSubsystem.getCurrentCommand() != null) {
+      m_robotContainer.driveSubsystem.getCurrentCommand().cancel();
+    }
   }
 
   @Override

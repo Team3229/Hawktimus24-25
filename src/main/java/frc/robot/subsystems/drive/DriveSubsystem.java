@@ -17,6 +17,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,8 +33,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
-import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,6 +70,27 @@ public class DriveSubsystem extends SubsystemBase {
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
 			6.5,
+			0.0,
+			0.0
+		);
+
+	private static final PIDConstants PP_TRANS = 
+		new PIDConstants(
+			4.25,
+			0.0,
+			0.01
+		);
+
+	// private static final PIDConstants PP_TRANS = 
+	// 	new PIDConstants(
+	// 		3.75,
+	// 		0.0,
+	// 		0.015
+	// 	);
+
+	private static final PIDConstants PP_ROT = 
+		new PIDConstants(
+			3.0,
 			0.0,
 			0.0
 		);
@@ -140,7 +162,11 @@ public class DriveSubsystem extends SubsystemBase {
 
 		resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), swerveDrive.getYaw()));
 
-		swerveDrive.setHeadingCorrection(false);
+		if (RobotBase.isSimulation()) {
+			swerveDrive.field.setRobotPose(new Pose2d(2, 4, new Rotation2d()));
+		}
+
+		swerveDrive.setHeadingCorrection(true);
 		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
 				true,
@@ -152,6 +178,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 		swerveDrive.pushOffsetsToEncoders();
 
+		swerveDrive.setAutoCenteringModules(true);
+
 		if (RobotBase.isSimulation()) {
 			swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
 			swerveDrive.getMapleSimDrive().get().config.bumperWidthY = Inch.of(33.954922);
@@ -162,6 +190,11 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("XPID", xTranslationPID);
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
+
+		PathPlannerLogging.setLogActivePathCallback((poses) -> {
+			// Do whatever you want with the poses here
+			swerveDrive.field.getObject("Trajectory").setPoses(poses);
+        });
 	}
 
 	@Override
@@ -195,7 +228,10 @@ public class DriveSubsystem extends SubsystemBase {
 						}
 					},
 					// Robot pose supplier
-					this::resetOdometry,
+					(Pose2d pose) -> {
+						Pose2d noRotPose = new Pose2d(pose.getX(), pose.getY(), swerveDrive.getYaw());
+						resetOdometry(noRotPose);
+					},
 					// Method to reset odometry (will be called if your auto has a starting pose)
 					() -> swerveDrive.getRobotVelocity(),
 					// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -210,8 +246,8 @@ public class DriveSubsystem extends SubsystemBase {
 						}
 					},
 					new PPHolonomicDriveController(
-						TRANSLATION_CONSTANTS,
-						ROTATION_CONSTANTS
+						PP_TRANS,
+						PP_ROT
 					),
 					config,
 					() -> {
@@ -287,7 +323,7 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
 		return run(() -> {
 			swerveDrive.driveFieldOriented(velocity.get());
-		});
+		}).ignoringDisable(false);
 	}
 
 	/**
@@ -314,6 +350,9 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return The robot's pose
 	 */
 	public Pose2d getPose() {
+		if (RobotBase.isSimulation()) {
+			return swerveDrive.field.getRobotPose();
+		}
 		return swerveDrive.getPose();
 	}
 

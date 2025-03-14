@@ -28,15 +28,15 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final int CAN_ID_2 = 4;
     
     private static final double POSITION_CONVERSION_FACTOR = 360;
-    private static final double GEARBOX_RATIO = 100;
+    private static final double GEARBOX_RATIO = 125;
 
-    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(15);
+    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(50);
     private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
 
-    private static final Current CURRENT_LIMIT = Amps.of(20);
+    private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
-    private static final double CLIMB_SPEED = 0.5;
+    private static final double CLIMB_SPEED = 0.75;
     
     public ClimbSubsystem() {
 
@@ -52,14 +52,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
         motorConfig.softLimit
             .forwardSoftLimitEnabled(true)
-
-            /*Change the value of 1 to the correct forward soft limit later,
-            and double check that POSITION_CONVERSION_FACTOR is used correctly. */
             .forwardSoftLimit(FORWARD_SOFT_LIMIT.in(Degrees))
             .reverseSoftLimitEnabled(true)
-
-            /*Change the value of 1 to the correct forward soft limit later,
-            and double check that POSITION_CONVERSION_FACTOR is used correctly. */
             .reverseSoftLimit(REVERSE_SOFT_LIMIT.in(Degrees));
 
         motorConfig.absoluteEncoder
