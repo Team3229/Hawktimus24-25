@@ -12,7 +12,7 @@ public enum ReefPositions {
     A(new Pose2d(3.144, 3.933, Rotation2d.fromDegrees(270))),
     B(new Pose2d(3.144, 3.602, Rotation2d.fromDegrees(270))),
     C(new Pose2d(3.899, 2.818, Rotation2d.fromDegrees(330))),
-    D(new Pose2d(4.185, 2.645, Rotation2d.fromDegrees(330))),
+    D(new Pose2d(4.186, 2.652, Rotation2d.fromDegrees(330))),
     E(new Pose2d(5.244, 2.907, Rotation2d.fromDegrees(30))),
     F(new Pose2d(5.527, 3.076, Rotation2d.fromDegrees(30))),
     G(new Pose2d(5.828, 4.118, Rotation2d.fromDegrees(90))),
