@@ -26,20 +26,20 @@ public class CoralStationPathing {
 
     private Pose2d getBlueTarget(Pose2d robotPose) {
         if (aboveZone(robotPose)) {
-            System.out.println("Robot is above zone");
+            // System.out.println("Robot is above zone");
             return driveToPlayerStation("HPST"); 
         } else {
-            System.out.println("Robot is bellow zone");
+            // System.out.println("Robot is bellow zone");
             return driveToPlayerStation("HPSB");
         }
     }
 
     private Pose2d getRedTarget(Pose2d robotPose) {
         if (aboveZone(robotPose)) {
-            System.out.println("Robot is above zone");
+            // System.out.println("Robot is above zone");
             return driveToPlayerStation("HPSB"); 
         } else {
-            System.out.println("Robot is bellow zone");
+            // System.out.println("Robot is bellow zone");
             return driveToPlayerStation("HPST");
         }
     }

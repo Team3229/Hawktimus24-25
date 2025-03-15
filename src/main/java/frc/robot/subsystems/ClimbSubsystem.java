@@ -106,7 +106,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        System.out.println("Climbing at speed " + speed);
+        // System.out.println("Climbing at speed " + speed);
         climbMotor.set(speed * CLIMB_SPEED);
     }
 

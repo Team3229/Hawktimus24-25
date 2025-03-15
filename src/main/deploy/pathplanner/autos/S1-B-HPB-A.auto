@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S1-J"
+            "pathName": "S1-B"
           }
         },
         {
@@ -19,19 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "J-HPT"
+            "pathName": "B-HPB"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Wait for Intake"
+            "name": "Wait for Intake Completion"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HPT-L"
+            "pathName": "HPB-A"
           }
         },
         {
@@ -43,13 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L-HPT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake"
+            "pathName": "A-HPB"
           }
         }
       ]

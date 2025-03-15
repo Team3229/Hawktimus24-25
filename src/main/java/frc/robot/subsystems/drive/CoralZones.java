@@ -32,58 +32,58 @@ public class CoralZones {
 		
 		reefCenterPose = FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.Center.getPosition());
 
-		System.out.println("Finding Algae Zone");
+		// System.out.println("Finding Algae Zone");
 
 		//LEFT SIDE
 		if (leftSide && inZone_AL_BC(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone AL_BC");
+			// System.out.println("Robot is in zone AL_BC");
 			return getReefPose("A", alliance == AllianceColor.Blue);
 		}
 		if (leftSide && inZone_BC_DE(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone BC_DE");
+			// System.out.println("Robot is in zone BC_DE");
 			return getReefPose("C", alliance == AllianceColor.Blue);
 		}
 		if (leftSide && inZone_DE_FG(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone DE_FG");
+			// System.out.println("Robot is in zone DE_FG");
 			return getReefPose("F", alliance == AllianceColor.Blue);
 		}
 		if (leftSide && inZone_FG_HI(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone FG_HI");
+			// System.out.println("Robot is in zone FG_HI");
 			return getReefPose("H", alliance == AllianceColor.Blue);
 		}
 		if (leftSide && inZone_HI_JK(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone HI_JK");
+			// System.out.println("Robot is in zone HI_JK");
 			return getReefPose("J", alliance == AllianceColor.Blue);
 		}
 		if (leftSide && inZone_JK_AL(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone JK_AL");
+			// System.out.println("Robot is in zone JK_AL");
 			return getReefPose("K", alliance == AllianceColor.Blue);
 		}
 		
 
 		//RIGHT SIDE
 		if (!leftSide && inZone_AL_BC(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone AL_BC");
+			// System.out.println("Robot is in zone AL_BC");
 			return getReefPose("B", alliance == AllianceColor.Blue);
 		}
 		if (!leftSide && inZone_BC_DE(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone BC_DE");
+			// System.out.println("Robot is in zone BC_DE");
 			return getReefPose("D", alliance == AllianceColor.Blue);
 		}
 		if (!leftSide && inZone_DE_FG(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone DE_FG");
+			// System.out.println("Robot is in zone DE_FG");
 			return getReefPose("E", alliance == AllianceColor.Blue);
 		}
 		if (!leftSide && inZone_FG_HI(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone FG_HI");
+			// System.out.println("Robot is in zone FG_HI");
 			return getReefPose("G", alliance == AllianceColor.Blue);
 		}
 		if (!leftSide && inZone_HI_JK(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone HI_JK");
+			// System.out.println("Robot is in zone HI_JK");
 			return getReefPose("I", alliance == AllianceColor.Blue);
 		}
 		if (!leftSide && inZone_JK_AL(robotPose, alliance == AllianceColor.Blue)) {
-			System.out.println("Robot is in zone JK_AL");
+			// System.out.println("Robot is in zone JK_AL");
 			return getReefPose("L", alliance == AllianceColor.Blue);
 		}
 

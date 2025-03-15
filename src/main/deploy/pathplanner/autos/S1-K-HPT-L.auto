@@ -7,55 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPB-A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A-HPB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake Completion"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPB-A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A-HPB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake Completion"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPB-A"
+            "pathName": "S1-K"
           }
         },
         {
@@ -63,11 +15,41 @@
           "data": {
             "name": "L4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "K-HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPT-L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L-HPT"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "S1",
   "choreoAuto": false
 }

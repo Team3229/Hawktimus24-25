@@ -74,7 +74,7 @@ public class SpitterSubsystem extends SubsystemBase {
 
             @Override
             public void initialize() {
-                System.out.println("Intake");
+                // System.out.println("Intake");
             }
 
             @Override
@@ -105,7 +105,7 @@ public class SpitterSubsystem extends SubsystemBase {
 
             @Override
             public void initialize() {
-                System.out.println("Spit");
+                // System.out.println("Spit");
             }
 
             @Override

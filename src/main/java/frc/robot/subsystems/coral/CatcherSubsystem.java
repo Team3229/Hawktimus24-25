@@ -100,7 +100,7 @@ public class CatcherSubsystem extends SubsystemBase{
 
         return Commands.run(
             () -> {
-                System.out.println("Feed");
+                // System.out.println("Feed");
                 positionController.setReference(FEED_ANGLE.in(Degrees), ControlType.kPosition);
             },
             this
@@ -113,7 +113,7 @@ public class CatcherSubsystem extends SubsystemBase{
     public Command catchAngle() {
         return Commands.run(
             () -> {
-                System.out.println("Reset Catcher");
+                // System.out.println("Reset Catcher");
                 positionController.setReference(CATCH_ANGLE.in(Degrees), ControlType.kPosition);
             },
             this

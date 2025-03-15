@@ -44,9 +44,10 @@ public class CoralSubsystem extends SubsystemBase {
 
     public Command feedCommand() {
         return
-        runOnce(
-            () -> System.out.println("Feeding...")
-        )
+        // runOnce(
+        //     () -> System.out.println("Feeding...")
+        // )
+        Commands.none()
         .andThen(
             Commands.parallel(
                 catcherSubsystem.feedAngle(),

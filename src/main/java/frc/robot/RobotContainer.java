@@ -15,6 +15,7 @@ import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import swervelib.SwerveInputStream;
@@ -27,7 +28,7 @@ public class RobotContainer {
 	CoralSubsystem coralSubsystem;
 	DriveSubsystem driveSubsystem;
 	ClimbSubsystem climbSubsystem;
-	// AlgaeSubsystem algaeSubsystem;
+	AlgaeSubsystem algaeSubsystem;
 
 	VisualizerSubsystem visualizerSubsystem;
 
@@ -39,7 +40,7 @@ public class RobotContainer {
 		buttonBoard = new ButtonBoard(1);
 		climbSubsystem = new ClimbSubsystem();
 		coralSubsystem = new CoralSubsystem();
-		// algaeSubsystem = new AlgaeSubsystem();
+		algaeSubsystem = new AlgaeSubsystem();
 		driveSubsystem = new DriveSubsystem(
 			"swerve",
 			TelemetryVerbosity.HIGH
@@ -83,14 +84,15 @@ public class RobotContainer {
 			)
 		);
 
-		driverController.b_9().toggleOnTrue(
-			Commands.runEnd(
-				() -> climbSubsystem.setSpeed(driverController.a_Y()),
-				() -> climbSubsystem.setSpeed(0),
-				driveSubsystem,
-				climbSubsystem
-			)
-		);
+				//manual driver control of the climb <3
+		// driverController.b_9().toggleOnTrue(
+		// 	Commands.runEnd(
+		// 		() -> climbSubsystem.setSpeed(driverController.a_Y()),
+		// 		() -> climbSubsystem.setSpeed(0),
+		// 		driveSubsystem,
+		// 		climbSubsystem
+		// 	)
+		// );
 
 		driverController.b_10().onTrue(
 			driveSubsystem.zeroGyroWithLimelight()
@@ -155,77 +157,76 @@ public class RobotContainer {
 				coralSubsystem.feedCommand()
 			);
 
-		// buttonBoard.b_5().onTrue(
-		// 	algaeSubsystem.removeUpperAlgae()
-		// 	// remove algae from the upper section of the reef
-		// );
+		buttonBoard.b_5().onTrue(
+			algaeSubsystem.removeUpperAlgae()
+			// remove algae from the upper section of the reef
+		);
 		
-		// buttonBoard.b_5().onFalse(
-		// 	algaeSubsystem.throwUpperAlgae()
-		// 	// Throws upper algae
-		// );
+		buttonBoard.b_5().onFalse(
+			algaeSubsystem.throwUpperAlgae()
+			// Throws upper algae
+		);
 
-		// buttonBoard.b_6().onTrue(
-		// 	algaeSubsystem.removeLowerAlgae()
-		// 	// remove algae from the lower section of the reef
-		// );
+		buttonBoard.b_6().onTrue(
+			algaeSubsystem.removeLowerAlgae()
+			// remove algae from the lower section of the reef
+		);
 
-		// buttonBoard.b_6().onFalse(
-		// 	algaeSubsystem.intakeAlgae()
-		// 	// intakes algae to a hold
-		// );
+		buttonBoard.b_6().onFalse(
+			algaeSubsystem.intakeAlgae()
+			// intakes algae to a hold
+		);
 
-		// buttonBoard.b_7().onTrue(
-		// 	algaeSubsystem.readyForCollection()
-		// 	// getting ready to collect from ground		
-		// );
+		buttonBoard.b_7().onTrue(
+			algaeSubsystem.readyForCollection()
+			// getting ready to collect from ground		
+		);
 
-		// buttonBoard.b_7().onFalse(
-		// 	algaeSubsystem.intakeAlgae()
-		// 	// intake/stow algae
-		// );
+		buttonBoard.b_7().onFalse(
+			algaeSubsystem.intakeAlgae()
+			// intake/stow algae
+		);
 
-		// buttonBoard.b_8().onTrue(
-		// 	algaeSubsystem.scoreAlgae()
-		// 	//Scores algae
-		// );
+		buttonBoard.b_8().onTrue(
+			algaeSubsystem.scoreAlgae()
+			//Scores algae
+		);
 
 	
-		// buttonBoard.b_10().onTrue(	
-		// 		algaeSubsystem.home()
-		// );
-		// Sets the algae arm to home
-
+		buttonBoard.b_10().onTrue(	
+			algaeSubsystem.home()
+			//Sets the algae arm to home
+		);
 
 		// Climb Controls
 
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
-		// buttonBoard.joy_U()
-		// /*.and(driverController.b_9())*/.whileTrue(
-		// 	climbSubsystem.engageClimb()
-		// );
+		buttonBoard.joy_U()
+		.and(driverController.b_9()).whileTrue(
+			climbSubsystem.engageClimb()
+		);
 
-		// buttonBoard.joy_D()
-		// /*.and(driverController.b_9())*/.whileTrue(
-		// 	climbSubsystem.disengageClimb()
-		// );
+		buttonBoard.joy_D()
+		.and(driverController.b_9()).whileTrue(
+			climbSubsystem.disengageClimb()
+		);
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
 		// buttonBoard.joy_U().whileTrue(
 		// 	Commands.runOnce(() -> {
-		// 		if(Timer.getMatchTime() < 130) {
+		// 		if(DriverStation.getMatchTime() < 30) {
 		// 			climbSubsystem.engageClimb();
 		// 		}
-		// 		System.out.println("Climb Up");
+		// 		//System.out.println("Climb Up");
 		// 	})
 		// );
 
 		// buttonBoard.joy_D().whileTrue(
 		// 	Commands.runOnce(() -> {
-		// 		if(Timer.getMatchTime() < 130) {
+		// 		if(DriverStation.getMatchTime() < 30) {
 		// 			climbSubsystem.engageClimb();
 		// 		}
-		// 		System.out.println("Climb Down");
+		// 		//System.out.println("Climb Down");
 		// 	})
 		// );
 	}
@@ -233,7 +234,7 @@ public class RobotContainer {
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
 		SmartDashboard.putData(climbSubsystem);
-		// SmartDashboard.putData(algaeSubsystem);
+		SmartDashboard.putData(algaeSubsystem);
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);
