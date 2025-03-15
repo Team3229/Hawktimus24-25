@@ -234,7 +234,10 @@ public class DriveSubsystem extends SubsystemBase {
 					},
 					// Robot pose supplier
 					(Pose2d pose) -> {
-						Pose2d noRotPose = new Pose2d(pose.getX(), pose.getY(), swerveDrive.getYaw());
+						Pose2d noRotPose = new Pose2d(pose.getX(), pose.getY(),
+							
+							(Alliance.getAlliance() == AllianceColor.Blue) ? swerveDrive.getOdometryHeading() : swerveDrive.getOdometryHeading().rotateBy(Rotation2d.fromDegrees(180))
+						);
 						resetOdometry(noRotPose);
 					},
 					// Method to reset odometry (will be called if your auto has a starting pose)
