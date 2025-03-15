@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G-HPB"
+            "pathName": "G-HPT"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPB-C"
+            "pathName": "HPT-A"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C-HPB"
+            "pathName": "A-HPT"
           }
         },
         {
