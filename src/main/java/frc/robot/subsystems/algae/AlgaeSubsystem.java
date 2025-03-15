@@ -95,6 +95,13 @@ public class AlgaeSubsystem extends SubsystemBase {
                  .handleInterrupt(() -> wheel.stopWheel());
     }
 
+    public Command disableAlgaeArm() {
+        return 
+            arm.disableAlgaeArm().
+            alongWith(wheel.stop())
+            .ignoringDisable(true);
+    }
+
     /**
      * Get the position of the arm.
      * 
@@ -107,7 +114,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Arm Angle", () -> getPosition().in(Degrees), null);
+        builder.addDoubleProperty("Arm Angle", () -> arm.getPosition().in(Degrees), null);
         builder.addDoubleProperty("Arm Current", () -> arm.getDraw(), null);
         builder.addDoubleProperty("Wheel Current", () -> wheel.getDraw(), null);
         builder.addDoubleProperty("Relative Angle", () -> arm.getRelativePosition().in(Degrees), null);

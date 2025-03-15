@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
@@ -194,9 +195,10 @@ public class RobotContainer {
 
 	
 		buttonBoard.b_10().onTrue(	
-			algaeSubsystem.home()
-			//Sets the algae arm to home
+				algaeSubsystem.home()
 		);
+		// Sets the algae arm to home
+
 
 		// Climb Controls
 
@@ -233,8 +235,9 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		SmartDashboard.putData(climbSubsystem);
+		// SmartDashboard.putData(climbSubsystem);
 		SmartDashboard.putData(algaeSubsystem);
+		SmartDashboard.putData(CommandScheduler.getInstance());
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);

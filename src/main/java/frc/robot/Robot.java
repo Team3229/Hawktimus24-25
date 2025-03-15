@@ -35,9 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.getAutonomousCommand().cancel();
-    if (m_robotContainer.driveSubsystem.getCurrentCommand() != null) {
-      m_robotContainer.driveSubsystem.getCurrentCommand().cancel();
-    }
+    m_robotContainer.algaeSubsystem.disableAlgaeArm().schedule();
   }
 
   @Override
