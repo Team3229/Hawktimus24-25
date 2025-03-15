@@ -76,7 +76,7 @@ public class RobotContainer {
 			.cubeRotationControllerAxis(true)
 			.cubeTranslationControllerAxis(true)
 			.scaleTranslation(0.8)
-			.scaleRotation(0.8)
+			.scaleRotation(0.9)
 			.allianceRelativeControl(true);
 
 		driveSubsystem.setDefaultCommand(
