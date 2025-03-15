@@ -103,7 +103,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         armMotorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
 
-        armMotorConfig.closedLoopRampRate(0);
+        armMotorConfig.closedLoopRampRate(2);
 
         //ABSOLUTE ENCODER IMPLEMENT
 
