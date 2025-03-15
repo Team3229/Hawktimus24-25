@@ -62,7 +62,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static final double POSITION_CONVERSION_FACTOR = SPROCKET_CIRCUMFERENCE.in(Inch) / 2;
 
     // PID controller constants
-    private static final double kP = 0.08;
+    private static final double kP = 0.09;
     private static final double kI = 0.0;
     private static final double kD = 2;
 

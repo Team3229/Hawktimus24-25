@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Elastic.selectTab("Teleoperated");
+    Elastic.selectTab("Endgame");
 
     new Trigger(
       () -> DriverStation.getMatchTime() < 30

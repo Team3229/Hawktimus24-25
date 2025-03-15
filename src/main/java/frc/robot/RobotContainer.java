@@ -137,8 +137,8 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_1().onTrue(
-			coralSubsystem.spit()
+		buttonBoard.b_1().whileTrue(
+			coralSubsystem.manualSpit()
 		);
 
 		buttonBoard.b_2().onTrue(

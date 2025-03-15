@@ -75,12 +75,15 @@ public class CoralSubsystem extends SubsystemBase {
                     .andThen(spitterSubsystem.spit())
                     .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
                     .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
-            )
-        .onlyIf(spitterSubsystem.hasCoral());
+            );
     }
 
     public Command spit() {
         return spitterSubsystem.spit();
+    }
+
+    public Command manualSpit() {
+        return spitterSubsystem.manualSpit();
     }
 
     public Distance getElevatorPose() {

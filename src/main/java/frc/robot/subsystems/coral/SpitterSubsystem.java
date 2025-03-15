@@ -26,7 +26,7 @@ public class SpitterSubsystem extends SubsystemBase {
 
     private static final double INTAKE_SPEED = 0.3;
     // private static final double SPIT_SPEED = 0.8;
-    private static final double SPIT_SPEED = 0.4;
+    private static final double SPIT_SPEED = 0.3;
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final boolean INVERTED = true;
 
@@ -116,6 +116,31 @@ public class SpitterSubsystem extends SubsystemBase {
             @Override
             public boolean isFinished() {
                 return !hasCoral().getAsBoolean();
+            }
+
+            @Override
+            public void end(boolean interrupted) {
+                spitterMotor.stopMotor();
+            }
+        };
+    }
+
+    public Command manualSpit() {
+        return new Command() {
+
+            @Override
+            public void initialize() {
+                // System.out.println("Spit");
+            }
+
+            @Override
+            public void execute() {
+                spitterMotor.set(SPIT_SPEED);
+            }
+
+            @Override
+            public boolean isFinished() {
+                return false;
             }
 
             @Override
