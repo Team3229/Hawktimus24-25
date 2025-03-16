@@ -31,15 +31,19 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
+import frc.robot.constants.ReefHeight;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.coral.ElevatorSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -141,6 +145,8 @@ public class DriveSubsystem extends SubsystemBase {
 			TelemetryVerbosity verbosity) {
 
 		super();
+
+		SmartDashboard.putBoolean("Done Lining Up", false);
 
 		rotationPID.enableContinuousInput(0, 2 * Math.PI);
 
@@ -408,6 +414,10 @@ public class DriveSubsystem extends SubsystemBase {
 		);
 	}
 
+	public void postTrajectoryToField(List<Pose2d> trajectory) {
+		swerveDrive.field.getObject("Trajectory").setPoses(trajectory);
+	}
+
 	/**
 	 * Lock the swerve drive to prevent it from moving.
 	 */
@@ -422,7 +432,12 @@ public class DriveSubsystem extends SubsystemBase {
     public Command driveToReef(boolean leftSide) {
         return driveToPose(() -> {
 			return coralZones.findCoralZone(leftSide, getPose());
-		});
+		})
+		.andThen(
+			() -> {
+				SmartDashboard.putBoolean("Done Lining Up", true);
+			}
+		);
     }
 
 	public Command driveToAlgaeZone() {

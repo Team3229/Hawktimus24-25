@@ -21,16 +21,35 @@
             }
           },
           {
-            "title": "Climb Camera",
-            "x": 384.0,
-            "y": 0.0,
-            "width": 576.0,
-            "height": 384.0,
-            "type": "Camera Stream",
+            "title": "swerve",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 384.0,
+            "height": 448.0,
+            "type": "YAGSL Swerve Drive",
             "properties": {
-              "topic": "/CameraPublisher/Climb Camera",
+              "topic": "/SmartDashboard/swerve",
               "period": 0.06,
-              "rotation_turns": 0
+              "show_robot_rotation": true,
+              "show_desired_states": true,
+              "angle_offset": 0.0
+            }
+          },
+          {
+            "title": "Spitter has Coral",
+            "x": 1344.0,
+            "y": 384.0,
+            "width": 192.0,
+            "height": 192.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/CoralSubsystem/Spitter has Coral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           },
           {
@@ -47,47 +66,23 @@
             }
           },
           {
-            "title": "FMSInfo",
-            "x": 0.0,
-            "y": 128.0,
-            "width": 384.0,
-            "height": 128.0,
-            "type": "FMSInfo",
-            "properties": {
-              "topic": "/FMSInfo",
-              "period": 0.06
-            }
-          },
-          {
-            "title": "swerve",
-            "x": 0.0,
-            "y": 256.0,
-            "width": 384.0,
-            "height": 320.0,
-            "type": "YAGSL Swerve Drive",
-            "properties": {
-              "topic": "/SmartDashboard/swerve",
-              "period": 0.06,
-              "show_robot_rotation": true,
-              "show_desired_states": true,
-              "angle_offset": 0.0
-            }
-          },
-          {
-            "title": "Spitter has Coral",
+            "title": "Field",
             "x": 384.0,
-            "y": 384.0,
-            "width": 192.0,
-            "height": 192.0,
-            "type": "Boolean Box",
+            "y": 0.0,
+            "width": 576.0,
+            "height": 320.0,
+            "type": "Field",
             "properties": {
-              "topic": "/SmartDashboard/CoralSubsystem/Spitter has Coral",
+              "topic": "/SmartDashboard/Field",
               "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
+              "field_game": "Reefscape",
+              "robot_width": 0.85,
+              "robot_length": 0.85,
+              "show_other_objects": true,
+              "show_trajectories": true,
+              "field_rotation": 0.0,
+              "robot_color": 4294198070,
+              "trajectory_color": 4285005568
             }
           }
         ]
@@ -226,6 +221,23 @@
               "true_icon": "None",
               "false_icon": "None"
             }
+          },
+          {
+            "title": "Done Lining Up",
+            "x": 0.0,
+            "y": 384.0,
+            "width": 1216.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Done Lining Up",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
           }
         ]
       }
@@ -308,12 +320,29 @@
             "x": 0.0,
             "y": 0.0,
             "width": 768.0,
-            "height": 512.0,
+            "height": 448.0,
             "type": "Camera Stream",
             "properties": {
               "topic": "/CameraPublisher/Climb Camera",
               "period": 0.06,
               "rotation_turns": 0
+            }
+          },
+          {
+            "title": "Done Lining Up",
+            "x": 0.0,
+            "y": 448.0,
+            "width": 1216.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Done Lining Up",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]

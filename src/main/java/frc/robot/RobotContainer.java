@@ -4,8 +4,19 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.json.simple.parser.ParseException;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -253,6 +264,28 @@ public class RobotContainer {
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);
+
+		autoChooser.onChange(
+			(selected) -> {
+				pathPreview(selected.getName());
+			}
+		);
+	}
+
+	public void pathPreview(String autoName) {
+
+		System.out.println("Displaying " + autoName);
+        List<PathPlannerPath> pathPlannerPaths;
+		try {
+			pathPlannerPaths = PathPlannerAuto.getPathGroupFromAutoFile(autoName);
+			List<Pose2d> poses = new ArrayList<>();
+			for (PathPlannerPath path : pathPlannerPaths) {
+				poses.addAll(path.getAllPathPoints().stream().map(point -> new Pose2d(point.position.getX(), point.position.getY(), new Rotation2d())).collect(Collectors.toList()));
+			}
+			driveSubsystem.postTrajectoryToField(poses);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Command getAutonomousCommand() {

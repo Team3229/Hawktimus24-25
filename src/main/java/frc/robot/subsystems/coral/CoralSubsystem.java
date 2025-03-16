@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -73,7 +74,11 @@ public class CoralSubsystem extends SubsystemBase {
         if (manualOverride) {
             return
             (
-                Commands.runOnce(() -> System.out.println("Manual Override Elevator"))
+                Commands.runOnce(() -> 
+                    {
+                        System.out.println("Manual Override Elevator");
+				        SmartDashboard.putBoolean("Done Lining Up", false);
+                    })
                     .andThen(elevatorSubsystem.goToLevel(reefHeight))
                     .andThen(
                         spitterSubsystem.spit(true)
@@ -86,8 +91,15 @@ public class CoralSubsystem extends SubsystemBase {
 
         return
             (
-                elevatorSubsystem.goToLevel(reefHeight)
-                    .andThen(spitterSubsystem.spit(false))
+                Commands.runOnce(() -> 
+                    {
+				        SmartDashboard.putBoolean("Done Lining Up", false);
+                    })
+                    .andThen(elevatorSubsystem.goToLevel(reefHeight))
+                    .andThen(
+                        spitterSubsystem.spit(true)
+                        .withTimeout(0.5)
+                    )
                     .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
                     .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
             ).onlyIf(
@@ -118,6 +130,11 @@ public class CoralSubsystem extends SubsystemBase {
         NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1, false));
     
         NamedCommands.registerCommand("Wait for Intake Completion", 
+            Commands.waitUntil(spitterSubsystem.hasCoral())
+            .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
+        );
+
+        NamedCommands.registerCommand("Wait for Intake", 
             Commands.waitUntil(spitterSubsystem.hasCoral())
             .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
         );
