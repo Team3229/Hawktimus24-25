@@ -68,18 +68,35 @@ public class CoralSubsystem extends SubsystemBase {
     /**
      * Connect elevator to spit
      */
-    public Command elevatorSpit(ReefHeight reefHeight) {
+    public Command elevatorSpit(ReefHeight reefHeight, boolean manualOverride) {
+
+        if (manualOverride) {
+            return
+            (
+                Commands.runOnce(() -> System.out.println("Manual Override Elevator"))
+                    .andThen(elevatorSubsystem.goToLevel(reefHeight))
+                    .andThen(
+                        spitterSubsystem.spit(true)
+                        .withTimeout(0.5)
+                    )
+                    .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
+                    .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
+            );
+        }
+
         return
             (
                 elevatorSubsystem.goToLevel(reefHeight)
-                    .andThen(spitterSubsystem.spit())
+                    .andThen(spitterSubsystem.spit(false))
                     .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
                     .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
+            ).onlyIf(
+                spitterSubsystem.hasCoral()
             );
     }
 
     public Command spit() {
-        return spitterSubsystem.spit();
+        return spitterSubsystem.spit(false);
     }
 
     public Command manualSpit() {
@@ -95,10 +112,10 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     private void registerCommands() {
-        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4));
-        NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3));
-        NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2));
-        NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1));
+        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4, false));
+        NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3, false));
+        NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2, false));
+        NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1, false));
     
         NamedCommands.registerCommand("Wait for Intake Completion", 
             Commands.waitUntil(spitterSubsystem.hasCoral())

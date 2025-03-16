@@ -142,16 +142,28 @@ public class RobotContainer {
 		);
 
 		buttonBoard.b_2().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2)
+			coralSubsystem.elevatorSpit(ReefHeight.L2, false)
 		);
 
 		buttonBoard.b_3().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3)
+			coralSubsystem.elevatorSpit(ReefHeight.L3, false)
 		);
 
 		buttonBoard.b_4().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4)
+			coralSubsystem.elevatorSpit(ReefHeight.L4, false)
 		// L4 coral
+		);
+
+		buttonBoard.b_2().debounce(1.5).onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L2, true)
+		);
+
+		buttonBoard.b_3().debounce(1.5).onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L3, true)
+		);
+
+		buttonBoard.b_4().debounce(1.5).onTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L4, true)
 		);
 
 		buttonBoard.b_9().onTrue(

@@ -38,7 +38,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
-    private static final double CLIMB_SPEED = 0.75;
+    private static final double CLIMB_SPEED = 0.6;
     
     public ClimbSubsystem() {
 

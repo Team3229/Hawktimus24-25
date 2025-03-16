@@ -100,7 +100,7 @@ public class SpitterSubsystem extends SubsystemBase {
      * 
      * @return Command that spits out the coral.
      */
-    public Command spit() {
+    public Command spit(boolean manualOverride) {
         return new Command() {
 
             @Override
@@ -115,6 +115,9 @@ public class SpitterSubsystem extends SubsystemBase {
 
             @Override
             public boolean isFinished() {
+                if (manualOverride) {
+                    return false;
+                }
                 return !hasCoral().getAsBoolean();
             }
 
