@@ -1,0 +1,20 @@
+{
+    "fileName": "Hawk-Libraries.json",
+    "name": "Hawk-Libraries",
+    "version": "25.0.2",
+    "frcYear": "2025",
+    "uuid": "f5831905-4ef2-4c83-b71c-3ce3a6c73fd0",
+    "mavenUrls": [
+        "https://team3229.github.io/Hawk-Libraries/repos"
+    ],
+    "jsonUrl": "https://team3229.github.io/Hawk-Libraries/Hawk-Libraries.json",
+    "javaDependencies": [
+        {
+            "groupId": "frc.hawklibraries",
+            "artifactId": "hawklibraries-java",
+            "version": "25.0.2"
+        }
+    ],
+    "jniDependencies": [],
+    "cppDependencies": []
+}

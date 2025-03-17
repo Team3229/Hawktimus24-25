@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.828210426329243,
+        "y": 4.453333587539911
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.5609604263292445,
+        "y": 5.530583587539911
+      },
+      "isLocked": false,
+      "linkedName": "Coral H"
+    },
+    {
+      "anchor": {
+        "x": 4.353375,
+        "y": 6.433249999999999
+      },
+      "prevControl": {
+        "x": 5.328374999999999,
+        "y": 5.989625
+      },
+      "nextControl": {
+        "x": 3.931562693655346,
+        "y": 6.625174599386816
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.079,
+        "y": 7.04
+      },
+      "prevControl": {
+        "x": 0.8290202369982171,
+        "y": 7.036819105538926
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HPT"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.011
+  },
+  "reversed": false,
+  "folder": "REEF-HPT",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

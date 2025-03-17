@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.261492944763251,
+        "y": 2.7310646137132495
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.136492944763251,
+        "y": 2.9475709646593593
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.16,
+        "y": 2.9
+      },
+      "prevControl": {
+        "x": 5.285,
+        "y": 2.68349364905389
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Algae Lineup",
+  "idealStartingState": {
+    "velocity": 0.5,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

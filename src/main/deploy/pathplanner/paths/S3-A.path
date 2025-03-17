@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.06325,
+        "y": 5.0195
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.12366116352754,
+        "y": 4.892660098000191
+      },
+      "isLocked": false,
+      "linkedName": "S3"
+    },
+    {
+      "anchor": {
+        "x": 4.53375,
+        "y": 5.7215
+      },
+      "prevControl": {
+        "x": 4.907354786520887,
+        "y": 5.667936012204319
+      },
+      "nextControl": {
+        "x": 4.161662110777342,
+        "y": 5.774846509135607
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1945587138875084,
+        "y": 5.238875
+      },
+      "prevControl": {
+        "x": 3.367089123431791,
+        "y": 5.419798347809182
+      },
+      "nextControl": {
+        "x": 2.62275,
+        "y": 4.63925
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1436102702444195,
+        "y": 3.9326028727324216
+      },
+      "prevControl": {
+        "x": 2.75811027024442,
+        "y": 4.609852872732421
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral A"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "S3-REEF",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

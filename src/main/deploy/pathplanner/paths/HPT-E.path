@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.079,
+        "y": 7.04
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.85619149996916,
+        "y": 6.110379046610525
+      },
+      "isLocked": false,
+      "linkedName": "HPT"
+    },
+    {
+      "anchor": {
+        "x": 2.520375,
+        "y": 5.687374999999999
+      },
+      "prevControl": {
+        "x": 2.4120101168388577,
+        "y": 5.912668257993824
+      },
+      "nextControl": {
+        "x": 2.782376487509005,
+        "y": 5.142667461928311
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1151250000000004,
+        "y": 2.6551249999999995
+      },
+      "prevControl": {
+        "x": 2.599235170131928,
+        "y": 3.3351615939170056
+      },
+      "nextControl": {
+        "x": 3.436875,
+        "y": 2.230999999999999
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.243702099128331,
+        "y": 2.907342020361466
+      },
+      "prevControl": {
+        "x": 4.922372838885809,
+        "y": 2.1698678134318072
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral E"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 29.999999999999996
+  },
+  "reversed": false,
+  "folder": "HPT-REEF",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -54.011
+  },
+  "useDefaultConstraints": true
+}

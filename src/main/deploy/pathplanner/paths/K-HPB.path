@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.750945836611928,
+        "y": 5.146068532427661
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2280708366119275,
+        "y": 4.9289435324276605
+      },
+      "isLocked": false,
+      "linkedName": "Coral K"
+    },
+    {
+      "anchor": {
+        "x": 2.6763750000000006,
+        "y": 3.44975
+      },
+      "prevControl": {
+        "x": 2.892723776404404,
+        "y": 4.99784568893817
+      },
+      "nextControl": {
+        "x": 2.457,
+        "y": 1.88
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.079,
+        "y": 0.987
+      },
+      "prevControl": {
+        "x": 0.9543266268827685,
+        "y": 0.7703053991545439
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HPB"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7032772364924627,
+      "rotationDegrees": -119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.011392
+  },
+  "reversed": false,
+  "folder": "REEF-HPB",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -150.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.867835012835004,
+        "y": 6.017569111381943
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.980638780350714,
+        "y": 5.794465301386995
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.751,
+        "y": 5.146068532427661
+      },
+      "prevControl": {
+        "x": 3.604056918720627,
+        "y": 5.433205138743518
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral K"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -150.0
+  },
+  "reversed": false,
+  "folder": "Reef Lineup",
+  "idealStartingState": {
+    "velocity": 0.5,
+    "rotation": -150.0
+  },
+  "useDefaultConstraints": true
+}

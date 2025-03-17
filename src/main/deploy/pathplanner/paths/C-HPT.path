@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.8990638857269446,
+        "y": 2.8177078121866455
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7340638857269446,
+        "y": 2.933582812186646
+      },
+      "isLocked": false,
+      "linkedName": "Coral C"
+    },
+    {
+      "anchor": {
+        "x": 2.909103260869565,
+        "y": 3.3007048233695646
+      },
+      "prevControl": {
+        "x": 3.0225,
+        "y": 2.815999999999999
+      },
+      "nextControl": {
+        "x": 2.7546759199833577,
+        "y": 3.9607915027720697
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.116253396739131,
+        "y": 6.126350203804347
+      },
+      "prevControl": {
+        "x": 2.7076076543747516,
+        "y": 5.641457067346425
+      },
+      "nextControl": {
+        "x": 1.5155183443393494,
+        "y": 6.618935316665464
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.079,
+        "y": 7.04
+      },
+      "prevControl": {
+        "x": 1.6422217104151557,
+        "y": 6.625000172351234
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HPT"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.011
+  },
+  "reversed": false,
+  "folder": "REEF-HPT",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "useDefaultConstraints": true
+}

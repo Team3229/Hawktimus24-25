@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.00475,
+        "y": 6.243125
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.711616812341052,
+        "y": 6.31967765410962
+      },
+      "isLocked": false,
+      "linkedName": "S2"
+    },
+    {
+      "anchor": {
+        "x": 2.9835000000000003,
+        "y": 5.653250000000001
+      },
+      "prevControl": {
+        "x": 3.74849473033002,
+        "y": 5.746922824122047
+      },
+      "nextControl": {
+        "x": 2.505750000000001,
+        "y": 5.5947499999999994
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.143999125144995,
+        "y": 3.601949670618566
+      },
+      "prevControl": {
+        "x": 2.280749125144995,
+        "y": 3.343949670618566
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral B"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "S2-REEF",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
