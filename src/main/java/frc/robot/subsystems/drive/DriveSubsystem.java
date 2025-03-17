@@ -31,13 +31,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
-import frc.robot.constants.ReefHeight;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.coral.ElevatorSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
@@ -244,6 +241,7 @@ public class DriveSubsystem extends SubsystemBase {
 							
 							(Alliance.getAlliance() == AllianceColor.Blue) ? swerveDrive.getOdometryHeading() : swerveDrive.getOdometryHeading().rotateBy(Rotation2d.fromDegrees(180))
 						);
+						
 						resetOdometry(noRotPose);
 					},
 					// Method to reset odometry (will be called if your auto has a starting pose)

@@ -34,7 +34,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    m_robotContainer.getAutonomousCommand().cancel();
+    if (m_robotContainer.getAutonomousCommand() != null) {
+      m_robotContainer.getAutonomousCommand().cancel();
+    }
     m_robotContainer.algaeSubsystem.disableAlgaeArm().schedule();
   }
 
@@ -46,8 +48,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if (m_robotContainer.getAutonomousCommand() != null) {
+      m_robotContainer.getAutonomousCommand().schedule();
+    }
     Elastic.selectTab("Autonomous");
-    m_robotContainer.getAutonomousCommand().schedule();
   }
 
   @Override

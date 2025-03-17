@@ -4,12 +4,9 @@
 
 package frc.robot;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -45,6 +42,7 @@ public class RobotContainer {
 	VisualizerSubsystem visualizerSubsystem;
 
 	private SendableChooser<Command> autoChooser;
+	private Command autoCommand;
 
 	public RobotContainer() {
 
@@ -268,6 +266,7 @@ public class RobotContainer {
 		autoChooser.onChange(
 			(selected) -> {
 				pathPreview(selected.getName());
+				preloadAutoCommand(selected);
 			}
 		);
 	}
@@ -288,8 +287,12 @@ public class RobotContainer {
 		}
 	}
 
+	public void preloadAutoCommand(Command command) {
+		autoCommand = command;
+	}
+
 	public Command getAutonomousCommand() {
-		return autoChooser.getSelected();
+		return autoCommand;
 	}
 
 }
