@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,6 +74,14 @@ public class RobotContainer {
 		configDriveControls();
 		configManipControls();
 
+	}
+
+	public void teleopInit() {
+
+		climbSubsystem.engageServoCommand().beforeStarting(
+			Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
+		).schedule();
+		
 	}
 
 	private void configDriveControls() {
@@ -146,8 +156,8 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_1().whileTrue(
-			coralSubsystem.manualSpit()
+		buttonBoard.b_1().onTrue(
+			climbSubsystem.toggleServo()
 		);
 
 		buttonBoard.b_2().onTrue(
