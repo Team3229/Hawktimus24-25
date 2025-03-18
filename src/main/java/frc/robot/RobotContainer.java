@@ -79,7 +79,7 @@ public class RobotContainer {
 	public void teleopInit() {
 
 		climbSubsystem.engageServoCommand().beforeStarting(
-			Commands.waitTime(Seconds.of(130))
+			Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
 		).schedule();
 		
 	}

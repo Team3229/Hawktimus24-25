@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Seconds;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +41,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(50);
     private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
+    public static final Time AUTOLOCK_BEFORE_MATCH_END = Seconds.of(1);
 
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
