@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase {
     
+  
     private SparkMax climbMotor;
     private SparkMax climbMotor2;
     private SparkMaxConfig motorConfig;
@@ -37,7 +38,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
-
+    private static final int RAMP_RATE = 1;
+    
     private static final double CLIMB_SPEED = 0.6;
     
     public ClimbSubsystem() {
@@ -96,7 +98,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
         config.idleMode(IDLE_MODE);
 
-        config.openLoopRampRate(1);
+        config.openLoopRampRate(RAMP_RATE);
 
         return config;
     }

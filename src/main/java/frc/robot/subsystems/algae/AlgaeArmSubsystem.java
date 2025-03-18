@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class AlgaeArmSubsystem extends SubsystemBase {
 
+   
     private SparkMax armMotor;
     private SparkMaxConfig armMotorConfig;
     private SparkClosedLoopController positionController;
@@ -42,7 +43,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     private static final double kP = 0.005;
     private static final double kI = 0;
     private static final double kD = 0.08;
-
+    private static final int RAMP_RATE = 2;
+    
     private static final Angle POSITION_TOLERANCE = Degrees.of(10);
     
     private static final Angle REMOVAL_POSITION = Degrees.of(154); 
@@ -103,7 +105,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         armMotorConfig.encoder
             .positionConversionFactor(POSITION_CONVERSION_FACTOR / GEARBOX_RATIO);
 
-        armMotorConfig.closedLoopRampRate(2);
+        armMotorConfig.closedLoopRampRate(RAMP_RATE);
 
         //ABSOLUTE ENCODER IMPLEMENT
 
