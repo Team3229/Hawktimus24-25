@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
+import frc.robot.constants.ReefPositions;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
@@ -195,6 +196,10 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("XPID", xTranslationPID);
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
+
+		for (ReefPositions reef : ReefPositions.values()) {
+			swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
+		}
 
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
 			// Do whatever you want with the poses here
