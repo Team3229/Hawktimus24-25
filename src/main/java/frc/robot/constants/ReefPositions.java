@@ -27,8 +27,14 @@ public enum ReefPositions {
     K(getRobotPose(19, Sides.LEFT)),
     L(getRobotPose(19, Sides.RIGHT)),
 
-    Center(getRobotPose(21, Sides.CENTER).relativeTo(getRobotPose(18, Sides.CENTER)));
-
+    Center(
+        new Pose2d(
+            getRobotPose(21, Sides.CENTER).relativeTo(getRobotPose(18, Sides.CENTER)).getX() / 2 + getRobotPose(21, Sides.CENTER).getX(),
+            getRobotPose(21, Sides.CENTER).relativeTo(getRobotPose(18, Sides.CENTER)).getY() / 2 + getRobotPose(21, Sides.CENTER).getY(),
+            new Rotation2d(0)
+        )
+    );
+        
     private Pose2d position;
 
     private static enum Sides {
