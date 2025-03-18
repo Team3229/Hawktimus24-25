@@ -197,9 +197,9 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
 
-		for (ReefPositions reef : ReefPositions.values()) {
-			swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
-		}
+		// for (ReefPositions reef : ReefPositions.values()) {
+		// 	swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
+		// }
 
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
 			// Do whatever you want with the poses here
