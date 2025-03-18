@@ -72,6 +72,8 @@ public class Robot extends TimedRobot {
       )
     );
 
+    m_robotContainer.teleopInit();
+
     m_robotContainer.getAutonomousCommand().cancel();
   }
 
