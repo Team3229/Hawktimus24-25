@@ -78,9 +78,11 @@ public class RobotContainer {
 
 	public void teleopInit() {
 
-		climbSubsystem.engageServoCommand().beforeStarting(
-			Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
-		).schedule();
+		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
+			climbSubsystem.engageServoCommand().beforeStarting(
+				Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
+			).schedule();
+		}
 		
 	}
 
@@ -266,7 +268,7 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		// SmartDashboard.putData(climbSubsystem);
+		SmartDashboard.putData(climbSubsystem);
 		SmartDashboard.putData(algaeSubsystem);
 		SmartDashboard.putData(CommandScheduler.getInstance());
 
