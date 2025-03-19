@@ -7,31 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S3-I"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "I-HPT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake Completion"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPT-K"
+            "pathName": "S3-K"
           }
         },
         {
@@ -51,11 +27,23 @@
           "data": {
             "name": "Wait for Intake Completion"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPT-L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
   "folder": "S3",
-  "choreoAuto": false
+  "choreoAuto": true
 }

@@ -15,9 +15,12 @@
     "S3-REEF"
   ],
   "autoFolders": [
+    "S6",
     "S1",
     "S2",
-    "S3"
+    "S3",
+    "S4",
+    "S5"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 2.0,
