@@ -70,29 +70,24 @@ public enum ReefPositions {
             0,0, Rotation2d.fromDegrees(0)
         );
 
-
-
         switch (side) {
             case LEFT:
-                return tagPose
-                    .transformBy(tagToLeftReef)
-                    .transformBy(reefToBumper)
-                    .transformBy(spitterToBot)
-                    .transformBy(spitterToBotRotation);
+                tagPose = tagPose
+                    .transformBy(tagToLeftReef);
+                break;
             case RIGHT:
-                return tagPose
-                    .transformBy(tagToRightReef)
-                    .transformBy(reefToBumper)
-                    .transformBy(spitterToBot)
-                    .transformBy(spitterToBotRotation);
+                tagPose = tagPose
+                    .transformBy(tagToRightReef);
+                break;
             case CENTER:
-                return tagPose
-                    .transformBy(reefToBumper)
-                    .transformBy(spitterToBot)
-                    .transformBy(spitterToBotRotation);
-            default:
                 return tagPose;
         }
+
+        return tagPose
+            .transformBy(reefToBumper)
+            .transformBy(spitterToBot)
+            .transformBy(spitterToBotRotation);
+
     }
 
     public Pose2d getPosition() {
