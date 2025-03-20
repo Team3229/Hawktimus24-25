@@ -81,7 +81,7 @@ public class RobotContainer {
 		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
 			climbSubsystem.engageServoCommand().beforeStarting(
 				Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
-			).schedule();
+			).withName("auto-lock").schedule();
 		}
 		
 	}
@@ -124,9 +124,9 @@ public class RobotContainer {
 			driveSubsystem.zeroGyroWithAllianceCommand()
 		);
 
-		driverController.b_3().onTrue(
-			driveSubsystem.driveToPlayerStation()
-		);
+		// driverController.b_3().onTrue(
+		// 	driveSubsystem.driveToPlayerStation()
+		// );
 
 		driverController.b_4().onTrue(
 			driveSubsystem.driveToAlgaeZone()
@@ -238,12 +238,12 @@ public class RobotContainer {
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		buttonBoard.joy_U()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.engageClimb()
+			climbSubsystem.disengageClimb()
 		);
 
 		buttonBoard.joy_D()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.disengageClimb()
+			climbSubsystem.engageClimb()
 		);
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
@@ -271,6 +271,7 @@ public class RobotContainer {
 		SmartDashboard.putData(climbSubsystem);
 		SmartDashboard.putData(algaeSubsystem);
 		SmartDashboard.putData(CommandScheduler.getInstance());
+
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);

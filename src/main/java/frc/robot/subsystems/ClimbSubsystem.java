@@ -35,21 +35,23 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private static final int CAN_ID = 8;
     private static final int CAN_ID_2 = 4;
-    private static final int PWM_ID = 8; // replace with actual PWM ID
-    private static final int PWM_ID_2 = 7; // replace with actual PWM ID
+    private static final int PWM_ID = 8;
+    private static final int PWM_ID_2 = 7;
     
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 125;
-    private static final double ENGAGED_SERVO_ANGLE = 150;
-    private static final double DISENGAGED_SERVO_ANGLE = 10;
-    private static final double ENGAGED_SERVO2_ANGLE = 135;
-    private static final double DISENGAGED_SERVO2_ANGLE = 90;
 
-    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(50);
+    private static final double ENGAGED_SERVO_ANGLE = 120;
+    private static final double DISENGAGED_SERVO_ANGLE = 170;
+
+    private static final double ENGAGED_SERVO2_ANGLE = 135;
+    private static final double DISENGAGED_SERVO2_ANGLE = 100;
+
+    private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(75);
     private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
 
     public static final Time AUTOLOCK_BEFORE_MATCH_END = Seconds.of(1);
-    public static final boolean AUTOLOCK_ENABLED = true;
+    public static final boolean AUTOLOCK_ENABLED = true;                
 
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
@@ -104,6 +106,9 @@ public class ClimbSubsystem extends SubsystemBase {
         camera = new ClimbCamera();
 
         seedInternalEncoder();
+
+        servo.setAngle(DISENGAGED_SERVO_ANGLE);  
+        servo2.setAngle(DISENGAGED_SERVO2_ANGLE);
 
     }
 
