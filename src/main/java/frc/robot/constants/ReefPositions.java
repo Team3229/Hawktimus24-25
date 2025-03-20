@@ -2,30 +2,31 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Inches;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Calculates the position of the robot relative to the reef for each of the Reef Poles A-L and the center of the reef.
+ */
 @AllArgsConstructor
 @Getter
 public enum ReefPositions {
 
-    A(getRobotPose(18, Sides.LEFT)),
-    B(getRobotPose(18, Sides.RIGHT)),
-    C(getRobotPose(17, Sides.LEFT)),
-    D(getRobotPose(17, Sides.RIGHT)),
-    E(getRobotPose(22, Sides.LEFT)),
-    F(getRobotPose(22, Sides.RIGHT)),
-    G(getRobotPose(21, Sides.LEFT)),
-    H(getRobotPose(21, Sides.RIGHT)),
-    I(getRobotPose(20, Sides.LEFT)),
-    J(getRobotPose(20, Sides.RIGHT)),
-    K(getRobotPose(19, Sides.LEFT)),
-    L(getRobotPose(19, Sides.RIGHT)),
+    A(18, Sides.LEFT),
+    B(18, Sides.RIGHT),
+    C(17, Sides.LEFT),
+    D(17, Sides.RIGHT),
+    E(22, Sides.LEFT),
+    F(22, Sides.RIGHT),
+    G(21, Sides.LEFT),
+    H(21, Sides.RIGHT),
+    I(20, Sides.LEFT),
+    J(20, Sides.RIGHT),
+    K(19, Sides.LEFT),
+    L(19, Sides.RIGHT),
 
     Center(
         new Pose2d(
@@ -41,9 +42,12 @@ public enum ReefPositions {
         LEFT, RIGHT, CENTER
     }
 
-    private static Pose2d getRobotPose(int tagID, Sides side) {
+    private ReefPositions(int tagID, Sides side) {
+        this(getRobotPose(tagID, side));
+    }
 
-        Pose2d tagPose = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark).getTagPose(tagID).get().toPose2d();
+    private static Pose2d getRobotPose(int tagID, Sides side) {
+        Pose2d tagPose = Field.getField().getTagPose(tagID).get().toPose2d();
 
         Transform2d tagToLeftReef = new Transform2d(
             Inches.of(0),
@@ -87,10 +91,5 @@ public enum ReefPositions {
             .transformBy(reefToBumper)
             .transformBy(spitterToBot)
             .transformBy(spitterToBotRotation);
-
-    }
-
-    public Pose2d getPosition() {
-        return position;
     }
 }
