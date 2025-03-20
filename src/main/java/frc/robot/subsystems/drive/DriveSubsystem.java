@@ -197,7 +197,6 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("RPID", rotationPID);
 
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
-			// Do whatever you want with the poses here
 			swerveDrive.field.getObject("Trajectory").setPoses(poses);
         });
 	}
