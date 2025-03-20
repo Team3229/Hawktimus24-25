@@ -71,7 +71,7 @@ public enum ReefPositions {
             new Rotation2d(0)
         );
         Transform2d spitterToBotRotation = new Transform2d(
-            0,0, Rotation2d.fromDegrees(0)
+            0,0, Rotation2d.fromDegrees(90)
         );
 
         switch (side) {
