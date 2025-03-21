@@ -61,7 +61,7 @@ public enum ReefPositions {
         );
 
         Transform2d reefToBumper  = new Transform2d(
-            Inches.of(3),
+            Inches.of(2),
             Inches.of(0),
             new Rotation2d(0)
         );

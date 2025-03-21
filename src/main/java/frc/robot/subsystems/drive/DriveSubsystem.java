@@ -5,10 +5,16 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -20,11 +26,17 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -64,8 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			8.5,
-			0.0,
+			6.0,
+			0.2,
 			0.5
 		);
 
@@ -83,13 +95,6 @@ public class DriveSubsystem extends SubsystemBase {
 			0.01
 		);
 
-	// private static final PIDConstants PP_TRANS = 
-	// 	new PIDConstants(
-	// 		3.75,
-	// 		0.0,
-	// 		0.015
-	// 	);
-
 	private static final PIDConstants PP_ROT = 
 		new PIDConstants(
 			3.0,
@@ -97,27 +102,36 @@ public class DriveSubsystem extends SubsystemBase {
 			0.0
 		);
 
-	private static final double TRANSLATION_ERROR_TOLERANCE = 0.2;
-	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.005;
-	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(0.25).in(Radians);
-	private static final double ROTATION_VELOCITY_TOLERANCE = 0.01;
+	private static final Distance TRANS_ERR_TOL = Meters.of(0.2);
+	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.005);
+	private static final Angle ROT_ERR_TOL = Degrees.of(0.25);
+	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.5);
 
-    private PIDController xTranslationPID = new PIDController(
+	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(2);
+	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(5);
+
+	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(720);
+	private static final AngularAcceleration ROT_MAX_ACCEL = DegreesPerSecondPerSecond.of(720);
+
+    private ProfiledPIDController xTranslationPID = new ProfiledPIDController(
         TRANSLATION_CONSTANTS.kP,
         TRANSLATION_CONSTANTS.kI,
-        TRANSLATION_CONSTANTS.kD
+        TRANSLATION_CONSTANTS.kD,
+		new Constraints(TRANS_MAX_VEL.in(MetersPerSecond), TRANS_MAX_ACCEL.in(MetersPerSecondPerSecond))
     );
 
-	private PIDController yTranslationPID = new PIDController(
+	private ProfiledPIDController yTranslationPID = new ProfiledPIDController(
         TRANSLATION_CONSTANTS.kP,
         TRANSLATION_CONSTANTS.kI,
-        TRANSLATION_CONSTANTS.kD
+        TRANSLATION_CONSTANTS.kD,
+		new Constraints(TRANS_MAX_VEL.in(MetersPerSecond), TRANS_MAX_ACCEL.in(MetersPerSecondPerSecond))
     );
 
-    private PIDController rotationPID = new PIDController(
+    private ProfiledPIDController rotationPID = new ProfiledPIDController(
         ROTATION_CONSTANTS.kP,
         ROTATION_CONSTANTS.kI,
-        ROTATION_CONSTANTS.kD
+        ROTATION_CONSTANTS.kD,
+		new Constraints(ROT_MAX_VEL.in(RadiansPerSecond), ROT_MAX_ACCEL.in(RadiansPerSecondPerSecond))
     );
 
     private CoralZones coralZones = new CoralZones();
@@ -147,9 +161,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 		rotationPID.enableContinuousInput(0, 2 * Math.PI);
 
-		xTranslationPID.setTolerance(TRANSLATION_ERROR_TOLERANCE, TRANSLATION_VELOCITY_TOLERANCE);
-		yTranslationPID.setTolerance(TRANSLATION_ERROR_TOLERANCE, TRANSLATION_VELOCITY_TOLERANCE);
-		rotationPID.setTolerance(ROTATION_ERROR_TOLERANCE, ROTATION_VELOCITY_TOLERANCE);
+		xTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
+		yTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
+		rotationPID.setTolerance(ROT_ERR_TOL.in(Radians), ROT_VEL_TOL.in(RadiansPerSecond));
 
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
@@ -295,26 +309,30 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return PID command
 	 */
 	public Command driveToPose(Supplier<Pose2d> pose) {
-		return driveFieldOriented(
-            getInputStream(
-                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
-                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
-                () -> restrictToMax(rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity(), 0.5)
-            ).allianceRelativeControl(false)
 
-        ).ignoringDisable(false)
-		.until(
-			() -> xTranslationPID.atSetpoint() && yTranslationPID.atSetpoint() && rotationPID.atSetpoint()
-		);
+		return
+			runOnce(
+				() -> {
+					xTranslationPID.reset(getPose().getX(), swerveDrive.getFieldVelocity().vxMetersPerSecond);
+					yTranslationPID.reset(getPose().getY(), swerveDrive.getFieldVelocity().vyMetersPerSecond);
+					rotationPID.reset(getPose().getRotation().getRadians(), swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+				}
+			).andThen(
+				driveFieldOriented(
+					() -> {
+						return new ChassisSpeeds(
+							xTranslationPID.calculate(getPose().getX(), pose.get().getX()),
+							yTranslationPID.calculate(getPose().getY(), pose.get().getY()),
+							rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians())
+						);
+					}
+				)
+			)
+			.ignoringDisable(false)
+			.until(
+				() -> xTranslationPID.atGoal() && yTranslationPID.atGoal() && rotationPID.atGoal()
+			);
     }
-
-	private double restrictToMax(double in, double restrict) {
-		if (Math.abs(in) > Math.abs(restrict)) {
-			return (in < 0) ? -restrict : restrict;
-		} else {
-			return in;
-		}
-	}
 
 	/**
 	 * Returns a Command that centers the modules of the SwerveDrive subsystem.
@@ -427,9 +445,14 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
     public Command driveToReef(boolean leftSide) {
-        return driveToPose(() -> {
-			return coralZones.findCoralZone(leftSide, getPose());
-		})
+        return 
+
+		runOnce(
+			() -> SmartDashboard.putBoolean("Done Lining Up", false)
+		).andThen(
+		driveToPose(
+			() -> coralZones.findCoralZone(leftSide, getPose())
+		))
 		.andThen(
 			() -> {
 				SmartDashboard.putBoolean("Done Lining Up", true);
