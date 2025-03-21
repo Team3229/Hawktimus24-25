@@ -39,17 +39,11 @@
           "data": {
             "name": "L4"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L-HPT"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
   "folder": "S1",
-  "choreoAuto": false
+  "choreoAuto": true
 }
