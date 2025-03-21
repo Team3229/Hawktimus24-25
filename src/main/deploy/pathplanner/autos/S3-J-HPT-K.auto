@@ -7,7 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S1-K"
+            "pathName": "S3-J"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "J-HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPT-K"
           }
         },
         {
@@ -27,29 +51,11 @@
           "data": {
             "name": "Wait for Intake Completion"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HPT-L"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L-HPT"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "S1",
+  "folder": "S3",
   "choreoAuto": false
 }
