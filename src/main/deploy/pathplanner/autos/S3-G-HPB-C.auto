@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S2-J"
+            "pathName": "S3-G"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "J-HPT"
+            "pathName": "G-HPB"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPT-K"
+            "pathName": "HPB-C"
           }
         },
         {
@@ -39,11 +39,23 @@
           "data": {
             "name": "L4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C-HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "S2",
-  "choreoAuto": true
+  "folder": "S3",
+  "choreoAuto": false
 }

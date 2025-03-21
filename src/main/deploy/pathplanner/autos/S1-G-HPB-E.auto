@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S1-K"
+            "pathName": "S1-G"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "K-HPT"
+            "pathName": "G-HPB"
           }
         },
         {
@@ -31,19 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPT-L"
+            "pathName": "HPB-E"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L-HPT"
           }
         }
       ]

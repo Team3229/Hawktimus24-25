@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S4-D"
+            "pathName": "S1-F"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D-HPB"
+            "pathName": "F-HPB"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPB-C"
+            "pathName": "HPB-D"
           }
         },
         {
@@ -44,6 +44,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "S4",
-  "choreoAuto": true
+  "folder": "S1",
+  "choreoAuto": false
 }

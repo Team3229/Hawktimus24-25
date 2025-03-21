@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S1-I"
+            "pathName": "S2-A"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "I-HPT"
+            "pathName": "A-HPT"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPT-L"
+            "pathName": "HPT-B"
           }
         },
         {
@@ -39,11 +39,23 @@
           "data": {
             "name": "L4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "S1",
-  "choreoAuto": true
+  "folder": "S2",
+  "choreoAuto": false
 }
