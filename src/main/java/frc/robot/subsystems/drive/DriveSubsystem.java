@@ -171,7 +171,7 @@ public class DriveSubsystem extends SubsystemBase {
 			swerveDrive.field.setRobotPose(new Pose2d(2, 4, new Rotation2d()));
 		}
 
-		swerveDrive.setHeadingCorrection(true);
+		swerveDrive.setHeadingCorrection(false);
 		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
 				true,
@@ -181,9 +181,9 @@ public class DriveSubsystem extends SubsystemBase {
 				false,
 				1);
 
-		swerveDrive.pushOffsetsToEncoders();
+		swerveDrive.useExternalFeedbackSensor();
 
-		swerveDrive.setAutoCenteringModules(true);
+		swerveDrive.setAutoCenteringModules(false);
 
 		if (RobotBase.isSimulation()) {
 			swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
