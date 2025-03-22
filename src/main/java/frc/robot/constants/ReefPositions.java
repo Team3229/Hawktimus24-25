@@ -56,12 +56,12 @@ public enum ReefPositions {
         );
         Transform2d tagToRightReef = new Transform2d(
             Inches.of(0),
-            Inches.of(8.5),
+            Inches.of(6.5),
             new Rotation2d(0)
         );
 
         Transform2d reefToBumper  = new Transform2d(
-            Inches.of(2),
+            Inches.of(3),
             Inches.of(0),
             new Rotation2d(0)
         );

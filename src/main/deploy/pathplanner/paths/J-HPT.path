@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.791739789678741,
-        "y": 5.398192001739086
+        "x": 4.787,
+        "y": 5.38
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.637739789678741,
-        "y": 6.250434176235681
+        "x": 4.633,
+        "y": 6.232242174496595
       },
       "isLocked": false,
       "linkedName": "Coral J"

@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
+import frc.robot.constants.ReefPositions;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
@@ -78,12 +79,12 @@ public class DriveSubsystem extends SubsystemBase {
 		new PIDConstants(
 			5.0,
 			0.2,
-			0.5
+			0.1
 		);
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			6.5,
+			7.0,
 			0.0,
 			0.0
 		);
@@ -103,12 +104,12 @@ public class DriveSubsystem extends SubsystemBase {
 		);
 
 	private static final Distance TRANS_ERR_TOL = Meters.of(0.2);
-	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.005);
+	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.01);
 	private static final Angle ROT_ERR_TOL = Degrees.of(0.25);
 	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.5);
 
-	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(2);
-	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(5);
+	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1);
+	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(2);
 
 	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(720);
 	private static final AngularAcceleration ROT_MAX_ACCEL = DegreesPerSecondPerSecond.of(720);
@@ -209,6 +210,10 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("XPID", xTranslationPID);
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
+
+		for (ReefPositions reef : ReefPositions.values()) {
+			swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
+		}
 
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
 			swerveDrive.field.getObject("Trajectory").setPoses(poses);
