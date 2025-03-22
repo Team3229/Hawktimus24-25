@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class CatcherSubsystem extends SubsystemBase{
 
+    
     private DigitalInput irSensor;
     private DigitalInput limitSwitch;
     private SparkMax catcherMotor;
@@ -36,7 +37,8 @@ public class CatcherSubsystem extends SubsystemBase{
     private static final int CAN_ID = 5;
     private static final int SENSOR_PORT = 9;
     private static final int LIMIT_PORT = 7;
-
+    private static final int CURRENT_LIMIT = 40;
+    
     private static final Angle POSITION_TOLERANCE = Degrees.of(5);
     
     private static final double UP_MAX_SPEED = 0.15;
@@ -82,7 +84,7 @@ public class CatcherSubsystem extends SubsystemBase{
             .reverseSoftLimitEnabled(true)
             .reverseSoftLimit(CATCH_ANGLE.in(Degrees));
 
-        motorConfig.smartCurrentLimit(40);
+        motorConfig.smartCurrentLimit(CURRENT_LIMIT);
             
         catcherMotor.configure(
             motorConfig,

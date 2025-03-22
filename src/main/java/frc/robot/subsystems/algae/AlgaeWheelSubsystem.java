@@ -24,8 +24,8 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
     private static final boolean INVERTED = true;
     private static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
-    private static final int CW_SPEED = 1;
-    private static final int CCW_SPEED = -1;
+    private static final double CW_SPEED = 0.75;
+    private static final double CCW_SPEED = -0.75;
     private static final int CURRENT_LIMIT = 20;
 
     public AlgaeWheelSubsystem() {

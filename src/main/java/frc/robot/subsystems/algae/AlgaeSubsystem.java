@@ -41,7 +41,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         return readyForRemoval(false);
     }
     public Command throwUpperAlgae(){
-        return arm.upperAlgaeRemovalPosition();
+        return arm.rotateTo(AlgaeArmSubsystem.THROW_ANGLE);
     }
 
     /**
@@ -51,7 +51,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to remove algae from the reef
      */
     public Command readyForRemoval(boolean clockwise) {
-        return arm.upToRemoveAlgaeFromReef()
+        return arm.rotateTo(AlgaeArmSubsystem.REMOVAL_POSITION)
         .andThen(wheel.spin(clockwise));
     }
 
@@ -61,7 +61,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to collect algae
      */
     public Command readyForCollection() {
-        return arm.readyingCollectPosition()
+        return arm.rotateTo(AlgaeArmSubsystem.GROUND_COLLECT_ANGLE)
                 .alongWith(wheel.spin(true));
     }
 
@@ -71,7 +71,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return
      */
     public Command home() {
-        return Commands.parallel(arm.home(), wheel.stop());
+        return Commands.parallel(arm.rotateTo(AlgaeArmSubsystem.HOME_POSITION), wheel.stop());
     }
 
     /**
@@ -79,8 +79,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return Command to hold algae
      */
-    public Command intakeAlgae() {
-        return arm.intakePosition()
+    public Command intakeAlgae() {  
+        return arm.rotateTo(AlgaeArmSubsystem.HOLD_ANGLE)
                 .andThen(new WaitCommand(1))
                 .andThen(wheel.stop());
     }
@@ -91,14 +91,13 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to score algae
      */
     public Command scoreAlgae() {
-        return Commands.parallel(arm.scorePosition(), wheel.spin(false))
+        return Commands.parallel(arm.rotateTo(AlgaeArmSubsystem.SCORE_ANGLE), wheel.spin(false))
                  .handleInterrupt(() -> wheel.stopWheel());
     }
 
     public Command disableAlgaeArm() {
         return 
-            arm.disableAlgaeArm().
-            alongWith(wheel.stop())
+            wheel.stop()
             .ignoringDisable(true);
     }
 
@@ -115,8 +114,6 @@ public class AlgaeSubsystem extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Arm Angle", () -> arm.getPosition().in(Degrees), null);
-        builder.addDoubleProperty("Arm Current", () -> arm.getDraw(), null);
         builder.addDoubleProperty("Wheel Current", () -> wheel.getDraw(), null);
-        builder.addDoubleProperty("Relative Angle", () -> arm.getRelativePosition().in(Degrees), null);
     }
 }

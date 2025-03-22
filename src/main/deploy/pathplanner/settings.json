@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.8624550188,
-  "robotLength": 0.8624550188,
+  "robotWidth": 0.845,
+  "robotLength": 0.845,
   "holonomicMode": true,
   "pathFolders": [
     "HPB-REEF",

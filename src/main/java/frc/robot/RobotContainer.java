@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,9 +72,21 @@ public class RobotContainer {
 
 	private void configureBindings() {
 
+		DriverStation.silenceJoystickConnectionWarning(true);
+
 		configDriveControls();
 		configManipControls();
 
+	}
+
+	public void teleopInit() {
+
+		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
+			climbSubsystem.engageServoCommand().beforeStarting(
+				Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
+			).withName("auto-lock").schedule();
+		}
+		
 	}
 
 	private void configDriveControls() {
@@ -81,7 +96,7 @@ public class RobotContainer {
 			() -> -driverController.a_X(),
 			() -> -driverController.a_Z()
 		)
-			.deadband(0.05)
+			.deadband(0.1)
 			.cubeRotationControllerAxis(true)
 			.cubeTranslationControllerAxis(true)
 			.scaleTranslation(0.8)
@@ -112,13 +127,12 @@ public class RobotContainer {
 			driveSubsystem.zeroGyroWithAllianceCommand()
 		);
 
-		driverController.b_3().onTrue(
-			driveSubsystem.driveToPlayerStation()
-		);
+		// driverController.b_3().onTrue(
+		// 	driveSubsystem.driveToPlayerStation()
+		// );
 
-		driverController.b_4().onTrue(
-			driveSubsystem.driveToAlgaeZone()
-		);
+		// driverController.b_
+		
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())
@@ -146,8 +160,8 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_1().whileTrue(
-			coralSubsystem.manualSpit()
+		buttonBoard.b_1().onTrue(
+			climbSubsystem.toggleServo()
 		);
 
 		buttonBoard.b_2().onTrue(
@@ -226,12 +240,12 @@ public class RobotContainer {
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		buttonBoard.joy_U()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.engageClimb()
+			climbSubsystem.disengageClimb()
 		);
 
 		buttonBoard.joy_D()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.disengageClimb()
+			climbSubsystem.engageClimb()
 		);
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
@@ -256,9 +270,10 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		// SmartDashboard.putData(climbSubsystem);
+		SmartDashboard.putData(climbSubsystem);
 		SmartDashboard.putData(algaeSubsystem);
 		SmartDashboard.putData(CommandScheduler.getInstance());
+
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);
@@ -294,5 +309,5 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		return autoCommand;
 	}
-
+	
 }
