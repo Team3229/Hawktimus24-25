@@ -91,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants PP_TRANS = 
 		new PIDConstants(
-			4.25,
+			5.2,
 			0.0,
 			0.01
 		);
@@ -227,6 +227,15 @@ public class DriveSubsystem extends SubsystemBase {
 		if (estimate != null) {
 			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
 		}
+
+		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
+		SmartDashboard.putNumber("Y-Pos-Err", yTranslationPID.getPositionError());
+		SmartDashboard.putNumber("Z-Pos-Err", rotationPID.getPositionError());
+
+		SmartDashboard.putNumber("X-Vel-Err", xTranslationPID.getVelocityError());
+		SmartDashboard.putNumber("Y-Vel-Err", yTranslationPID.getVelocityError());
+		SmartDashboard.putNumber("Z-Vel-Err", rotationPID.getVelocityError());
+
 	}
 
 	/**

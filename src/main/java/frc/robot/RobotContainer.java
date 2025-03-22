@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.ReefHeight;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
@@ -82,6 +80,8 @@ public class RobotContainer {
 	}
 
 	public void teleopInit() {
+
+		climbSubsystem.seedInternalEncoder();
 
 		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
 			climbSubsystem.engageServoCommand().beforeStarting(

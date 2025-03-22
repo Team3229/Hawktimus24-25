@@ -199,7 +199,7 @@ public class ClimbSubsystem extends SubsystemBase {
         });
     }
 
-    private void seedInternalEncoder() {
+    public void seedInternalEncoder() {
         climbMotor.getEncoder().setPosition(getCurrentAngle().in(Degrees));
         climbMotor2.getEncoder().setPosition(getCurrentAngle().in(Degrees));
     }
