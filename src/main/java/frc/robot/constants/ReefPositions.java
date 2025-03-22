@@ -56,7 +56,7 @@ public enum ReefPositions {
         );
         Transform2d tagToRightReef = new Transform2d(
             Inches.of(0),
-            Inches.of(6.5),
+            Inches.of(8.5),
             new Rotation2d(0)
         );
 
@@ -67,7 +67,7 @@ public enum ReefPositions {
         );
         Transform2d spitterToBot = new Transform2d(
             Inches.of(16.5),
-            Inches.of(10.409915),
+            Inches.of(10.125),
             new Rotation2d(0)
         );
         Transform2d spitterToBotRotation = new Transform2d(

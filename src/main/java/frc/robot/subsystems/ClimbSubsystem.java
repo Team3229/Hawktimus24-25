@@ -28,8 +28,8 @@ public class ClimbSubsystem extends SubsystemBase {
     private SparkMax climbMotor2;
     private SparkMaxConfig motorConfig;
     private SparkMaxConfig motorConfig2;
-    private Servo servo;
-    private Servo servo2;
+    private Servo servoRight;
+    private Servo servoLeft;
 
     private ClimbCamera camera;
 
@@ -41,14 +41,14 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final double POSITION_CONVERSION_FACTOR = 360;
     private static final double GEARBOX_RATIO = 125;
 
-    private static final double ENGAGED_SERVO_ANGLE = 120;
-    private static final double DISENGAGED_SERVO_ANGLE = 170;
+    private static final double ENGAGED_SERVO_RIGHT_ANGLE = 135;
+    private static final double DISENGAGED_SERVO_RIGHT_ANGLE = 170;
 
-    private static final double ENGAGED_SERVO2_ANGLE = 135;
-    private static final double DISENGAGED_SERVO2_ANGLE = 100;
+    private static final double ENGAGED_SERVO_LEFT_ANGLE = 115;
+    private static final double DISENGAGED_SERVO_LEFT_ANGLE = 85;
 
     private static final Angle FORWARD_SOFT_LIMIT = Degrees.of(75);
-    private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-110);
+    private static final Angle REVERSE_SOFT_LIMIT = Degrees.of(-90);
 
     public static final Time AUTOLOCK_BEFORE_MATCH_END = Seconds.of(1);
     public static final boolean AUTOLOCK_ENABLED = true;                
@@ -67,8 +67,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
         climbMotor = new SparkMax(CAN_ID, MotorType.kBrushless);
         climbMotor2 = new SparkMax(CAN_ID_2, MotorType.kBrushless);
-        servo = new Servo(PWM_ID);
-        servo2 = new Servo(PWM_ID_2);
+        servoRight = new Servo(PWM_ID);
+        servoLeft = new Servo(PWM_ID_2);
 
         motorConfig = getBaseConfig();
 
@@ -107,8 +107,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
         seedInternalEncoder();
 
-        servo.setAngle(DISENGAGED_SERVO_ANGLE);  
-        servo2.setAngle(DISENGAGED_SERVO2_ANGLE);
+        servoRight.setAngle(DISENGAGED_SERVO_RIGHT_ANGLE);  
+        servoLeft.setAngle(DISENGAGED_SERVO_LEFT_ANGLE);
 
     }
 
@@ -165,15 +165,15 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void engageServo() {
-        servo.setAngle(ENGAGED_SERVO_ANGLE);
-        servo2.setAngle(ENGAGED_SERVO2_ANGLE);
+        servoRight.setAngle(ENGAGED_SERVO_RIGHT_ANGLE);
+        servoLeft.setAngle(ENGAGED_SERVO_LEFT_ANGLE);
         isServoEngaged = true;
 
     }
 
     public void disengageServo() {
-        servo.setAngle(DISENGAGED_SERVO_ANGLE);
-        servo2.setAngle(DISENGAGED_SERVO2_ANGLE);
+        servoRight.setAngle(DISENGAGED_SERVO_RIGHT_ANGLE);
+        servoLeft.setAngle(DISENGAGED_SERVO_LEFT_ANGLE);
         isServoEngaged = false;
     }
 

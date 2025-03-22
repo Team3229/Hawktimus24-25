@@ -76,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			6.0,
+			5.0,
 			0.2,
 			0.5
 		);
@@ -178,7 +178,7 @@ public class DriveSubsystem extends SubsystemBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		resetOdometry(new Pose2d(2, 4, swerveDrive.getYaw()));
 
 		if (RobotBase.isSimulation()) {
@@ -423,7 +423,7 @@ public class DriveSubsystem extends SubsystemBase {
 				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
 
 				if (mt1 != null) {
-					swerveDrive.setGyro(new Rotation3d(mt1));
+						swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}
 		);

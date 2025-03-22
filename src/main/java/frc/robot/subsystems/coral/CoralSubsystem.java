@@ -24,7 +24,7 @@ public class CoralSubsystem extends SubsystemBase {
     ElevatorSubsystem elevatorSubsystem;
     SpitterSubsystem spitterSubsystem;
     CatcherSubsystem catcherSubsystem;
-    ExtentionSubsystem extentionSubsystem;
+    ExtensionSubsystem extentionSubsystem;
     
     public CoralSubsystem() {
 
@@ -33,7 +33,7 @@ public class CoralSubsystem extends SubsystemBase {
         elevatorSubsystem = new ElevatorSubsystem();
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
-        extentionSubsystem = new ExtentionSubsystem();
+        extentionSubsystem = new ExtensionSubsystem();
 
         registerCommands();
 

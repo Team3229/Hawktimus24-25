@@ -96,7 +96,7 @@ public class RobotContainer {
 			() -> -driverController.a_X(),
 			() -> -driverController.a_Z()
 		)
-			.deadband(0.05)
+			.deadband(0.1)
 			.cubeRotationControllerAxis(true)
 			.cubeTranslationControllerAxis(true)
 			.scaleTranslation(0.8)
@@ -309,5 +309,5 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		return autoCommand;
 	}
-
+	
 }
