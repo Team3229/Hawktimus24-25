@@ -24,6 +24,7 @@ public class CoralSubsystem extends SubsystemBase {
     ElevatorSubsystem elevatorSubsystem;
     SpitterSubsystem spitterSubsystem;
     CatcherSubsystem catcherSubsystem;
+    ExtensionSubsystem extentionSubsystem;
     
     public CoralSubsystem() {
 
@@ -32,6 +33,7 @@ public class CoralSubsystem extends SubsystemBase {
         elevatorSubsystem = new ElevatorSubsystem();
         catcherSubsystem = new CatcherSubsystem();
         spitterSubsystem = new SpitterSubsystem();
+        extentionSubsystem = new ExtensionSubsystem();
 
         registerCommands();
 
@@ -124,7 +126,7 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     private void registerCommands() {
-        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.L4, false));
+        NamedCommands.registerCommand("L4", elevatorSpit(ReefHeight.AutoL4, false));
         NamedCommands.registerCommand("L3", elevatorSpit(ReefHeight.L3, false));
         NamedCommands.registerCommand("L2", elevatorSpit(ReefHeight.L2, false));
         NamedCommands.registerCommand("L1", elevatorSpit(ReefHeight.L1, false));

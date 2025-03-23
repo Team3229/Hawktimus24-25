@@ -5,10 +5,16 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -20,11 +26,17 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -34,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
+import frc.robot.constants.ReefPositions;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
@@ -64,31 +77,24 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			8.5,
-			0.0,
-			0.5
+			5.5,
+			0.2,
+			0.1
 		);
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			6.5,
+			7.0,
 			0.0,
 			0.0
 		);
 
 	private static final PIDConstants PP_TRANS = 
 		new PIDConstants(
-			4.25,
+			5.2,
 			0.0,
 			0.01
 		);
-
-	// private static final PIDConstants PP_TRANS = 
-	// 	new PIDConstants(
-	// 		3.75,
-	// 		0.0,
-	// 		0.015
-	// 	);
 
 	private static final PIDConstants PP_ROT = 
 		new PIDConstants(
@@ -97,27 +103,36 @@ public class DriveSubsystem extends SubsystemBase {
 			0.0
 		);
 
-	private static final double TRANSLATION_ERROR_TOLERANCE = 0.2;
-	private static final double TRANSLATION_VELOCITY_TOLERANCE = 0.005;
-	private static final double ROTATION_ERROR_TOLERANCE = Degrees.of(0.25).in(Radians);
-	private static final double ROTATION_VELOCITY_TOLERANCE = 0.01;
+	private static final Distance TRANS_ERR_TOL = Meters.of(0.25);
+	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.1);
+	private static final Angle ROT_ERR_TOL = Degrees.of(0.5);
+	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.5);
 
-    private PIDController xTranslationPID = new PIDController(
+	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1);
+	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(2);
+
+	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(720);
+	private static final AngularAcceleration ROT_MAX_ACCEL = DegreesPerSecondPerSecond.of(720);
+
+    private ProfiledPIDController xTranslationPID = new ProfiledPIDController(
         TRANSLATION_CONSTANTS.kP,
         TRANSLATION_CONSTANTS.kI,
-        TRANSLATION_CONSTANTS.kD
+        TRANSLATION_CONSTANTS.kD,
+		new Constraints(TRANS_MAX_VEL.in(MetersPerSecond), TRANS_MAX_ACCEL.in(MetersPerSecondPerSecond))
     );
 
-	private PIDController yTranslationPID = new PIDController(
+	private ProfiledPIDController yTranslationPID = new ProfiledPIDController(
         TRANSLATION_CONSTANTS.kP,
         TRANSLATION_CONSTANTS.kI,
-        TRANSLATION_CONSTANTS.kD
+        TRANSLATION_CONSTANTS.kD,
+		new Constraints(TRANS_MAX_VEL.in(MetersPerSecond), TRANS_MAX_ACCEL.in(MetersPerSecondPerSecond))
     );
 
-    private PIDController rotationPID = new PIDController(
+    private ProfiledPIDController rotationPID = new ProfiledPIDController(
         ROTATION_CONSTANTS.kP,
         ROTATION_CONSTANTS.kI,
-        ROTATION_CONSTANTS.kD
+        ROTATION_CONSTANTS.kD,
+		new Constraints(ROT_MAX_VEL.in(RadiansPerSecond), ROT_MAX_ACCEL.in(RadiansPerSecondPerSecond))
     );
 
     private CoralZones coralZones = new CoralZones();
@@ -147,9 +162,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 		rotationPID.enableContinuousInput(0, 2 * Math.PI);
 
-		xTranslationPID.setTolerance(TRANSLATION_ERROR_TOLERANCE, TRANSLATION_VELOCITY_TOLERANCE);
-		yTranslationPID.setTolerance(TRANSLATION_ERROR_TOLERANCE, TRANSLATION_VELOCITY_TOLERANCE);
-		rotationPID.setTolerance(ROTATION_ERROR_TOLERANCE, ROTATION_VELOCITY_TOLERANCE);
+		xTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
+		yTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
+		rotationPID.setTolerance(ROT_ERR_TOL.in(Radians), ROT_VEL_TOL.in(RadiansPerSecond));
 
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
@@ -164,14 +179,14 @@ public class DriveSubsystem extends SubsystemBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		resetOdometry(new Pose2d(2, 4, swerveDrive.getYaw()));
 
 		if (RobotBase.isSimulation()) {
 			swerveDrive.field.setRobotPose(new Pose2d(2, 4, new Rotation2d()));
 		}
 
-		swerveDrive.setHeadingCorrection(true);
+		swerveDrive.setHeadingCorrection(false);
 		swerveDrive.setCosineCompensator(RobotBase.isReal());
 		swerveDrive.setAngularVelocityCompensation(
 				true,
@@ -181,9 +196,9 @@ public class DriveSubsystem extends SubsystemBase {
 				false,
 				1);
 
-		swerveDrive.pushOffsetsToEncoders();
+		swerveDrive.useExternalFeedbackSensor();
 
-		swerveDrive.setAutoCenteringModules(true);
+		swerveDrive.setAutoCenteringModules(false);
 
 		if (RobotBase.isSimulation()) {
 			swerveDrive.getMapleSimDrive().get().config.bumperLengthX = Inch.of(33.954922);
@@ -196,8 +211,11 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
 
+		for (ReefPositions reef : ReefPositions.values()) {
+			swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
+		}
+
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
-			// Do whatever you want with the poses here
 			swerveDrive.field.getObject("Trajectory").setPoses(poses);
         });
 	}
@@ -209,6 +227,15 @@ public class DriveSubsystem extends SubsystemBase {
 		if (estimate != null) {
 			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
 		}
+
+		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
+		SmartDashboard.putNumber("Y-Pos-Err", yTranslationPID.getPositionError());
+		SmartDashboard.putNumber("Z-Pos-Err", rotationPID.getPositionError());
+
+		SmartDashboard.putNumber("X-Vel-Err", xTranslationPID.getVelocityError());
+		SmartDashboard.putNumber("Y-Vel-Err", yTranslationPID.getVelocityError());
+		SmartDashboard.putNumber("Z-Vel-Err", rotationPID.getVelocityError());
+
 	}
 
 	/**
@@ -216,8 +243,12 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void setupPathPlanner() {
 
-		NamedCommands.registerCommand("DriveToLeft", driveToReef(true));
-		NamedCommands.registerCommand("DriveToRight", driveToReef(false));
+		NamedCommands.registerCommand("DriveToLeft",
+			driveToReef(true).withTimeout(1)
+		);
+		NamedCommands.registerCommand("DriveToRight",
+			driveToReef(false).withTimeout(1)
+		);
 
 		RobotConfig config;
 
@@ -236,14 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
 						}
 					},
 					// Robot pose supplier
-					(Pose2d pose) -> {
-						Pose2d noRotPose = new Pose2d(pose.getX(), pose.getY(),
-							
-							(Alliance.getAlliance() == AllianceColor.Blue) ? swerveDrive.getOdometryHeading() : swerveDrive.getOdometryHeading().rotateBy(Rotation2d.fromDegrees(180))
-						);
-						
-						resetOdometry(noRotPose);
-					},
+					this::resetOdometry,
 					// Method to reset odometry (will be called if your auto has a starting pose)
 					() -> swerveDrive.getRobotVelocity(),
 					// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -296,26 +320,30 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @return PID command
 	 */
 	public Command driveToPose(Supplier<Pose2d> pose) {
-		return driveFieldOriented(
-            getInputStream(
-                () -> restrictToMax(xTranslationPID.calculate(getPose().getX(), pose.get().getX()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
-                () -> restrictToMax(yTranslationPID.calculate(getPose().getY(), pose.get().getY()) / MAX_VELOCITY.in(MetersPerSecond), 0.2),
-                () -> restrictToMax(rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians()) / swerveDrive.getMaximumChassisAngularVelocity(), 0.5)
-            ).allianceRelativeControl(false)
 
-        ).ignoringDisable(false)
-		.until(
-			() -> xTranslationPID.atSetpoint() && yTranslationPID.atSetpoint() && rotationPID.atSetpoint()
-		);
+		return
+			runOnce(
+				() -> {
+					xTranslationPID.reset(getPose().getX(), swerveDrive.getFieldVelocity().vxMetersPerSecond);
+					yTranslationPID.reset(getPose().getY(), swerveDrive.getFieldVelocity().vyMetersPerSecond);
+					rotationPID.reset(getPose().getRotation().getRadians(), swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+				}
+			).andThen(
+				driveFieldOriented(
+					() -> {
+						return new ChassisSpeeds(
+							xTranslationPID.calculate(getPose().getX(), pose.get().getX()),
+							yTranslationPID.calculate(getPose().getY(), pose.get().getY()),
+							rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians())
+						);
+					}
+				)
+			)
+			.ignoringDisable(false)
+			.until(
+				() -> xTranslationPID.atGoal() && yTranslationPID.atGoal() && rotationPID.atGoal()
+			);
     }
-
-	private double restrictToMax(double in, double restrict) {
-		if (Math.abs(in) > Math.abs(restrict)) {
-			return (in < 0) ? -restrict : restrict;
-		} else {
-			return in;
-		}
-	}
 
 	/**
 	 * Returns a Command that centers the modules of the SwerveDrive subsystem.
@@ -360,7 +388,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * odometry.
 	 *
 	 * @return The robot's pose
-	 */
+	 */	
 	public Pose2d getPose() {
 		if (RobotBase.isSimulation()) {
 			return swerveDrive.field.getRobotPose();
@@ -380,7 +408,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * This will zero (calibrate) the robot to assume the current position is facing
 	 * forward
 	 * <p>
-	 * If red alliance rotate the robot 180 after the drviebase zero command
+	 * If red alliance rotate the robot 180 after the drivebase zero command
 	 */
 	public void zeroGyroWithAlliance() {
 
@@ -400,12 +428,20 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public Command zeroGyroWithLimelight() {
+
+		System.out.println("register lm");
+
 		return runOnce(
 			() -> {
 
+				System.out.println("trying lm before");
+
 				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
 
+				System.out.println("trying lm after");
+
 				if (mt1 != null) {
+					System.out.println("lm not null");
 					swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}
@@ -428,9 +464,14 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
     public Command driveToReef(boolean leftSide) {
-        return driveToPose(() -> {
-			return coralZones.findCoralZone(leftSide, getPose());
-		})
+        return 
+
+		runOnce(
+			() -> SmartDashboard.putBoolean("Done Lining Up", false)
+		).andThen(
+		driveToPose(
+			() -> coralZones.findCoralZone(leftSide, getPose())
+		))
 		.andThen(
 			() -> {
 				SmartDashboard.putBoolean("Done Lining Up", true);

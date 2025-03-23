@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.getAutonomousCommand() != null) {
       m_robotContainer.getAutonomousCommand().cancel();
     }
-    m_robotContainer.algaeSubsystem.disableAlgaeArm().schedule();
+    // m_robotContainer.algaeSubsystem.disableAlgaeArm().schedule();
   }
 
   @Override
@@ -72,7 +72,11 @@ public class Robot extends TimedRobot {
       )
     );
 
-    m_robotContainer.getAutonomousCommand().cancel();
+    m_robotContainer.teleopInit();
+
+    if (m_robotContainer.getAutonomousCommand() != null) {
+      m_robotContainer.getAutonomousCommand().cancel();
+    }
   }
 
   @Override

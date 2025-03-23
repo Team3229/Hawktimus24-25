@@ -4,16 +4,20 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,19 +73,42 @@ public class RobotContainer {
 
 	private void configureBindings() {
 
+		DriverStation.silenceJoystickConnectionWarning(true);
+
 		configDriveControls();
 		configManipControls();
 
 	}
 
+	public void teleopInit() {
+
+		System.out.println("TELEOP INIT");
+
+		climbSubsystem.seedInternalEncoder();
+
+		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
+			Commands.waitSeconds(134).andThen(
+				climbSubsystem.forceEngageCommand()
+			).withName("autolock").schedule();
+		}
+		
+	}
+
+	public void autoInit() {
+		driveSubsystem.zeroGyroWithAlliance();
+	}
+
 	private void configDriveControls() {
+
+		NamedCommands.registerCommand("LineupLeft", driveSubsystem.driveToReef(true));
+		NamedCommands.registerCommand("LineupRight", driveSubsystem.driveToReef(false));
 
 		SwerveInputStream driveAngularVelocity = driveSubsystem.getInputStream(
 			() -> -driverController.a_Y(),
 			() -> -driverController.a_X(),
 			() -> -driverController.a_Z()
 		)
-			.deadband(0.05)
+			.deadband(0.1)
 			.cubeRotationControllerAxis(true)
 			.cubeTranslationControllerAxis(true)
 			.scaleTranslation(0.8)
@@ -93,6 +120,16 @@ public class RobotContainer {
 				driveAngularVelocity
 			)
 		);
+
+		// new Trigger(
+		// 	() -> climbSubsystem.getCurrentAngle().in(Degrees) < 0
+		// ).whileTrue(
+		// 	driveSubsystem.driveFieldOriented(
+		// 		driveAngularVelocity
+		// 		.scaleTranslation(0.2)
+		// 		.scaleRotation(0.2)
+		// 	)
+		// );
 
 				//manual driver control of the climb <3
 		// driverController.b_9().toggleOnTrue(
@@ -113,12 +150,11 @@ public class RobotContainer {
 		);
 
 		driverController.b_3().onTrue(
-			driveSubsystem.driveToPlayerStation()
+			driveSubsystem.zeroGyroWithLimelight()
 		);
 
-		driverController.b_4().onTrue(
-			driveSubsystem.driveToAlgaeZone()
-		);
+		// driverController.b_
+		
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())
@@ -146,8 +182,8 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_1().whileTrue(
-			coralSubsystem.manualSpit()
+		buttonBoard.b_1().onTrue(
+			climbSubsystem.toggleServo()
 		);
 
 		buttonBoard.b_2().onTrue(
@@ -226,12 +262,12 @@ public class RobotContainer {
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		buttonBoard.joy_U()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.engageClimb()
+			climbSubsystem.disengageClimb()
 		);
 
 		buttonBoard.joy_D()
 		.and(driverController.b_9()).whileTrue(
-			climbSubsystem.disengageClimb()
+			climbSubsystem.engageClimb()
 		);
 
 				//ALTERNATIVE CLIMB CONTROLS // CANNOT TEST UNLESS DURING PRACTICE (or real) MATCH
@@ -256,9 +292,10 @@ public class RobotContainer {
 
 	public void initTelemetery() {
 		SmartDashboard.putData(coralSubsystem);
-		// SmartDashboard.putData(climbSubsystem);
+		SmartDashboard.putData(climbSubsystem);
 		SmartDashboard.putData(algaeSubsystem);
 		SmartDashboard.putData(CommandScheduler.getInstance());
+
 
 		autoChooser = AutoBuilder.buildAutoChooser();
 		SmartDashboard.putData("Autonomous Chooser", autoChooser);

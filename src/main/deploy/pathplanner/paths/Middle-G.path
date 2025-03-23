@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.079,
-        "y": 0.987
+        "x": 7.31,
+        "y": 4.118
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.301,
-        "y": 1.0902499999999997
+        "x": 7.06,
+        "y": 4.118
       },
       "isLocked": false,
-      "linkedName": "HPB"
+      "linkedName": "Middle"
     },
     {
       "anchor": {
-        "x": 3.162,
-        "y": 3.929
+        "x": 5.816,
+        "y": 4.117559699909499
       },
       "prevControl": {
-        "x": 2.1337991803278684,
-        "y": 3.8901045081967207
+        "x": 6.331364153071615,
+        "y": 4.117559699909499
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral A"
+      "linkedName": "Coral G"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "HPB-REEF",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.011392
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
