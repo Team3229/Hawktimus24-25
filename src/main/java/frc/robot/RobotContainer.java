@@ -82,6 +82,8 @@ public class RobotContainer {
 
 	public void teleopInit() {
 
+		System.out.println("TELEOP INIT");
+
 		climbSubsystem.seedInternalEncoder();
 
 		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
@@ -90,6 +92,10 @@ public class RobotContainer {
 			).withName("autolock").schedule();
 		}
 		
+	}
+
+	public void autoInit() {
+		driveSubsystem.zeroGyroWithAlliance();
 	}
 
 	private void configDriveControls() {
@@ -143,9 +149,9 @@ public class RobotContainer {
 			driveSubsystem.zeroGyroWithAllianceCommand()
 		);
 
-		// driverController.b_3().onTrue(
-		// 	driveSubsystem.driveToPlayerStation()
-		// );
+		driverController.b_3().onTrue(
+			driveSubsystem.zeroGyroWithLimelight()
+		);
 
 		// driverController.b_
 		

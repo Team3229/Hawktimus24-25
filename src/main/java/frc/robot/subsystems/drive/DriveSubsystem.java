@@ -77,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants TRANSLATION_CONSTANTS =
 		new PIDConstants(
-			5.0,
+			5.5,
 			0.2,
 			0.1
 		);
@@ -243,8 +243,12 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void setupPathPlanner() {
 
-		NamedCommands.registerCommand("DriveToLeft", driveToReef(true));
-		NamedCommands.registerCommand("DriveToRight", driveToReef(false));
+		NamedCommands.registerCommand("DriveToLeft",
+			driveToReef(true).withTimeout(1)
+		);
+		NamedCommands.registerCommand("DriveToRight",
+			driveToReef(false).withTimeout(1)
+		);
 
 		RobotConfig config;
 
@@ -263,14 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
 						}
 					},
 					// Robot pose supplier
-					(Pose2d pose) -> {
-						Pose2d noRotPose = new Pose2d(pose.getX(), pose.getY(),
-							
-							(Alliance.getAlliance() == AllianceColor.Blue) ? swerveDrive.getOdometryHeading() : swerveDrive.getOdometryHeading().rotateBy(Rotation2d.fromDegrees(180))
-						);
-						
-						resetOdometry(noRotPose);
-					},
+					this::resetOdometry,
 					// Method to reset odometry (will be called if your auto has a starting pose)
 					() -> swerveDrive.getRobotVelocity(),
 					// ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -411,7 +408,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * This will zero (calibrate) the robot to assume the current position is facing
 	 * forward
 	 * <p>
-	 * If red alliance rotate the robot 180 after the drviebase zero command
+	 * If red alliance rotate the robot 180 after the drivebase zero command
 	 */
 	public void zeroGyroWithAlliance() {
 
@@ -431,12 +428,20 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public Command zeroGyroWithLimelight() {
+
+		System.out.println("register lm");
+
 		return runOnce(
 			() -> {
 
+				System.out.println("trying lm before");
+
 				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
 
+				System.out.println("trying lm after");
+
 				if (mt1 != null) {
+					System.out.println("lm not null");
 					swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}
