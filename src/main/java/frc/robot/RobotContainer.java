@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -84,14 +85,17 @@ public class RobotContainer {
 		climbSubsystem.seedInternalEncoder();
 
 		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
-			climbSubsystem.engageServoCommand().beforeStarting(
-				Commands.waitTime(Seconds.of(135).minus(ClimbSubsystem.AUTOLOCK_BEFORE_MATCH_END))
-			).withName("auto-lock").schedule();
+			Commands.waitSeconds(134).andThen(
+				climbSubsystem.forceEngageCommand()
+			).withName("autolock").schedule();
 		}
 		
 	}
 
 	private void configDriveControls() {
+
+		NamedCommands.registerCommand("LineupLeft", driveSubsystem.driveToReef(true));
+		NamedCommands.registerCommand("LineupRight", driveSubsystem.driveToReef(false));
 
 		SwerveInputStream driveAngularVelocity = driveSubsystem.getInputStream(
 			() -> -driverController.a_Y(),

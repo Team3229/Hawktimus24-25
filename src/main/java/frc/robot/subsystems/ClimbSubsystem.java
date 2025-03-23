@@ -60,6 +60,8 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final double CLIMB_SPEED = 0.6;
 
     private boolean isServoEngaged = false;
+
+    private boolean preventManualLockToggle = false;
     
     public ClimbSubsystem() {
 
@@ -146,6 +148,15 @@ public class ClimbSubsystem extends SubsystemBase {
         );
     }
 
+    public Command forceEngageCommand() {
+        return runOnce(
+            () -> {
+                preventManualLockToggle = true;
+                engageServo();
+            }
+        );
+    }
+
     public Command disengageServoCommand() {
         return runOnce(
             this::disengageServo
@@ -155,6 +166,11 @@ public class ClimbSubsystem extends SubsystemBase {
     public Command toggleServo() {
         return runOnce(
             () -> {
+
+                if (preventManualLockToggle) {
+                    return;
+                }
+
                 if (isServoEngaged) {
                     disengageServo();
                 } else {

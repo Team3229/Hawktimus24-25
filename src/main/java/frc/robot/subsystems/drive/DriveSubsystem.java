@@ -103,9 +103,9 @@ public class DriveSubsystem extends SubsystemBase {
 			0.0
 		);
 
-	private static final Distance TRANS_ERR_TOL = Meters.of(0.2);
-	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.01);
-	private static final Angle ROT_ERR_TOL = Degrees.of(0.25);
+	private static final Distance TRANS_ERR_TOL = Meters.of(0.25);
+	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.1);
+	private static final Angle ROT_ERR_TOL = Degrees.of(0.5);
 	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.5);
 
 	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1);
@@ -391,7 +391,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * odometry.
 	 *
 	 * @return The robot's pose
-	 */
+	 */	
 	public Pose2d getPose() {
 		if (RobotBase.isSimulation()) {
 			return swerveDrive.field.getRobotPose();
@@ -437,7 +437,7 @@ public class DriveSubsystem extends SubsystemBase {
 				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
 
 				if (mt1 != null) {
-						swerveDrive.setGyro(new Rotation3d(mt1));
+					swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}
 		);
