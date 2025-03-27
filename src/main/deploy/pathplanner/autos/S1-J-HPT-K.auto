@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S1-G"
+            "pathName": "S1-J"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LineupLeft"
           }
         },
         {
@@ -19,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G-HPB"
+            "pathName": "J-HPT"
           }
         },
         {
@@ -31,13 +37,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HPB-E"
+            "pathName": "HPT-K"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LineupLeft"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "K-HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPT-L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LineupRight"
           }
         },
         {

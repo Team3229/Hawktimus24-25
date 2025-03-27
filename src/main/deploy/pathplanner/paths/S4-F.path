@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.332000000000001,
+        "y": 2.9817499999999995
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.664125,
+        "y": 2.996375
+      },
+      "isLocked": false,
+      "linkedName": "S4"
+    },
+    {
+      "anchor": {
+        "x": 5.621484375,
+        "y": 2.8118800951086937
+      },
+      "prevControl": {
+        "x": 6.221609375,
+        "y": 2.759380095108693
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral F"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 29.999999999999996
+  },
+  "reversed": false,
+  "folder": "S4-REEF",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
