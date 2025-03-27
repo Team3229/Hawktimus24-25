@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Seconds;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

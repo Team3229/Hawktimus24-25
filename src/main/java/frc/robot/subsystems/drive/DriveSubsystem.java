@@ -41,12 +41,12 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
-import frc.robot.constants.ReefPositions;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
@@ -91,9 +91,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants PP_TRANS = 
 		new PIDConstants(
-			5.2,
-			0.0,
-			0.01
+			5.5,
+			0.2,
+			0.1
 		);
 
 	private static final PIDConstants PP_ROT = 
@@ -138,6 +138,8 @@ public class DriveSubsystem extends SubsystemBase {
     private CoralZones coralZones = new CoralZones();
 	private AlgaeZones algaeZones = new AlgaeZones();
     private CoralStationPathing coralStationPathing = new CoralStationPathing();
+
+	private FieldObject2d lmPose;
 
 	/**
 	 * Swerve drive object.
@@ -211,13 +213,15 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putData("YPID", yTranslationPID);
 		SmartDashboard.putData("RPID", rotationPID);
 
-		for (ReefPositions reef : ReefPositions.values()) {
-			swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
-		}
+		// for (ReefPositions reef : ReefPositions.values()) {
+		// 	swerveDrive.field.getObject(reef.name()).setPose(reef.getPosition());
+		// }
 
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
 			swerveDrive.field.getObject("Trajectory").setPoses(poses);
         });
+
+		lmPose = swerveDrive.field.getObject("Limelight Position");
 	}
 
 	@Override
@@ -226,6 +230,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		if (estimate != null) {
 			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+			lmPose.setPose(estimate.pose);
 		}
 
 		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
@@ -255,7 +260,7 @@ public class DriveSubsystem extends SubsystemBase {
 		try {
 			config = RobotConfig.fromGUISettings();
 
-			final boolean enableFeedforward = true;
+			final boolean enableFeedforward = false;
 
 			// Configure AutoBuilder last
 			AutoBuilder.configure(
@@ -364,6 +369,17 @@ public class DriveSubsystem extends SubsystemBase {
 		return run(() -> {
 			swerveDrive.driveFieldOriented(velocity.get());
 		}).ignoringDisable(false);
+	}
+
+	/**
+	 * Drive the robot given a chassis field oriented velocity.
+	 *
+	 * @param velocity Velocity according to the field.
+	 */
+	public void driveFieldOriented(ChassisSpeeds velocity) {
+		
+		swerveDrive.driveFieldOriented(velocity);
+
 	}
 
 	/**

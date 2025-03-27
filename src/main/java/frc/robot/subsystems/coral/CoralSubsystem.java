@@ -68,45 +68,74 @@ public class CoralSubsystem extends SubsystemBase {
         );
     }
 
+    // /**
+    //  * Connect elevator to spit
+    //  */
+    // public Command elevatorSpit(ReefHeight reefHeight, boolean manualOverride) {
+
+    //     Command out = 
+    //         Commands.runOnce(() -> 
+    //             {
+    //                 System.out.println("Manual Override Elevator");
+    //                 SmartDashboard.putBoolean("Done Lining Up", false);
+    //             })
+    //             .andThen(elevatorSubsystem.goToLevel(reefHeight));
+
+
+    //             if (reefHeight == ReefHeight.L4) {
+    //                 out.andThen(
+    //                     spitterSubsystem.spit(true)
+    //                     .alongWith(elevatorSubsystem.goToLevel(ReefHeight.L4Up))
+    //                     .withTimeout(0.5)
+    //                 );
+    //             } else {
+    //                 out.andThen(
+    //                     spitterSubsystem.spit(true)
+    //                     .withTimeout(0.5)
+    //                 );
+    //             }
+
+    //             out
+    //                 .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
+    //                 .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base));
+
+    //     if (manualOverride) {
+    //         return out;
+    //     } else {
+    //         return out
+    //             .onlyIf(
+    //                 spitterSubsystem.hasCoral()
+    //             );
+    //     }
+    // }
+
     /**
      * Connect elevator to spit
      */
     public Command elevatorSpit(ReefHeight reefHeight, boolean manualOverride) {
 
-        if (manualOverride) {
-            return
-            (
-                Commands.runOnce(() -> 
-                    {
-                        System.out.println("Manual Override Elevator");
-				        SmartDashboard.putBoolean("Done Lining Up", false);
-                    })
-                    .andThen(elevatorSubsystem.goToLevel(reefHeight))
-                    .andThen(
-                        spitterSubsystem.spit(true)
-                        .withTimeout(0.5)
-                    )
-                    .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
-                    .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
-            );
-        }
+        Command out = 
+            Commands.runOnce(() -> 
+                {
+                    System.out.println("Manual Override Elevator");
+                    SmartDashboard.putBoolean("Done Lining Up", false);
+                })
+                .andThen(elevatorSubsystem.goToLevel(reefHeight))
+                .andThen(
+                    spitterSubsystem.spit(true)
+                    .withTimeout(0.5)
+                )
+                .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
+                .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base));
 
-        return
-            (
-                Commands.runOnce(() -> 
-                    {
-				        SmartDashboard.putBoolean("Done Lining Up", false);
-                    })
-                    .andThen(elevatorSubsystem.goToLevel(reefHeight))
-                    .andThen(
-                        spitterSubsystem.spit(true)
-                        .withTimeout(0.5)
-                    )
-                    .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
-                    .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base))
-            ).onlyIf(
-                spitterSubsystem.hasCoral()
-            );
+        if (manualOverride) {
+            return out;
+        } else {
+            return out
+                .onlyIf(
+                    spitterSubsystem.hasCoral()
+                );
+        }
     }
 
     public Command spit() {

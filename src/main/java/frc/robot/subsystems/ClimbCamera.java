@@ -11,8 +11,8 @@ public class ClimbCamera {
         camera = CameraServer.startAutomaticCapture("Climb Camera", 0);
 
         try {
-            camera.setResolution(640, 360);
-            camera.setFPS(20);
+            camera.setResolution(320, 240);
+            camera.setFPS(30);
         } catch (Exception e) {
             e.printStackTrace();
         }
