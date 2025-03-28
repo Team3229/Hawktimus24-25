@@ -84,9 +84,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			7.0,
-			0.0,
-			0.0
+			6.0,
+			0.1,
+			0.05
 		);
 
 	private static final PIDConstants PP_TRANS = 
@@ -105,8 +105,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final Distance TRANS_ERR_TOL = Meters.of(0.25);
 	private static final LinearVelocity TRANS_VEL_TOL = MetersPerSecond.of(0.1);
-	private static final Angle ROT_ERR_TOL = Degrees.of(0.5);
-	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.5);
+	private static final Angle ROT_ERR_TOL = Degrees.of(0.1);
+	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.1);
 
 	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1);
 	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(2);
@@ -167,6 +167,10 @@ public class DriveSubsystem extends SubsystemBase {
 		xTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
 		yTranslationPID.setTolerance(TRANS_ERR_TOL.in(Meters), TRANS_VEL_TOL.in(MetersPerSecond));
 		rotationPID.setTolerance(ROT_ERR_TOL.in(Radians), ROT_VEL_TOL.in(RadiansPerSecond));
+
+		xTranslationPID.setIZone(0.5);
+		yTranslationPID.setIZone(0.5);
+		rotationPID.setIZone(20);
 
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
@@ -365,9 +369,29 @@ public class DriveSubsystem extends SubsystemBase {
 	 *
 	 * @param velocity Velocity according to the field.
 	 */
+	public Command driveFieldOriented(SwerveInputStream velocity, DoubleSupplier scaleTranslation, DoubleSupplier scaleRotation) {
+		return run(() -> {
+			swerveDrive.driveFieldOriented(
+				velocity
+					.scaleTranslation(scaleTranslation.getAsDouble())
+					.scaleRotation(scaleRotation.getAsDouble())
+					.get()
+			);
+
+		}).ignoringDisable(false);
+	}
+
+	/**
+	 * Drive the robot given a chassis field oriented velocity.
+	 *
+	 * @param velocity Velocity according to the field.
+	 */
 	public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
 		return run(() -> {
-			swerveDrive.driveFieldOriented(velocity.get());
+			swerveDrive.driveFieldOriented(
+				velocity
+					.get()
+			);
 		}).ignoringDisable(false);
 	}
 
@@ -445,19 +469,12 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public Command zeroGyroWithLimelight() {
 
-		System.out.println("register lm");
-
 		return runOnce(
 			() -> {
 
-				System.out.println("trying lm before");
-
 				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
 
-				System.out.println("trying lm after");
-
 				if (mt1 != null) {
-					System.out.println("lm not null");
 					swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}

@@ -18,6 +18,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -112,6 +113,8 @@ public class ClimbSubsystem extends SubsystemBase {
         servoRight.setAngle(DISENGAGED_SERVO_RIGHT_ANGLE);  
         servoLeft.setAngle(DISENGAGED_SERVO_LEFT_ANGLE);
 
+        SmartDashboard.putBoolean("ENABLE_AUTOLOCK", true);
+
     }
 
     private SparkMaxConfig getBaseConfig() {
@@ -135,7 +138,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void setSpeed(double speed) {
         // System.out.println("Climbing at speed " + speed);
-        climbMotor.set(speed * CLIMB_SPEED);
+        climbMotor.setVoltage(speed * CLIMB_SPEED * 12);
     }
 
     public void stop() {
@@ -151,8 +154,10 @@ public class ClimbSubsystem extends SubsystemBase {
     public Command forceEngageCommand() {
         return runOnce(
             () -> {
-                preventManualLockToggle = true;
-                engageServo();
+                if (SmartDashboard.getBoolean("ENABLE_AUTOLOCK", true)) {
+                    preventManualLockToggle = true;
+                    engageServo();
+                }
             }
         );
     }

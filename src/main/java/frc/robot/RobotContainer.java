@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -110,13 +111,13 @@ public class RobotContainer {
 			.deadband(0.1)
 			.cubeRotationControllerAxis(true)
 			.cubeTranslationControllerAxis(true)
-			.scaleTranslation(0.8)
-			.scaleRotation(0.9)
 			.allianceRelativeControl(true);
 
 		driveSubsystem.setDefaultCommand(
 			driveSubsystem.driveFieldOriented(
-				driveAngularVelocity
+				driveAngularVelocity,
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
 			)
 		);
 
@@ -146,14 +147,7 @@ public class RobotContainer {
 
 		driverController.b_11().onTrue(
 			driveSubsystem.zeroGyroWithAllianceCommand()
-		);
-
-		driverController.b_3().onTrue(
-			driveSubsystem.zeroGyroWithLimelight()
-		);
-
-		// driverController.b_
-		
+		);		
     
 		driverController.b_Trigger()
 			.and(buttonBoard.joy_R())
@@ -165,7 +159,6 @@ public class RobotContainer {
 			.and(buttonBoard.joy_L())
 				.onTrue(
 					driveSubsystem.driveToReef(false)
-					
 				);
 
 		driverController.b_Hazard().onTrue(
@@ -175,11 +168,11 @@ public class RobotContainer {
 			})
 		);
 
-		driverController.b_12()
-			.debounce(1)
-			.onTrue(
-				CageLineup.cageLineupToNearest(driveSubsystem)
-			);
+		// driverController.b_7()
+		// 	.debounce(1)
+		// 	.onTrue(
+		// 		CageLineup.cageLineupToNearest(driveSubsystem)
+		// 	);
 
 	}
 
@@ -187,7 +180,7 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_1().onTrue(
+		buttonBoard.b_9().onTrue(
 			climbSubsystem.toggleServo()
 		);
 
@@ -216,7 +209,7 @@ public class RobotContainer {
 			coralSubsystem.elevatorSpit(ReefHeight.L4, true)
 		);
 
-		buttonBoard.b_9().onTrue(
+		buttonBoard.b_1().onTrue(
 				coralSubsystem.feedCommand()
 			);
 
@@ -266,12 +259,12 @@ public class RobotContainer {
 
 				//TESTING AND POTENTIAL COMP CLIMB CONTROLS// WORKS IN SIMULATION
 		buttonBoard.joy_U()
-		.and(driverController.b_9()).whileTrue(
+		.and(driverController.b_3()).whileTrue(
 			climbSubsystem.disengageClimb()
 		);
 
 		buttonBoard.joy_D()
-		.and(driverController.b_9()).whileTrue(
+		.and(driverController.b_3()).whileTrue(
 			climbSubsystem.engageClimb()
 		);
 

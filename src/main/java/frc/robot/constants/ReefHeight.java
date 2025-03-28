@@ -14,7 +14,7 @@ public enum ReefHeight {
     Base(ElevatorSubsystem.ELEVATOR_BASE_HEIGHT),
     L1(Feet.of(1).plus(Inch.of(6))),
     L2(Feet.of( 2).plus(Inch.of(11 + (5/8)))),
-    L3(Inch.of(50.7)),
+    L3(Inch.of(51.2)),
     L4(Feet.of(6).plus(Inch.of(2))),
     L4Up(Feet.of(6).plus(Inch.of(5))),
     AutoL4(Feet.of(6).plus(Inch.of(1)));
