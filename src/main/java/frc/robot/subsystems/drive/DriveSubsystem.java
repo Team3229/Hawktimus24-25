@@ -303,7 +303,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		// Preload PathPlanner Path finding
 		// IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
-		PathfindingCommand.warmupCommand().schedule();
+		PathfindingCommand.warmupCommand().withName("Drive/Pathplanner warmup").schedule();
 	}
 
 	/**
@@ -315,7 +315,8 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command getAutonomousCommand(String pathName) {
 		// Create a path following command using AutoBuilder. This will also trigger
 		// event markers.
-		return new PathPlannerAuto(pathName);
+		return new PathPlannerAuto(pathName)
+			.withName("Drive/Autonomous");
 	}
 
 	/**
@@ -347,7 +348,8 @@ public class DriveSubsystem extends SubsystemBase {
 			.ignoringDisable(false)
 			.until(
 				() -> xTranslationPID.atGoal() && yTranslationPID.atGoal() && rotationPID.atGoal()
-			);
+			)
+			.withName("Drive/Drive to pose (initially) " + pose.get().toString());
     }
 
 	/**
@@ -357,7 +359,8 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public Command centerModulesCommand() {
 		return run(() -> Arrays.asList(swerveDrive.getModules())
-				.forEach(it -> it.setAngle(0.0)));
+				.forEach(it -> it.setAngle(0.0)))
+				.withName("Drive/Center modules");
 	}
 
 	/**
@@ -368,7 +371,8 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
 		return run(() -> {
 			swerveDrive.driveFieldOriented(velocity.get());
-		}).ignoringDisable(false);
+		}).ignoringDisable(false)
+			.withName("Drive/Drive field oriented");
 	}
 
 	/**
@@ -440,7 +444,8 @@ public class DriveSubsystem extends SubsystemBase {
 	public Command zeroGyroWithAllianceCommand() {
 		return runOnce(
 			this::zeroGyroWithAlliance
-		);
+		)
+			.withName("Drive/Zero gyro with alliance");
 	}
 
 	public Command zeroGyroWithLimelight() {
@@ -461,7 +466,8 @@ public class DriveSubsystem extends SubsystemBase {
 					swerveDrive.setGyro(new Rotation3d(mt1));
 				}
 			}
-		);
+		)
+		.withName("Drive/Zero gyro with limelight");
 	}
 
 	public void postTrajectoryToField(List<Pose2d> trajectory) {
@@ -492,19 +498,22 @@ public class DriveSubsystem extends SubsystemBase {
 			() -> {
 				SmartDashboard.putBoolean("Done Lining Up", true);
 			}
-		);
+		)
+		.withName("Drive/Drive to " + ((leftSide) ? "left side " : "right side ") + "of reef");
     }
 
 	public Command driveToAlgaeZone() {
 		return driveToPose(() -> {
 			return algaeZones.findAlgaeZone(getPose());
-		});
+		})
+			.withName("Drive/Drive to algae zone");
 	}
 
 	public Command driveToPlayerStation() {
 		return driveToPose(() -> {
 			return coralStationPathing.getTargetStation(getPose());
-		});
+		})
+			.withName("Drive/Drive to human player station");
 	}
 
 	public SwerveInputStream getInputStream(

@@ -37,6 +37,7 @@ public class ExtensionSubsystem extends SubsystemBase {
                 left.setAngle(LEFT_SERVO_ANGLE);
                 right.setAngle(RIGHT_SERVO_ANGLE);
             }  
-        );
+        )
+        .withName("Extension/Lifting extension");
     }
 }

@@ -28,7 +28,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return
      */
     public Command removeLowerAlgae() {
-        return readyForRemoval(true);
+        return readyForRemoval(true)
+            .withName("Algae/Remove lower algae");
     }
 
     /**
@@ -38,10 +39,12 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return Command to remove algae from the upper part of the reef
      */
     public Command removeUpperAlgae() {
-        return readyForRemoval(false);
+        return readyForRemoval(false)
+            .withName("Algae/Remove upper algae");
     }
     public Command throwUpperAlgae(){
-        return arm.rotateTo(AlgaeArmSubsystem.THROW_ANGLE);
+        return arm.rotateTo(AlgaeArmSubsystem.THROW_ANGLE)
+            .withName("Algae/Throw upper algae");
     }
 
     /**
@@ -52,7 +55,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command readyForRemoval(boolean clockwise) {
         return arm.rotateTo(AlgaeArmSubsystem.REMOVAL_POSITION)
-        .andThen(wheel.spin(clockwise));
+        .andThen(wheel.spin(clockwise))
+            .withName("Algae/Ready to remove");
     }
 
     /**
@@ -62,7 +66,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command readyForCollection() {
         return arm.rotateTo(AlgaeArmSubsystem.GROUND_COLLECT_ANGLE)
-                .alongWith(wheel.spin(true));
+                .alongWith(wheel.spin(true))
+                .withName("Algae/Ready to collect");
     }
 
     /**
@@ -71,7 +76,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      * @return
      */
     public Command home() {
-        return Commands.parallel(arm.rotateTo(AlgaeArmSubsystem.HOME_POSITION), wheel.stop());
+        return Commands.parallel(arm.rotateTo(AlgaeArmSubsystem.HOME_POSITION), wheel.stop())
+            .withName("Algae/Home arm");
     }
 
     /**
@@ -82,7 +88,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     public Command intakeAlgae() {  
         return arm.rotateTo(AlgaeArmSubsystem.HOLD_ANGLE)
                 .andThen(new WaitCommand(1))
-                .andThen(wheel.stop());
+                .andThen(wheel.stop())
+                .withName("Algae/Intake algae");
     }
 
     /**
@@ -92,7 +99,8 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command scoreAlgae() {
         return Commands.parallel(arm.rotateTo(AlgaeArmSubsystem.SCORE_ANGLE), wheel.spin(false))
-                 .handleInterrupt(() -> wheel.stopWheel());
+                 .handleInterrupt(() -> wheel.stopWheel())
+                 .withName("Algae/Score algae");
     }
 
     public Command disableAlgaeArm() {

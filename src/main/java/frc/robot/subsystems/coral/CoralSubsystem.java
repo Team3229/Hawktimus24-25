@@ -65,7 +65,8 @@ public class CoralSubsystem extends SubsystemBase {
         )
         .withTimeout(
             2
-        );
+        )
+        .withName("Coral/Feeding coral");
     }
 
     // /**
@@ -129,21 +130,25 @@ public class CoralSubsystem extends SubsystemBase {
                 .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base));
 
         if (manualOverride) {
-            return out;
+            return out
+                .withName("Coral/Score coral on " + reefHeight.toString() + "manually");
         } else {
             return out
                 .onlyIf(
                     spitterSubsystem.hasCoral()
-                );
+                )
+                .withName("Coral/Score coral on " + reefHeight.toString());
         }
     }
 
     public Command spit() {
-        return spitterSubsystem.spit(false);
+        return spitterSubsystem.spit(false)
+            .withName("Coral/Spit coral");
     }
 
     public Command manualSpit() {
-        return spitterSubsystem.manualSpit();
+        return spitterSubsystem.manualSpit()
+            .withName("Coral/Manually spit coral");
     }
 
     public Distance getElevatorPose() {
@@ -163,11 +168,13 @@ public class CoralSubsystem extends SubsystemBase {
         NamedCommands.registerCommand("Wait for Intake Completion", 
             Commands.waitUntil(spitterSubsystem.hasCoral())
             .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
+            .withName("Coral/Waiting to intake")
         );
 
         NamedCommands.registerCommand("Wait for Intake", 
             Commands.waitUntil(spitterSubsystem.hasCoral())
             .withTimeout(RobotBase.isReal() ? Double.POSITIVE_INFINITY : 2)
+            .withName("Coral/Waiting to intake")
         );
     }    
 

@@ -87,9 +87,8 @@ public class RobotContainer {
 		if (ClimbSubsystem.AUTOLOCK_ENABLED) {
 			Commands.waitSeconds(134).andThen(
 				climbSubsystem.forceEngageCommand()
-			).withName("autolock").schedule();
+			).withName("Climb/Waiting for auto-lock").schedule();
 		}
-		
 	}
 
 	public void autoInit() {
@@ -171,7 +170,7 @@ public class RobotContainer {
 				Commands.runOnce(() -> {
 					driveSubsystem.getCurrentCommand().cancel();
 					// cancels ALL DRIVING on driver controller
-			})
+			}).withName("Drive/Cancel drive command")
 		);
 
 	}

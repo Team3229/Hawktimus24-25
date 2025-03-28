@@ -145,7 +145,8 @@ public class ClimbSubsystem extends SubsystemBase {
     public Command engageServoCommand() {
         return runOnce(
             this::engageServo
-        );
+        )
+        .withName("Climb/Engage lock");
     }
 
     public Command forceEngageCommand() {
@@ -154,13 +155,15 @@ public class ClimbSubsystem extends SubsystemBase {
                 preventManualLockToggle = true;
                 engageServo();
             }
-        );
+        )
+        .withName("Climb/Force engage lock");
     }
 
     public Command disengageServoCommand() {
         return runOnce(
             this::disengageServo
-        );
+        )
+        .withName("Climb/Disengage lock");
     }
 
     public Command toggleServo() {
@@ -177,7 +180,8 @@ public class ClimbSubsystem extends SubsystemBase {
                     engageServo();
                 }
             }
-        );
+        )
+        .withName("Climb/Toggle lock");
     }
 
     public void engageServo() {
@@ -203,7 +207,8 @@ public class ClimbSubsystem extends SubsystemBase {
         },
         () -> {
             stop();
-        });
+        })
+        .withName("Climb/Engage climbing");
     }
 
     public Command disengageClimb() {
@@ -212,7 +217,8 @@ public class ClimbSubsystem extends SubsystemBase {
         },
         () -> {
             stop();
-        });
+        })
+        .withName("Climb/Disengage climbing");
     }
 
     public void seedInternalEncoder() {
