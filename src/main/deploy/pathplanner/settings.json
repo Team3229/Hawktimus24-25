@@ -3,10 +3,11 @@
   "robotLength": 0.845,
   "holonomicMode": true,
   "pathFolders": [
+    "Algae Lineup",
     "HPB-REEF",
     "HPS Lineup",
     "HPT-REEF",
-    "Algae Lineup",
+    "S4-REEF",
     "REEF-HPB",
     "REEF-HPT",
     "Reef Lineup",
