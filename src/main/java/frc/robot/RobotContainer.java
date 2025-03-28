@@ -28,6 +28,7 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.drive.CageLineup;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -173,6 +174,12 @@ public class RobotContainer {
 					// cancels ALL DRIVING on driver controller
 			})
 		);
+
+		driverController.b_12()
+			.debounce(1)
+			.onTrue(
+				CageLineup.cageLineupToNearest(driveSubsystem)
+			);
 
 	}
 
