@@ -20,20 +20,15 @@
         "y": 2.56746773097826
       },
       "prevControl": {
-        "x": 3.8023930335917338,
-        "y": 2.2881718205568653
+        "x": 4.13116508152174,
+        "y": 1.95941745923913
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Coral C"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

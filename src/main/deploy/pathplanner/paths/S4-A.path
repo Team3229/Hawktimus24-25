@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.463861186314965,
-        "y": 2.6969271652392366
+        "x": 6.40241168478261,
+        "y": 2.6509256114130424
       },
       "isLocked": false,
       "linkedName": "S4"
     },
     {
       "anchor": {
-        "x": 4.477097005350156,
-        "y": 2.4713078591318776
+        "x": 4.506725543478261,
+        "y": 2.4005519701086953
       },
       "prevControl": {
-        "x": 6.1843087574714,
-        "y": 2.175704610508682
+        "x": 5.047989052225333,
+        "y": 2.460692359969481
       },
       "nextControl": {
-        "x": 3.2328375613753524,
-        "y": 2.6867510420364207
+        "x": 4.023862092391305,
+        "y": 2.3469004755434777
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1535156250000007,
+        "y": 2.7105383831521737
+      },
+      "prevControl": {
+        "x": 3.4106178655416173,
+        "y": 2.4326082113808587
+      },
+      "nextControl": {
+        "x": 2.896413384458384,
+        "y": 2.9884685549234886
       },
       "isLocked": false,
       "linkedName": null
@@ -36,20 +52,15 @@
         "y": 3.9326002038043475
       },
       "prevControl": {
-        "x": 2.463164782190676,
-        "y": 3.469228308499905
+        "x": 2.99952776461522,
+        "y": 3.710243608056631
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Coral A"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

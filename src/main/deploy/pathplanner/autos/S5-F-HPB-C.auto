@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S5-F"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LineupRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F-HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HPB-C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LineupLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C-HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait for Intake Completion"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "S5",
+  "choreoAuto": false
+}

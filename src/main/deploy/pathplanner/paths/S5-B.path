@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.332000000000001,
-        "y": 2.9817499999999995
+        "x": 7.368138586956522,
+        "y": 1.9236497961956502
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.8786249999999995,
-        "y": 3.717875
+        "x": 7.966510714913525,
+        "y": 1.955257095358732
       },
       "isLocked": false,
-      "linkedName": "S4"
+      "linkedName": "S5"
     },
     {
       "anchor": {
-        "x": 5.573794157608696,
-        "y": 5.595796535326087
+        "x": 3.660224184782609,
+        "y": 2.48997112771739
       },
       "prevControl": {
-        "x": 5.770516304347826,
-        "y": 5.434842051630434
+        "x": 5.131605215339558,
+        "y": 1.8186425042549268
       },
       "nextControl": {
-        "x": 5.185441534552,
-        "y": 5.9135395905542945
+        "x": 3.432779483953956,
+        "y": 2.593744477210237
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6542629076086954,
-        "y": 5.410996942934783
+        "x": 2.8673743206521745,
+        "y": 3.5987686820652165
       },
       "prevControl": {
-        "x": 4.417306385869565,
-        "y": 5.6971382472826075
+        "x": 2.7052429010035044,
+        "y": 3.8006601998548697
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral K"
+      "linkedName": "Coral B"
     }
   ],
   "rotationTargets": [],
@@ -49,19 +49,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 360.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -150.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "S4-REEF",
+  "folder": "S5-REEF",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

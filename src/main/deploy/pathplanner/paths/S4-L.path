@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 5.2455,
+        "x": 5.722826086956522,
         "y": 5.302249999999999
       },
       "prevControl": {
-        "x": 6.106986424180327,
+        "x": 6.58431251113685,
         "y": 4.82144813012295
       },
       "nextControl": {
-        "x": 4.384013575819672,
+        "x": 4.861339662776195,
         "y": 5.783051869877048
       },
       "isLocked": false,
@@ -44,12 +44,7 @@
       "linkedName": "Coral L"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -120.6354175503028
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

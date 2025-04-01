@@ -7,18 +7,23 @@
     "HPB-REEF",
     "HPS Lineup",
     "HPT-REEF",
-    "S4-REEF",
+    "S6-REEF",
     "REEF-HPB",
     "REEF-HPT",
     "Reef Lineup",
     "S1-REEF",
     "S2-REEF",
-    "S3-REEF"
+    "S3-REEF",
+    "S4-REEF",
+    "S5-REEF"
   ],
   "autoFolders": [
+    "S6",
     "S1",
     "S2",
-    "S3"
+    "S3",
+    "S4",
+    "S5"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,

@@ -28,6 +28,13 @@ public enum ReefPositions {
     K(19, Sides.LEFT),
     L(19, Sides.RIGHT),
 
+    West(18, Sides.CENTER),
+    SouthWest(17, Sides.CENTER),
+    SouthEast(22, Sides.CENTER),
+    East(21, Sides.CENTER),
+    NorthEast(20, Sides.CENTER),
+    NorthWest(19, Sides.CENTER),
+
     Center(
         new Pose2d(
             getRobotPose(21, Sides.CENTER).relativeTo(getRobotPose(18, Sides.CENTER)).getX() / 2 + getRobotPose(21, Sides.CENTER).getX(),
@@ -73,23 +80,30 @@ public enum ReefPositions {
         Transform2d spitterToBotRotation = new Transform2d(
             0,0, Rotation2d.fromDegrees(90)
         );
+        Transform2d algaeArmToBotRotation = new Transform2d(
+            0,0, Rotation2d.fromDegrees(270)
+        );
 
         switch (side) {
             case LEFT:
                 tagPose = tagPose
+                    .transformBy(spitterToBotRotation)
                     .transformBy(tagToLeftReef);
+
                 break;
             case RIGHT:
                 tagPose = tagPose
+                    .transformBy(spitterToBotRotation)
                     .transformBy(tagToRightReef);
                 break;
             case CENTER:
-                return tagPose;
+                return tagPose
+                    .transformBy(algaeArmToBotRotation);
         }
 
         return tagPose
             .transformBy(reefToBumper)
-            .transformBy(spitterToBot)
-            .transformBy(spitterToBotRotation);
+            .transformBy(spitterToBot);
+        
     }
 }

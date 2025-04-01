@@ -35,27 +35,27 @@ public class AlgaeZones {
 
 		if (inZone_West(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone West");
-			return getReefPose("ReefWest", alliance == AllianceColor.Blue);
+			return getReefPose("West", alliance == AllianceColor.Blue);
 		}
 		if (inZone_SouthWest(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone SouthWest");
-			return getReefPose("ReefSouthWest", alliance == AllianceColor.Blue);
+			return getReefPose("SouthWest", alliance == AllianceColor.Blue);
 		}
 		if (inZone_SouthEast(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone SouthEast");
-			return getReefPose("ReefSouthEast", alliance == AllianceColor.Blue);
+			return getReefPose("SouthEast", alliance == AllianceColor.Blue);
 		}
 		if (inZone_East(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone East");
-			return getReefPose("ReefEast", alliance == AllianceColor.Blue);
+			return getReefPose("East", alliance == AllianceColor.Blue);
 		}
 		if (inZone_NorthEast(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone NorthEast");
-			return getReefPose("ReefNorthEast", alliance == AllianceColor.Blue);
+			return getReefPose("NorthEast", alliance == AllianceColor.Blue);
 		}
 		if (inZone_NorthWest(robotPose, alliance == AllianceColor.Blue)) {
 			// System.out.println("Robot is in zone NorthWest");
-			return getReefPose("ReefNorthWest", alliance == AllianceColor.Blue);
+			return getReefPose("NorthWest", alliance == AllianceColor.Blue);
 		}
 
 		return null;
