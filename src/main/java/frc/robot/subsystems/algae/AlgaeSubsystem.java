@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
  */
 public class AlgaeSubsystem extends SubsystemBase {
     
+    private static final double INTAKE_WAIT_TIME = 2.5;
     private AlgaeArmSubsystem arm;
     private AlgaeWheelSubsystem wheel;
 
@@ -81,7 +82,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public Command intakeAlgae() {  
         return arm.rotateTo(AlgaeArmSubsystem.HOLD_ANGLE)
-                .andThen(new WaitCommand(1))
+                .andThen(new WaitCommand(INTAKE_WAIT_TIME))
                 .andThen(wheel.stop());
     }
 

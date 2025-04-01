@@ -138,6 +138,32 @@ public class CoralSubsystem extends SubsystemBase {
         }
     }
 
+    public Command elevatorReady(ReefHeight reefHeight) {
+        Command out = 
+            Commands.runOnce(() -> 
+                {
+                    SmartDashboard.putBoolean("Done Lining Up", false);
+                })
+                .andThen(elevatorSubsystem.goToLevel(reefHeight));
+
+        return out
+            .onlyIf(
+                spitterSubsystem.hasCoral()
+            );
+    }
+
+    public Command elevatorScore() {
+        Command out =  spitterSubsystem.spit(true)
+            .withTimeout(0.5)
+            .andThen(Commands.waitTime(ElevatorSubsystem.L4_EXTRA_WAIT_TIME))
+            .andThen(elevatorSubsystem.goToLevel(ReefHeight.Base));
+
+        return out
+            .onlyIf(
+                spitterSubsystem.hasCoral()
+            );
+    }
+
     public Command spit() {
         return spitterSubsystem.spit(false);
     }

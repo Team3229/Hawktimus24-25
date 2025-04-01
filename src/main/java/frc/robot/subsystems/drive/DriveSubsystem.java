@@ -30,6 +30,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
@@ -41,13 +42,13 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
@@ -84,7 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			6.0,
+			5.0,
 			0.1,
 			0.05
 		);
@@ -139,7 +140,8 @@ public class DriveSubsystem extends SubsystemBase {
 	private AlgaeZones algaeZones = new AlgaeZones();
     private CoralStationPathing coralStationPathing = new CoralStationPathing();
 
-	private FieldObject2d lmPose;
+	public static final int[] CORAL_STATION_APRILTAG_IDS = {1, 2, 12, 13};
+    public static final int[] REEF_APRILTAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
 
 	/**
 	 * Swerve drive object.
@@ -170,7 +172,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		xTranslationPID.setIZone(0.5);
 		yTranslationPID.setIZone(0.5);
-		rotationPID.setIZone(20);
+		rotationPID.setIZone(Degrees.of(20).in(Radians));
 
 		// Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
 		// objects being created.
@@ -224,18 +226,12 @@ public class DriveSubsystem extends SubsystemBase {
 		PathPlannerLogging.setLogActivePathCallback((poses) -> {
 			swerveDrive.field.getObject("Trajectory").setPoses(poses);
         });
-
-		lmPose = swerveDrive.field.getObject("Limelight Position");
 	}
 
 	@Override
 	public void periodic() {
-		PoseEstimate estimate = VisionSubsystem.getMT2Pose(getPose().getRotation(), swerveDrive.getRobotVelocity().omegaRadiansPerSecond);
-
-		if (estimate != null) {
-			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
-			lmPose.setPose(estimate.pose);
-		}
+		
+		updateOdometry();
 
 		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
 		SmartDashboard.putNumber("Y-Pos-Err", yTranslationPID.getPositionError());
@@ -246,6 +242,53 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Z-Vel-Err", rotationPID.getVelocityError());
 
 	}
+
+	/**
+   * Updates the drivetrain odometry object to the robot's current position on the
+   * field.
+   * 
+   * @return The new updated pose of the robot.
+   */
+  public void updateOdometry() {
+
+    for (String side : new String[] {"coral", "algae"}) {
+
+      LimelightHelpers.SetRobotOrientation("limelight-" + side, swerveDrive.getOdometryHeading().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
+
+      if (estimate.tagCount > 0) {
+        
+        double tagID = LimelightHelpers.getFiducialID("limelight-" + side);
+
+        for (int desiredID : liningUpToReef() ? REEF_APRILTAG_IDS : CORAL_STATION_APRILTAG_IDS) {
+
+          if (tagID == desiredID) {
+
+            Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
+
+            if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3.5) {
+                
+              swerveDrive.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), swerveDrive.getOdometryHeading()), estimate.timestampSeconds);
+                
+            }
+
+            break;
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  public boolean liningUpToReef() {
+	return true;
+	// return getCurrentCommand() != null && getCurrentCommand().getName() == "Reef Lineup";
+  }
+
 
 	/**
 	 * Setup AutoBuilder for PathPlanner.
@@ -472,10 +515,16 @@ public class DriveSubsystem extends SubsystemBase {
 		return runOnce(
 			() -> {
 
-				Rotation2d mt1 = VisionSubsystem.getMT1Rotation();
+				Rotation2d mt1_coral = VisionSubsystem.getMT1Rotation("coral");
+				Rotation2d mt1_algae = VisionSubsystem.getMT1Rotation("algae");
 
-				if (mt1 != null) {
-					swerveDrive.setGyro(new Rotation3d(mt1));
+				if (mt1_coral != null && mt1_algae != null) {
+					Rotation2d average = Rotation2d.fromDegrees((mt1_coral.getDegrees() + mt1_algae.getDegrees()) / 2);
+					swerveDrive.setGyro(new Rotation3d(average));
+				} else if (mt1_coral != null) {
+					swerveDrive.setGyro(new Rotation3d(mt1_coral));
+				} else if (mt1_algae != null) {
+					swerveDrive.setGyro(new Rotation3d(mt1_algae));
 				}
 			}
 		);
@@ -509,7 +558,7 @@ public class DriveSubsystem extends SubsystemBase {
 			() -> {
 				SmartDashboard.putBoolean("Done Lining Up", true);
 			}
-		);
+		).withName("Reef Lineup");
     }
 
 	public Command driveToAlgaeZone() {

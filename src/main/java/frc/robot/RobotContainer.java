@@ -23,13 +23,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.ReefHeight;
+import frc.robot.constants.ReefPositions;
 import frc.robot.inputs.ButtonBoard;
 import frc.robot.inputs.FlightStick;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.VisualizerSubsystem;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralSubsystem;
-import frc.robot.subsystems.drive.CageLineup;
+import frc.robot.subsystems.drive.CoralStationPathing;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -116,6 +117,32 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 			driveSubsystem.driveFieldOriented(
 				driveAngularVelocity,
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
+			)
+		);
+
+		driverController.p_Right().whileTrue(
+			driveSubsystem.driveFieldOriented(
+				driveAngularVelocity
+					.copy()
+					.withControllerHeadingAxis(
+						() -> Rotation2d.fromDegrees(54).getSin(),
+						() -> Rotation2d.fromDegrees(54).getCos()
+					).headingWhile(() -> !(Math.abs(driverController.a_Z()) > 0)),
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
+				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
+			)
+		);
+
+		driverController.p_Left().whileTrue(
+			driveSubsystem.driveFieldOriented(
+				driveAngularVelocity
+					.copy()
+					.withControllerHeadingAxis(
+						() -> Rotation2d.fromDegrees(-54).getSin(),
+						() -> Rotation2d.fromDegrees(-54).getCos()
+					).headingWhile(() -> !(Math.abs(driverController.a_Z()) > 0)),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
 			)

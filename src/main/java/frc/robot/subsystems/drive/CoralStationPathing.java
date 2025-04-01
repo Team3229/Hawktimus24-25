@@ -45,7 +45,6 @@ public class CoralStationPathing {
     }
 
     private Pose2d driveToPlayerStation(String hps) {
-
         return FieldMirroringUtils.toCurrentAlliancePose(ReefPositions.valueOf(hps).getPosition());
     }
 

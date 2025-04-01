@@ -62,15 +62,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Elastic.selectTab("Endgame");
+    Elastic.selectTab("Teleoperated");
 
-    new Trigger(
-      () -> DriverStation.getMatchTime() < 30
-    ).onTrue(
-      Commands.runOnce(
-        () -> Elastic.selectTab("Endgame")
-      )
-    );
+    // new Trigger(
+    //   () -> DriverStation.getMatchTime() < 30
+    // ).onTrue(
+    //   Commands.runOnce(
+    //     () -> Elastic.selectTab("Endgame")
+    //   )
+    // );
 
     m_robotContainer.teleopInit();
 

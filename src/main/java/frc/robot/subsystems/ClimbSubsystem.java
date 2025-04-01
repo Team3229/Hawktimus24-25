@@ -32,7 +32,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private Servo servoRight;
     private Servo servoLeft;
 
-    private ClimbCamera camera;
+    // private ClimbCamera camera;
 
     private static final int CAN_ID = 8;
     private static final int CAN_ID_2 = 4;
@@ -106,7 +106,7 @@ public class ClimbSubsystem extends SubsystemBase {
             PersistMode.kNoPersistParameters
         );
 
-        camera = new ClimbCamera();
+        // camera = new ClimbCamera();
 
         seedInternalEncoder();
 
@@ -225,9 +225,9 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotor2.getEncoder().setPosition(getCurrentAngle().in(Degrees));
     }
 
-    public UsbCamera getCamera() {
-        return camera.camera;
-    }
+    // public UsbCamera getCamera() {
+    //     return camera.camera;
+    // }
 
     @Override
     public void initSendable(SendableBuilder builder) {
