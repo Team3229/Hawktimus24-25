@@ -256,7 +256,7 @@ public class DriveSubsystem extends SubsystemBase {
       LimelightHelpers.SetRobotOrientation("limelight-" + side, swerveDrive.getOdometryHeading().getDegrees(), 0, 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
-      if (estimate.tagCount > 0) {
+      if (estimate != null && estimate.tagCount > 0) {
         
         double tagID = LimelightHelpers.getFiducialID("limelight-" + side);
 

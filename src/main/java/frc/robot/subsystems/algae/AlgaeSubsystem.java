@@ -80,10 +80,9 @@ public class AlgaeSubsystem extends SubsystemBase {
      * 
      * @return Command to hold algae
      */
-    public Command intakeAlgae() {  
+    public Command intakeAlgae() {
         return arm.rotateTo(AlgaeArmSubsystem.HOLD_ANGLE)
-                .andThen(new WaitCommand(INTAKE_WAIT_TIME))
-                .andThen(wheel.stop());
+                .andThen(new WaitCommand(INTAKE_WAIT_TIME));
     }
 
     /**

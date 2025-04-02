@@ -57,6 +57,12 @@ public class AlgaeWheelSubsystem extends SubsystemBase {
         );
     }
 
+    public Command spin(double speed) {
+        return Commands.runOnce(
+            () -> wheelMotor.set(speed)
+        );
+    }
+
     /**
      * Command to stop the algae wheel
      * 
