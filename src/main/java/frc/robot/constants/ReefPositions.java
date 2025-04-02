@@ -80,15 +80,11 @@ public enum ReefPositions {
         Transform2d spitterToBotRotation = new Transform2d(
             0,0, Rotation2d.fromDegrees(90)
         );
-        // Transform2d algaeArmToBotRotation = new Transform2d(
-        //     0,0, Rotation2d.fromDegrees(270)
-        // );
 
         switch (side) {
             case LEFT:
                 tagPose = tagPose
                     .transformBy(tagToLeftReef);
-
                 break;
             case RIGHT:
                 tagPose = tagPose
@@ -102,7 +98,6 @@ public enum ReefPositions {
             .transformBy(reefToBumper)
             .transformBy(spitterToBot)
             .transformBy(spitterToBotRotation);
-
         
     }
 }
