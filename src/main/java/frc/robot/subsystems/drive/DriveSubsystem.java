@@ -16,6 +16,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -49,7 +50,6 @@ import frc.hawklibraries.utilities.Alliance;
 import frc.hawklibraries.utilities.Alliance.AllianceColor;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utilities.LimelightHelpers;
-import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 
 import java.io.File;
 import java.io.IOException;
@@ -231,13 +231,13 @@ public class DriveSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		
-		// updateOdometry();
+		updateOdometry();
 
-		PoseEstimate estimate = VisionSubsystem.getMT2Pose(getPose().getRotation(), swerveDrive.getRobotVelocity().omegaRadiansPerSecond, "coral");
+		// PoseEstimate estimate = VisionSubsystem.getMT2Pose(getPose().getRotation(), swerveDrive.getRobotVelocity().omegaRadiansPerSecond, "coral");
 
-		if (estimate != null) {
-			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
-		}
+		// if (estimate != null) {
+		// 	swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+		// }
 
 		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
 		SmartDashboard.putNumber("Y-Pos-Err", yTranslationPID.getPositionError());
@@ -259,7 +259,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     for (String side : new String[] {"coral", "algae"}) {
 
-      LimelightHelpers.SetRobotOrientation("limelight-" + side, swerveDrive.getOdometryHeading().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.SetRobotOrientation("limelight-" + side, getIMUYaw().getDegrees(), getIMUYawRate().in(DegreesPerSecond), 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
       if (estimate != null && estimate.tagCount > 0) {
@@ -274,7 +274,7 @@ public class DriveSubsystem extends SubsystemBase {
 
             if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3.5) {
                 
-              swerveDrive.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), swerveDrive.getOdometryHeading()), estimate.timestampSeconds);
+              swerveDrive.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getIMUYaw()), estimate.timestampSeconds);
                 
             }
 
@@ -288,6 +288,22 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+  }
+
+  public Rotation2d getIMUYaw() {
+	return getIMU().getRotation2d();
+  }
+
+  public AngularVelocity getIMUYawRate() {
+	return getIMU().getAngularVelocityZWorld().getValue();
+  }
+
+  public void setIMUYaw(Rotation2d yaw) {
+	getIMU().setYaw(yaw.getMeasure());
+  }
+
+  public Pigeon2 getIMU() {
+	return ((Pigeon2) swerveDrive.getGyro().getIMU());
   }
 
   public boolean liningUpToReef() {
@@ -384,7 +400,7 @@ public class DriveSubsystem extends SubsystemBase {
 				() -> {
 					xTranslationPID.reset(getPose().getX(), swerveDrive.getFieldVelocity().vxMetersPerSecond);
 					yTranslationPID.reset(getPose().getY(), swerveDrive.getFieldVelocity().vyMetersPerSecond);
-					rotationPID.reset(getPose().getRotation().getRadians(), swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+					rotationPID.reset(getIMUYaw().getRadians(), swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
 				}
 			).andThen(
 				driveFieldOriented(
@@ -392,7 +408,7 @@ public class DriveSubsystem extends SubsystemBase {
 						return new ChassisSpeeds(
 							xTranslationPID.calculate(getPose().getX(), pose.get().getX()),
 							yTranslationPID.calculate(getPose().getY(), pose.get().getY()),
-							rotationPID.calculate(getPose().getRotation().getRadians(), pose.get().getRotation().getRadians())
+							rotationPID.calculate(getIMUYaw().getRadians(), pose.get().getRotation().getRadians())
 						);
 					}
 				)
@@ -469,7 +485,7 @@ public class DriveSubsystem extends SubsystemBase {
 			swerveDrive.resetOdometry(new Pose2d(2, 4, new Rotation2d()));
 			return;
 		}
-		swerveDrive.resetOdometry(pose);
+		swerveDrive.resetOdometry(new Pose2d(pose.getX(), pose.getY(), getIMUYaw()));
 	}
 
 	/**
@@ -482,7 +498,7 @@ public class DriveSubsystem extends SubsystemBase {
 		if (RobotBase.isSimulation()) {
 			return swerveDrive.field.getRobotPose();
 		}
-		return swerveDrive.getPose();
+		return new Pose2d(swerveDrive.getPose().getX(), swerveDrive.getPose().getY(), getIMUYaw());
 	}
 
 	/**
@@ -490,7 +506,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * facing toward 0.
 	 */
 	public void zeroGyro() {
-		swerveDrive.zeroGyro();
+		getIMU().setYaw(0);
 	}
 
 	/**
@@ -500,11 +516,8 @@ public class DriveSubsystem extends SubsystemBase {
 	 * If red alliance rotate the robot 180 after the drivebase zero command
 	 */
 	public void zeroGyroWithAlliance() {
-
 		if (Alliance.getAlliance() == AllianceColor.Red) {
-			zeroGyro();
-			// Set the pose 180 degrees
-			resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+			setIMUYaw(new Rotation2d(Math.PI));
 		} else {
 			zeroGyro();
 		}
@@ -536,9 +549,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 				if (mt1_coral != null) {
 					if (Alliance.getAlliance() == AllianceColor.Red) {
-						swerveDrive.setGyro(new Rotation3d(mt1_coral.rotateBy(new Rotation2d(Math.PI))));
+						setIMUYaw(mt1_coral.rotateBy(new Rotation2d(Math.PI)));
 					} else {
-						swerveDrive.setGyro(new Rotation3d(mt1_coral));
+						setIMUYaw(mt1_coral);
 					}
 				}
 			}
@@ -562,7 +575,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Command driveToReef(boolean leftSide) {
         return 
-
 		runOnce(
 			() -> SmartDashboard.putBoolean("Done Lining Up", false)
 		).andThen(
