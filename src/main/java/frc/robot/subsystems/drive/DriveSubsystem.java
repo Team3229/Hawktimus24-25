@@ -85,9 +85,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private static final PIDConstants ROTATION_CONSTANTS =
 		new PIDConstants(
-			5.0,
-			0.1,
-			0.05
+			8.0,
+			0.0,
+			0.0
 		);
 
 	private static final PIDConstants PP_TRANS = 
@@ -231,7 +231,13 @@ public class DriveSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		
-		updateOdometry();
+		// updateOdometry();
+
+		PoseEstimate estimate = VisionSubsystem.getMT2Pose(getPose().getRotation(), swerveDrive.getRobotVelocity().omegaRadiansPerSecond, "coral");
+
+		if (estimate != null) {
+			swerveDrive.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+		}
 
 		SmartDashboard.putNumber("X-Pos-Err", xTranslationPID.getPositionError());
 		SmartDashboard.putNumber("Y-Pos-Err", yTranslationPID.getPositionError());
@@ -516,15 +522,24 @@ public class DriveSubsystem extends SubsystemBase {
 			() -> {
 
 				Rotation2d mt1_coral = VisionSubsystem.getMT1Rotation("coral");
-				Rotation2d mt1_algae = VisionSubsystem.getMT1Rotation("algae");
+				// Rotation2d mt1_algae = VisionSubsystem.getMT1Rotation("algae");
 
-				if (mt1_coral != null && mt1_algae != null) {
-					Rotation2d average = Rotation2d.fromDegrees((mt1_coral.getDegrees() + mt1_algae.getDegrees()) / 2);
-					swerveDrive.setGyro(new Rotation3d(average));
-				} else if (mt1_coral != null) {
-					swerveDrive.setGyro(new Rotation3d(mt1_coral));
-				} else if (mt1_algae != null) {
-					swerveDrive.setGyro(new Rotation3d(mt1_algae));
+				// if (mt1_coral != null && mt1_algae != null) {
+				// 	Rotation2d average = Rotation2d.fromDegrees((mt1_coral.getDegrees() + mt1_algae.getDegrees()) / 2);
+				// 	swerveDrive.setGyro(new Rotation3d(average));
+				// } else if (mt1_coral != null) {
+				// 	swerveDrive.setGyro(new Rotation3d(mt1_coral));
+				// } else if (mt1_algae != null) {
+				// 	swerveDrive.setGyro(new Rotation3d(mt1_algae));
+				// }
+
+
+				if (mt1_coral != null) {
+					if (Alliance.getAlliance() == AllianceColor.Red) {
+						swerveDrive.setGyro(new Rotation3d(mt1_coral.rotateBy(new Rotation2d(Math.PI))));
+					} else {
+						swerveDrive.setGyro(new Rotation3d(mt1_coral));
+					}
 				}
 			}
 		);

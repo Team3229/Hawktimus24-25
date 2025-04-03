@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.hawklibraries.utilities.Alliance;
+import frc.hawklibraries.utilities.Alliance.AllianceColor;
 import frc.robot.constants.ReefHeight;
 import frc.robot.constants.ReefPositions;
 import frc.robot.inputs.ButtonBoard;
@@ -127,8 +129,8 @@ public class RobotContainer {
 				driveAngularVelocity
 					.copy()
 					.withControllerHeadingAxis(
-						() -> Rotation2d.fromDegrees(54).getSin(),
-						() -> Rotation2d.fromDegrees(54).getCos()
+						() -> Rotation2d.fromDegrees((Alliance.getAlliance() == AllianceColor.Blue) ? 54 : 54+180).getSin(),
+						() -> Rotation2d.fromDegrees((Alliance.getAlliance() == AllianceColor.Blue) ? 54 : 54+180).getCos()
 					).headingWhile(() -> !(Math.abs(driverController.a_Z()) > 0)),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
@@ -140,8 +142,8 @@ public class RobotContainer {
 				driveAngularVelocity
 					.copy()
 					.withControllerHeadingAxis(
-						() -> Rotation2d.fromDegrees(-54).getSin(),
-						() -> Rotation2d.fromDegrees(-54).getCos()
+						() -> Rotation2d.fromDegrees((Alliance.getAlliance() == AllianceColor.Blue) ? -54 : -54+180).getSin(),
+						() -> Rotation2d.fromDegrees((Alliance.getAlliance() == AllianceColor.Blue) ? -54 : -54+180).getCos()
 					).headingWhile(() -> !(Math.abs(driverController.a_Z()) > 0)),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1),
 				() -> MathUtil.clamp(((-driverController.a_Throttle() + 1.0) / 4.0) + 0.5, 0.5, 1)
@@ -211,30 +213,40 @@ public class RobotContainer {
 			climbSubsystem.toggleServo()
 		);
 
-		buttonBoard.b_2().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2, false)
-		);
+		// buttonBoard.b_2().onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L2, false)
+		// );
 
-		buttonBoard.b_3().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3, false)
-		);
+		// buttonBoard.b_3().onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L3, false)
+		// );
 
-		buttonBoard.b_4().onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4, false)
-		// L4 coral
-		);
+		// buttonBoard.b_4().onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L4, false)
+		// // L4 coral
+		// );
 
-		buttonBoard.b_2().debounce(1.5).onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L2, true)
-		);
+		// buttonBoard.b_2().debounce(1.5).onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L2, true)
+		// );
 
-		buttonBoard.b_3().debounce(1.5).onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L3, true)
-		);
+		// buttonBoard.b_3().debounce(1.5).onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L3, true)
+		// );
 
-		buttonBoard.b_4().debounce(1.5).onTrue(
-			coralSubsystem.elevatorSpit(ReefHeight.L4, true)
-		);
+		// buttonBoard.b_4().debounce(1.5).onTrue(
+		// 	coralSubsystem.elevatorSpit(ReefHeight.L4, true)
+		// );
+
+		buttonBoard.b_2().onTrue(coralSubsystem.elevatorReady(ReefHeight.L2));
+		buttonBoard.b_2().onFalse(coralSubsystem.elevatorScore());
+
+		buttonBoard.b_3().onTrue(coralSubsystem.elevatorReady(ReefHeight.L3));
+		buttonBoard.b_3().onFalse(coralSubsystem.elevatorScore());
+
+		buttonBoard.b_4().onTrue(coralSubsystem.elevatorReady(ReefHeight.L4));
+		buttonBoard.b_4().onFalse(coralSubsystem.elevatorScore());
+
 
 		buttonBoard.b_1().onTrue(
 				coralSubsystem.feedCommand()
