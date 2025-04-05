@@ -486,7 +486,7 @@ public class DriveSubsystem extends SubsystemBase {
 			swerveDrive.resetOdometry(new Pose2d(2, 4, new Rotation2d()));
 			return;
 		}
-		swerveDrive.resetOdometry(new Pose2d(pose.getX(), pose.getY(), getIMUYaw()));
+		swerveDrive.resetOdometry(pose);
 	}
 
 	/**
