@@ -210,7 +210,7 @@ public class RobotContainer {
 		// Coral Controls
 
 		buttonBoard.b_9().onTrue(
-			climbSubsystem.toggleServo()
+			coralSubsystem.feedCommand()
 		);
 
 		// buttonBoard.b_2().onTrue(
@@ -249,7 +249,7 @@ public class RobotContainer {
 
 
 		buttonBoard.b_1().onTrue(
-				coralSubsystem.feedCommand()
+				coralSubsystem.elevatorSpit(ReefHeight.L2, true)
 			);
 
 		buttonBoard.b_5().onTrue(

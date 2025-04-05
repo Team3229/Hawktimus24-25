@@ -300,6 +300,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setIMUYaw(Rotation2d yaw) {
 	getIMU().setYaw(yaw.getMeasure());
+	swerveDrive.resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), yaw));
   }
 
   public Pigeon2 getIMU() {
@@ -507,6 +508,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 */
 	public void zeroGyro() {
 		getIMU().setYaw(0);
+		swerveDrive.resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d()));
 	}
 
 	/**
