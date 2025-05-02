@@ -209,9 +209,10 @@ public class RobotContainer {
 
 		// Coral Controls
 
-		buttonBoard.b_9().onTrue(
-			climbSubsystem.toggleServo()
+		buttonBoard.b_1().whileTrue(
+			coralSubsystem.elevatorSpit(ReefHeight.L2, true)
 		);
+		// manual spit (just in case)
 
 		// buttonBoard.b_2().onTrue(
 		// 	coralSubsystem.elevatorSpit(ReefHeight.L2, false)
@@ -248,7 +249,7 @@ public class RobotContainer {
 		buttonBoard.b_4().onFalse(coralSubsystem.elevatorScore());
 
 
-		buttonBoard.b_1().onTrue(
+		buttonBoard.b_9().onTrue(
 				coralSubsystem.feedCommand()
 			);
 

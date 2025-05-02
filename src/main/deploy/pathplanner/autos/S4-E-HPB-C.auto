@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S6-E"
+            "pathName": "S4-E"
           }
         },
         {
@@ -68,6 +68,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "S6",
+  "folder": "S4",
   "choreoAuto": false
 }
