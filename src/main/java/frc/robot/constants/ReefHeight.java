@@ -17,7 +17,7 @@ public enum ReefHeight {
     L3(Inch.of(51.2)),
     L4(Feet.of(6).plus(Inch.of(2))),
     L4Up(Feet.of(6).plus(Inch.of(5))),
-    AutoL4(Feet.of(6).plus(Inch.of(1)));
+    AutoL4(Feet.of(6).plus(Inch.of(2)));
 
     Distance height;
 
