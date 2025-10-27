@@ -551,7 +551,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 				if (mt1_coral != null) {
 					if (Alliance.getAlliance() == AllianceColor.Red) {
-						setIMUYaw(mt1_coral.rotateBy(new Rotation2d(Math.PI)));
+						// setIMUYaw(mt1_coral.rotateBy(new Rotation2d(Math.PI)));
+						setIMUYaw(mt1_coral);
 					} else {
 						setIMUYaw(mt1_coral);
 					}
