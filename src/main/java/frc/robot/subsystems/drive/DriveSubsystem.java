@@ -109,11 +109,11 @@ public class DriveSubsystem extends SubsystemBase {
 	private static final Angle ROT_ERR_TOL = Degrees.of(0.1);
 	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.1);
 
-	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1);
-	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(2);
+	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(0.8); // normally 1
+	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(1.6); // normally 2
 
-	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(720);
-	private static final AngularAcceleration ROT_MAX_ACCEL = DegreesPerSecondPerSecond.of(720);
+	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(576); // normally 720
+	private static final AngularAcceleration ROT_MAX_ACCEL = DegreesPerSecondPerSecond.of(576); // normally 720
 
     private ProfiledPIDController xTranslationPID = new ProfiledPIDController(
         TRANSLATION_CONSTANTS.kP,
