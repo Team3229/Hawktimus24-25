@@ -26,8 +26,8 @@ public class SpitterSubsystem extends SubsystemBase {
     private static final int SENSOR_PORT = 8;
 
     private static final double INTAKE_SPEED = 0.3;
-    // private static final double SPIT_SPEED = 0.8;
-    private static final double SPIT_SPEED = 0.3;
+    private static final double SPIT_SPEED = 0.8;
+    // private static final double SPIT_SPEED = 0.3;
     private static final Current CURRENT_LIMIT = Amps.of(80);
     private static final boolean INVERTED = true;
 
