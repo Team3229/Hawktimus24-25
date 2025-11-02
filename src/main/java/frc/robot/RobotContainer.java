@@ -197,6 +197,12 @@ public class RobotContainer {
 			})
 		);
 
+		driverController.b_12().onTrue(
+			Commands.runOnce(() -> {
+				driveSubsystem.flippedZeroCommand();
+			})
+		);
+
 		// driverController.b_7()
 		// 	.debounce(1)
 		// 	.onTrue(

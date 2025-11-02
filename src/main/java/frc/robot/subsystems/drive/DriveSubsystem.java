@@ -109,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
 	private static final Angle ROT_ERR_TOL = Degrees.of(0.1);
 	private static final AngularVelocity ROT_VEL_TOL = DegreesPerSecond.of(0.1);
 
-	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(0.8); // normally 1
+	private static final LinearVelocity TRANS_MAX_VEL = MetersPerSecond.of(1); // normally 1
 	private static final LinearAcceleration TRANS_MAX_ACCEL = MetersPerSecondPerSecond.of(1.6); // normally 2
 
 	private static final AngularVelocity ROT_MAX_VEL = DegreesPerSecond.of(576); // normally 720
@@ -509,6 +509,17 @@ public class DriveSubsystem extends SubsystemBase {
 	public void zeroGyro() {
 		getIMU().setYaw(0);
 		swerveDrive.resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d()));
+	}
+
+	public void flipedZeroGyroWithLimelights() {
+		setIMUYaw(new Rotation2d(Math.PI));
+		zeroGyro();
+	}
+
+	public Command flippedZeroCommand() {
+		return runOnce(
+			this:: flipedZeroGyroWithLimelights
+		);
 	}
 
 	/**
